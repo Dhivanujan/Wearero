@@ -193,4 +193,76 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @route   POST /api/cart/merge
+// @desc    Merge guest cart into user cart upon login
+// @access  Private
+router.post("/merge", protect, async (req, res) => {
+  const { guestId } = req.body;
+
+  try {
+    const guestCart = await Cart.findOne({ guestId });
+    const userCart = await Cart.findOne({ userId: req.user.id });
+
+    if (guestCart) {
+      if (guestCart.products.length === 0) {
+        return res.status(400).json({ message: "Guest cart is empty" });
+      }
+
+      if (userCart) {
+        // ✅ Merge carts
+        guestCart.products.forEach((guestItem) => {
+          const productIndex = userCart.products.findIndex(
+            (item) =>
+              item.productId.toString() === guestItem.productId.toString() &&
+              item.size === guestItem.size &&
+              item.color === guestItem.color
+          );
+
+          if (productIndex > -1) {
+            // Update quantity if item exists
+            userCart.products[productIndex].quantity += guestItem.quantity;
+          } else {
+            // Add new item
+            userCart.products.push(guestItem);
+          }
+        });
+
+        // ✅ Recalculate total price
+        userCart.totalPrice = userCart.products.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
+
+        await userCart.save();
+
+        // ✅ Remove guest cart after merging
+        try {
+          await Cart.findOneAndDelete({ guestId });
+        } catch (error) {
+          console.error("Error deleting guest cart:", error);
+        }
+
+        return res.status(200).json(userCart);
+      } else {
+        // ✅ Assign guest cart to user
+        guestCart.userId = req.user.id;
+        guestCart.guestId = undefined;
+        await guestCart.save();
+
+        return res.status(200).json(guestCart);
+      }
+    } else {
+      // ✅ No guest cart found
+      if (userCart) {
+        return res.status(200).json(userCart);
+      } else {
+        return res.status(404).json({ message: "No cart found for user" });
+      }
+    }
+  } catch (error) {
+    console.error("Error merging carts:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 module.exports = router;
