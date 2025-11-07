@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
     } else {
       // ✅ No existing cart → create new one
       const newCart = await Cart.create({
-        userId: userId || undefined,
+        user: userId || undefined,
         guestId: guestId || "guest_" + new Date().getTime(),
         products: [
           {
@@ -87,6 +87,108 @@ router.post("/", async (req, res) => {
     }
   } catch (error) {
     console.error("Cart creation error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+//@route PUT /api/cart
+//@desc Update cart item quantity
+//@access Public
+router.put("/", async (req, res) => {
+  const { productId, quantity, size, color, guestId, userId } = req.body;
+  try {
+    let cart = await getCart(userId, guestId);
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+    const productIndex = cart.products.findIndex(
+      (p) =>
+        p.productId.toString() === productId &&
+        p.size === size &&
+        p.color === color
+    );
+    if (productIndex > -1) {
+      //Update quantity
+      if (quantity > 0) {
+        cart.products[productIndex].quantity = quantity;
+      } else {
+        //Remove item if quantity is 0
+        cart.products.splice(productIndex, 1);
+      }
+
+      cart.totalPrice = cart.products.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+      await cart.save();
+      return res.status(200).json(cart);
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+//@route DELETE /api/cart
+//@desc Remove specific item from cart
+//@access Public
+router.delete("/", async (req, res) => {
+  const { productId, size, color, guestId, userId } = req.body;
+
+  try {
+    let cart = await getCart(userId, guestId);
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    const productIndex = cart.products.findIndex(
+      (p) =>
+        p.productId.toString() === productId &&
+        p.size === size &&
+        p.color === color
+    );
+
+    if (productIndex > -1) {
+      cart.products.splice(productIndex, 1);
+
+      cart.totalPrice = cart.products.reduce(
+        (acc, item) => acc + item.price * Number(item.quantity),
+        0
+      );
+
+      if (cart.products.length === 0) {
+        await Cart.deleteOne({ _id: cart._id });
+        return res.status(200).json({ message: "Cart cleared and removed" });
+      }
+
+      await cart.save();
+      return res.status(200).json(cart);
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+  } catch (error) {
+    console.error("Cart delete error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+//@route GET /api/cart
+//@desc Get cart for user or guest
+//@access Public
+router.get("/", async (req, res) => {
+  const { userId, guestId } = req.query;
+
+  try {
+    const cart = await getCart(userId, guestId);
+    if (cart) {
+      res.json(cart);
+    } else {
+      res.status(404).json({ message: "Cart not found" });
+    }
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server Error" });
   }
 });
