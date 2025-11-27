@@ -8,15 +8,19 @@ const router = express.Router();
 // @route POST /api/users/register
 // @desc Register a new user
 // @access Public
+const ALLOWED_ROLES = ["customer", "admin"];
+
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   try {
     //Registration Logic
     let user = await User.findOne({ email });
 
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    user = new User({ name, email, password });
+    const sanitizedRole = ALLOWED_ROLES.includes(role) ? role : "customer";
+
+    user = new User({ name, email, password, role: sanitizedRole });
     await user.save();
 
     // Create JWT Payload
@@ -117,7 +121,9 @@ router.post("/", protect, admin, async (req, res) => {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    user = new User({ name, email, password, role: role || "customer" });
+    const sanitizedRole = ALLOWED_ROLES.includes(role) ? role : "customer";
+
+    user = new User({ name, email, password, role: sanitizedRole });
     await user.save();
     res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
@@ -135,7 +141,9 @@ router.put("/:id", protect, admin, async (req, res) => {
         if(user) {
             user.name = req.body.name || user.name;
             user.email = req.body.email || user.email;
-            user.role = req.body.role || user.role;
+            if (req.body.role && ALLOWED_ROLES.includes(req.body.role)) {
+              user.role = req.body.role;
+            }
             
             const updatedUser = await user.save();
             res.json({

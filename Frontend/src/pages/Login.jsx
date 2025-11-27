@@ -59,8 +59,8 @@ const handleSubmit = async (e) => {
                 <div className='flex justify-center mb-6'>
                     <h2 className='text-xl font-medium'>Wearero</h2>
                 </div>
-                <h2 className='text-2xl font-bold text-center mb-6'>Hey there! 👋🏻</h2>
-                <p className='text-center mb-6'>Enter your username and password to Login</p>
+                <h2 className='text-2xl font-bold text-center mb-6'>Welcome back 👋🏻</h2>
+                <p className='text-center mb-6 text-sm text-gray-600'>Sign in with your Wearero credentials. Admins gain access to catalog, order, and user management tools.</p>
                 <div className='mb-4'>
                     <label className='block text-sm font-semibold mb-2'>Email</label>
                     <input 
