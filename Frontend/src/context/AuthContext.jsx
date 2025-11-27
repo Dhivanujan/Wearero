@@ -11,20 +11,35 @@ const AuthContext = createContext({
   logout: () => {},
 });
 
+const normalizeRole = (role) => {
+  if (!role) return null;
+  return role.toString().trim().toLowerCase();
+};
+
+const formatUser = (rawUser) => {
+  if (!rawUser) return null;
+  const normalizedRole = normalizeRole(rawUser.role);
+  return {
+    ...rawUser,
+    ...(normalizedRole ? { role: normalizedRole } : {}),
+  };
+};
+
 const persistAuthState = (user, token) => {
+  const normalizedUser = formatUser(user);
   if (token) {
     localStorage.setItem('token', token);
   } else {
     localStorage.removeItem('token');
   }
 
-  if (user) {
-    localStorage.setItem('user', JSON.stringify(user));
-    if (user._id) {
-      localStorage.setItem('userId', user._id);
+  if (normalizedUser) {
+    localStorage.setItem('user', JSON.stringify(normalizedUser));
+    if (normalizedUser._id) {
+      localStorage.setItem('userId', normalizedUser._id);
     }
-    if (user.role) {
-      localStorage.setItem('role', user.role);
+    if (normalizedUser.role) {
+      localStorage.setItem('role', normalizedUser.role);
     }
   } else {
     localStorage.removeItem('user');
@@ -37,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem('user');
-    return stored ? JSON.parse(stored) : null;
+    return stored ? formatUser(JSON.parse(stored)) : null;
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,8 +86,9 @@ export const AuthProvider = ({ children }) => {
 
         const profile = await response.json();
         if (isMounted) {
-          setUser(profile);
-          persistAuthState(profile, token);
+          const normalizedProfile = formatUser(profile);
+          setUser(normalizedProfile);
+          persistAuthState(normalizedProfile, token);
         }
       } catch (error) {
         console.error('Auth profile fetch failed:', error.message);
@@ -97,9 +113,10 @@ export const AuthProvider = ({ children }) => {
     if (!authPayload?.token || !authPayload?.user) {
       return;
     }
+    const normalizedUser = formatUser(authPayload.user);
     setToken(authPayload.token);
-    setUser(authPayload.user);
-    persistAuthState(authPayload.user, authPayload.token);
+    setUser(normalizedUser);
+    persistAuthState(normalizedUser, authPayload.token);
   };
 
   const value = useMemo(
@@ -108,7 +125,7 @@ export const AuthProvider = ({ children }) => {
       token,
       isLoading,
       isAuthenticated: Boolean(token),
-      isAdmin: user?.role === 'admin',
+      isAdmin: normalizeRole(user?.role) === 'admin',
       login,
       logout: handleLogout,
     }),

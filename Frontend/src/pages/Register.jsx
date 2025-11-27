@@ -37,9 +37,11 @@ const handleSubmit = async (e) => {
 
         if (response.ok) {
             login(data);
-            await mergeCart();
-            toast.success('Registration successful');
-            navigate('/');
+            if (role !== 'admin') {
+                await mergeCart();
+            }
+            toast.success(role === 'admin' ? 'Admin account created' : 'Registration successful');
+            navigate(role === 'admin' ? '/admin' : '/');
         } else {
             toast.error(data.message || 'Registration failed');
         }

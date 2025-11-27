@@ -37,9 +37,14 @@ const handleSubmit = async (e) => {
 
         if (response.ok) {
             persistAuth(data);
-            await mergeCart();
-            toast.success('Welcome back!');
-            navigate(redirectTo, { replace: true });
+            const role = data?.user?.role;
+            const cameFromProtectedRoute = Boolean(location.state?.from);
+            const defaultDestination = role === 'admin' ? '/admin' : '/';
+            if (role !== 'admin') {
+                await mergeCart();
+            }
+            toast.success(role === 'admin' ? 'Welcome back, admin!' : 'Welcome back!');
+            navigate(cameFromProtectedRoute ? redirectTo : defaultDestination, { replace: true });
         } else {
             toast.error(data.message || 'Login failed');
         }

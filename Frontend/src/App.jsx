@@ -12,7 +12,7 @@ import Checkout from './components/Cart/Checkout'
 import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import MyOrdersPage from './pages/MyOrdersPage'
-import AdminLayout from './components/Admin/AdminLayout'
+import AdminOutlet from './components/Admin/Outlet'
 import AdminHomePage from './pages/AdminHomePage'
 import UserManagement from './components/Admin/UserManagement'
 import ProductManagement from './components/Admin/ProductManagement'
@@ -39,7 +39,7 @@ const App = () => {
             <Route path='order/:id' element={<ProtectedRoute><OrderDetailsPage/></ProtectedRoute>}/>
             <Route path='my-orders' element={<ProtectedRoute><MyOrdersPage/></ProtectedRoute>}/>
           </Route>
-          <Route path='/admin' element={<ProtectedRoute requireAdmin><AdminLayout/></ProtectedRoute>}>
+          <Route path='/admin' element={<AdminOutlet/>}>
             <Route index element={<AdminHomePage/>}/>
             <Route path="users" element={<UserManagement/>}/>
             <Route path="products" element={<ProductManagement/>}/>

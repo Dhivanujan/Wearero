@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+const ROLE_VALUES = ['customer', 'admin'];
+
+const sanitizeRole = (value) => {
+  if (!value) return 'customer';
+  const normalized = value.toString().trim().toLowerCase();
+  return ROLE_VALUES.includes(normalized) ? normalized : 'customer';
+};
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -22,8 +30,9 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['customer', 'admin'],
+      enum: ROLE_VALUES,
       default: 'customer',
+      set: sanitizeRole,
     },
   },
   { timestamps: true }

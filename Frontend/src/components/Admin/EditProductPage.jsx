@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../../lib/api";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ const EditProductPage = () => {
     colors: [],
     collections: "",
     material: "",
-    gender: "",
+    gender: "Men",
     images: [],
   };
   const [productData, setProductData] = useState(defaultProductState);
@@ -50,33 +50,26 @@ const EditProductPage = () => {
   }, [id]);
 
   // Generic input handler
+  const numericFields = useMemo(
+    () => ["price", "discountPrice", "countInStock", "weight"],
+    []
+  );
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProductData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  // Image upload + preview
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // In a real app, you would upload this file to a server/cloud
-      // For now, we'll just use a local object URL for preview
-      // But for the backend, we need a string URL. 
-      // Since we don't have image upload backend, we will rely on URL input for now.
-      // Or we can simulate it.
-      // Let's stick to URL input for simplicity as requested "remove hardcoded images"
-      // But the user might want to upload.
-      // Given the constraints, I'll add a text input for Image URL as well.
-    }
+    setProductData((prevData) => ({
+      ...prevData,
+      [name]: numericFields.includes(name) ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const url = id 
-        ? `http://localhost:3000/api/products/${id}` 
-        : 'http://localhost:3000/api/products';
+      const url = id
+        ? `${API_BASE_URL}/api/products/${id}`
+        : `${API_BASE_URL}/api/products`;
       const method = id ? 'PUT' : 'POST';
 
       setIsSubmitting(true);
@@ -107,7 +100,9 @@ const EditProductPage = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
-      <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
+      <h2 className="text-3xl font-bold mb-6">
+        {id ? "Edit Product" : "Create Product"}
+      </h2>
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
         <div className="mb-6">
@@ -171,6 +166,48 @@ const EditProductPage = () => {
           />
         </div>
 
+        {/* Category */}
+        <div className="mb-6">
+          <label className="block font-semibold mb-2">Category</label>
+          <input
+            type="text"
+            name="category"
+            value={productData.category}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md p-2"
+            required
+          />
+        </div>
+
+        {/* Collection */}
+        <div className="mb-6">
+          <label className="block font-semibold mb-2">Collection</label>
+          <input
+            type="text"
+            name="collections"
+            value={productData.collections}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md p-2"
+            required
+          />
+        </div>
+
+        {/* Gender */}
+        <div className="mb-6">
+          <label className="block font-semibold mb-2">Gender</label>
+          <select
+            name="gender"
+            value={productData.gender}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md p-2"
+            required
+          >
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Unisex">Unisex</option>
+          </select>
+        </div>
+
         {/* Sizes */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">
@@ -221,17 +258,11 @@ const EditProductPage = () => {
                 const url = e.target.value;
                 setProductData(prev => ({
                     ...prev,
-                    images: [{ url, altText: prev.name }]
+                    images: url ? [{ url, alt: prev.name || "Product image" }] : [],
                 }));
             }}
             className="w-full border border-gray-300 rounded-md p-2"
           />
-        </div>
-
-        {/* Image Upload */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Upload Image</label>
-          <input type="file" onChange={handleImageUpload} />
         </div>
 
         <button
