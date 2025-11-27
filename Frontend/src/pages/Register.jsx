@@ -1,17 +1,31 @@
 import React, { useState } from 'react'
 import register from '../assets/register.jpg'
 import { Link, useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
+import { toast } from 'sonner'
 
 const Register = () => {
     const [name, setName] = useState('')
     const [email,setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate();
+    const { login } = useAuth();
+    const { mergeCart } = useCart();
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!name || !email || !password) {
+        toast.error('All fields are required');
+        return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-        const response = await fetch('http://localhost:3000/api/users/register', {
+        const response = await fetch(`${API_BASE_URL}/api/users/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -21,29 +35,18 @@ const handleSubmit = async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('userId', data.user._id);
-            localStorage.setItem('role', data.user.role);
-             // Merge guest cart if exists
-             const guestId = localStorage.getItem('guestId');
-             if (guestId) {
-                 await fetch('http://localhost:3000/api/cart/merge', {
-                     method: 'POST',
-                     headers: {
-                         'Content-Type': 'application/json',
-                         'Authorization': `Bearer ${data.token}`
-                     },
-                     body: JSON.stringify({ guestId }),
-                 });
-                 localStorage.removeItem('guestId');
-             }
+            login(data);
+            await mergeCart();
+            toast.success('Registration successful');
             navigate('/');
         } else {
-            alert(data.message || 'Registration failed');
+            toast.error(data.message || 'Registration failed');
         }
     } catch (error) {
         console.error(error);
-        alert('An error occurred');
+        toast.error('Something went wrong. Please try again.');
+    } finally {
+        setIsSubmitting(false);
     }
 }
 
@@ -59,7 +62,7 @@ const handleSubmit = async (e) => {
                 <div className='mb-4'>
                     <label className='block text-sm font-semibold mb-2'>Name</label>
                     <input 
-                    type="email" 
+                    type="text" 
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
                     className='w-full p-2 border rounded' 
@@ -83,7 +86,9 @@ const handleSubmit = async (e) => {
                     className='w-full p-2 border rounded' 
                     placeholder='Enter your password' />
                 </div>
-                <button type='submit' className='w-full bg-blacktext-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'>Sign Up</button>
+                <button type='submit' disabled={isSubmitting} className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'>
+                    {isSubmitting ? 'Creating account...' : 'Sign Up'}
+                </button>
                 <p className='mt-6 text-center text-sm'>
                     Already have an account? {" "}
                     <Link to='/login' className='text-blue-500'>Login</Link>

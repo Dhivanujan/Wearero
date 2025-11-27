@@ -1,16 +1,32 @@
 import React, { useState } from 'react'
 import login from '../assets/login.jpg'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
+import { API_BASE_URL } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
+import { toast } from 'sonner'
 
 const Login = () => {
     const [email,setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate();
+    const { mergeCart } = useCart();
+    const { login: persistAuth } = useAuth();
+    const location = useLocation();
+    const redirectTo = location.state?.from?.pathname || '/';
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+        toast.error('Please enter your email and password');
+        return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-        const response = await fetch('http://localhost:3000/api/users/login', {
+        const response = await fetch(`${API_BASE_URL}/api/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -20,30 +36,18 @@ const handleSubmit = async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('userId', data.user._id);
-            localStorage.setItem('role', data.user.role);
-            // Merge guest cart if exists
-            const guestId = localStorage.getItem('guestId');
-            if (guestId) {
-                await fetch('http://localhost:3000/api/cart/merge', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${data.token}`
-                    },
-                    body: JSON.stringify({ guestId }),
-                });
-                localStorage.removeItem('guestId');
-            }
-
-            navigate('/');
+            persistAuth(data);
+            await mergeCart();
+            toast.success('Welcome back!');
+            navigate(redirectTo, { replace: true });
         } else {
-            alert(data.message || 'Login failed');
+            toast.error(data.message || 'Login failed');
         }
     } catch (error) {
         console.error(error);
-        alert('An error occurred');
+        toast.error('Something went wrong. Please try again.');
+    } finally {
+        setIsSubmitting(false);
     }
 }
 
@@ -75,7 +79,9 @@ const handleSubmit = async (e) => {
                     className='w-full p-2 border rounded' 
                     placeholder='Enter your password' />
                 </div>
-                <button type='submit' className='w-full bg-blacktext-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'>Sign In</button>
+                <button type='submit' disabled={isSubmitting} className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'>
+                    {isSubmitting ? 'Signing in...' : 'Sign In'}
+                </button>
                 <p className='mt-6 text-center text-sm'>
                     Don't have an account? {" "}
                     <Link to='/register' className='text-blue-500'>Register</Link>

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from '../../lib/api'
+import { toast } from 'sonner'
 
 const NewArrivals = () => {
   const scrollRef = useRef(null)
@@ -17,11 +19,16 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products/new-arrivals');
+        const response = await fetch(`${API_BASE_URL}/api/products/new-arrivals`);
         const data = await response.json();
-        setNewArrivals(data);
+        if (response.ok) {
+          setNewArrivals(data);
+        } else {
+          toast.error(data.message || 'Unable to load new arrivals');
+        }
       } catch (error) {
         console.error("Error fetching new arrivals:", error);
+        toast.error('Something went wrong while loading new arrivals');
       }
     };
 

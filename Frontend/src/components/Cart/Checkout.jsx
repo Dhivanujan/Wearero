@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
-// import StripeButton from './StripeButton';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useCart } from '../../context/CartContext'
+import { useAuth } from '../../context/AuthContext'
+import { API_BASE_URL } from '../../lib/api'
+import { toast } from 'sonner'
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [checkoutId, setCheckoutId] = useState(null)
-  const [cart, setCart] = useState(null);
+  const { cart, loading, clearCart } = useCart();
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
@@ -16,35 +21,6 @@ const Checkout = () => {
     phone: ""
   });
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
-      const guestId = localStorage.getItem('guestId');
-
-      let url = 'http://localhost:3000/api/cart';
-      if (userId) {
-        url += `?userId=${userId}`;
-      } else if (guestId) {
-        url += `?guestId=${guestId}`;
-      } else {
-        return; // No user or guest
-      }
-
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        if (response.ok) {
-          setCart(data);
-        }
-      } catch (error) {
-        console.error('Error fetching cart:', error);
-      }
-    };
-
-    fetchCart();
-  }, []);
-
   const handleCreateCheckout = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -54,9 +30,11 @@ const Checkout = () => {
     }
 
     if (!cart || !cart.products || cart.products.length === 0) {
-        alert("Your cart is empty");
+        toast.error("Your cart is empty");
         return;
     }
+
+    setIsSubmitting(true);
 
     const orderData = {
         orderItems: cart.products,
@@ -72,7 +50,7 @@ const Checkout = () => {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/api/orders', {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,21 +62,38 @@ const Checkout = () => {
         const data = await response.json();
         if (response.ok) {
             setCheckoutId(data._id);
-            navigate(`/order-confirmation`); // Or navigate to order details
+      clearCart();
+      toast.success('Order placed successfully');
+      navigate(`/order-confirmation`, { state: { checkoutId: data._id } });
         } else {
-            alert(data.message || "Failed to place order");
+      toast.error(data.message || "Failed to place order");
         }
     } catch (error) {
         console.error("Error placing order:", error);
-    }
+    toast.error('Something went wrong while placing your order');
+  } finally {
+    setIsSubmitting(false);
+  }
   }
 
 
-const handlePaymentSuccess =  (details) => {
-    console.log("Payment Successful", details);
-    navigate("/order-confirmation")
-    
-}
+  if (loading) {
+    return (
+      <div className='flex h-64 items-center justify-center text-gray-600'>
+        Preparing your checkout...
+      </div>
+    );
+  }
+
+  if (!cart || cart.products.length === 0) {
+    return (
+      <div className='max-w-2xl mx-auto py-20 text-center'>
+        <h2 className='text-2xl font-semibold mb-4'>Your cart is empty</h2>
+        <p className='text-gray-600 mb-6'>Browse the latest collections and add items to your cart before checking out.</p>
+      </div>
+    );
+  }
+
   return (
     <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter'>
       {/* Left section */}
@@ -110,7 +105,7 @@ const handlePaymentSuccess =  (details) => {
             <label className='block text-gray-700'>Email</label>
             <input
               type="email"
-              value='user@example.com'
+              value={user?.email || 'your@email.com'}
               className='w-full p-2 border rounded'
               disabled
             />
@@ -198,7 +193,9 @@ const handlePaymentSuccess =  (details) => {
           </div>
           <div className="mt-6">
             {!checkoutId ? (
-                <button type="submit" className='w-full bg-black text-white py-3 rounded'>Continue to Payment</button>
+                <button type="submit" disabled={isSubmitting} className='w-full bg-black text-white py-3 rounded disabled:opacity-70 disabled:cursor-not-allowed'>
+                  {isSubmitting ? 'Processing order...' : 'Place Order'}
+                </button>
             ) : (
                 <div>
                     <h3 className='text-lg mb-4'>Pay with Stripe</h3>
@@ -216,7 +213,7 @@ const handlePaymentSuccess =  (details) => {
             <div key={index} className='flex items-start justify-between py-2 border-b'>
               <div className="flex items-start">
                 <img 
-                src={product.image} 
+                src={product.image || 'https://picsum.photos/120?blur=2'} 
                 alt={product.name} 
                 className='w-20 h-24 object-cover mr-4' />
                 <div>
@@ -229,7 +226,7 @@ const handlePaymentSuccess =  (details) => {
             </div>
           ))}
         </div>
-        <div className='flex justify-between items-centertext-lg mb-4'>
+        <div className='flex justify-between items-center text-lg mb-4'>
           <p>Subtotal</p>
           <p>${cart.totalPrice?.toLocaleString()}</p>
         </div>

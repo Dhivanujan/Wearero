@@ -1,5 +1,6 @@
 const express = require('express');
 const Order = require('../models/Order');
+const Cart = require('../models/Cart');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -29,6 +30,12 @@ router.post('/', protect, async (req, res) => {
     });
 
     const createdOrder = await order.save();
+
+    try {
+      await Cart.deleteOne({ user: req.user._id });
+    } catch (cleanupError) {
+      console.error('Failed to clear cart after order creation:', cleanupError);
+    }
     res.status(201).json(createdOrder);
   } catch (error) {
     console.error(error);

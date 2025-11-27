@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
+import { toast } from 'sonner';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -11,7 +13,7 @@ const MyOrders = () => {
         if (!token) return;
 
         try {
-            const response = await fetch('http://localhost:3000/api/orders/my-orders', {
+          const response = await fetch(`${API_BASE_URL}/api/orders/my-orders`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -19,14 +21,17 @@ const MyOrders = () => {
             const data = await response.json();
             if (response.ok) {
                 setOrders(data);
+          } else {
+            toast.error(data.message || 'Unable to load your orders');
             }
         } catch (error) {
             console.error("Error fetching orders:", error);
+          toast.error('Something went wrong while fetching your orders');
         }
     };
 
-    fetchOrders();
-  }, []);
+      fetchOrders();
+      }, [navigate]);
 
   const handleRowClick = (orderId) => {
     navigate(`/order/${orderId}`)

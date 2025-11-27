@@ -4,6 +4,8 @@ import FilterSidebar from "../components/Products/FilterSidebar";
 import SortOptions from "./SortOptions";
 import ProductGrid from "../components/Products/ProductGrid";
 import { useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from "../lib/api";
+import { toast } from "sonner";
 
 const CollectionPage = () => {
   const [products, setProducts] = useState([]);
@@ -36,13 +38,16 @@ const CollectionPage = () => {
     const fetchProducts = async () => {
         try {
             const params = new URLSearchParams(searchParams);
-            const response = await fetch(`http://localhost:3000/api/products?${params.toString()}`);
+            const response = await fetch(`${API_BASE_URL}/api/products?${params.toString()}`);
             const data = await response.json();
             if (response.ok) {
                 setProducts(data);
+            } else {
+              toast.error(data.message || 'Unable to load products');
             }
         } catch (error) {
             console.error("Error fetching products:", error);
+            toast.error('Something went wrong while loading the collection');
         }
     };
 

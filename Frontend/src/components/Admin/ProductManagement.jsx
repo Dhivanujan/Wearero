@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from '../../lib/api'
+import { toast } from 'sonner'
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -10,11 +12,16 @@ const ProductManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/products');
+      const response = await fetch(`${API_BASE_URL}/api/products`);
       const data = await response.json();
-      setProducts(data);
+      if (response.ok) {
+        setProducts(data);
+      } else {
+        toast.error(data.message || 'Unable to load products');
+      }
     } catch (error) {
       console.error("Error fetching products:", error);
+      toast.error('Something went wrong while loading products');
     }
   };
 
@@ -22,7 +29,7 @@ const ProductManagement = () => {
     if(window.confirm("Are you sure you want to delete the Product?")) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -30,11 +37,14 @@ const ProductManagement = () => {
         });
         if (response.ok) {
           fetchProducts();
+          toast.success('Product deleted');
         } else {
-          console.error("Failed to delete product");
+          const payload = await response.json();
+          toast.error(payload.message || "Failed to delete product");
         }
       } catch (error) {
         console.error("Error deleting product:", error);
+        toast.error('Something went wrong while deleting the product');
       }
     }
   }
@@ -74,7 +84,7 @@ const ProductManagement = () => {
                 <button onClick={() => handleDelete(product._id)} className='bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'>Delete</button>
               </td>
             </tr>)) : (<tr>
-              <td colSpan={4} className='p-4 text-centertext-gray-500'>No Products found.</td>
+              <td colSpan={4} className='p-4 text-center text-gray-500'>No products found.</td>
             </tr>)}
           </tbody>
         </table>

@@ -208,7 +208,8 @@ router.get("/", async (req, res) => {
       query.sizes = { $in: size.split(",") };
     }
     if (color) {
-      query.colors = { $in: [color] };
+      const colorsArray = color.split(",").map((value) => value.trim());
+      query.colors = { $in: colorsArray };
     }
     if (gender) {
       query.gender = gender;
@@ -229,23 +230,25 @@ router.get("/", async (req, res) => {
     if (sortBy) {
       switch (sortBy) {
         case "priceAsc":
-          sortBy = { price: 1 };
+          sort = { price: 1 };
           break;
         case "priceDesc":
-          sortBy = { price: -1 };
+          sort = { price: -1 };
           break;
         case "popularity":
-          sortBy = { rating: -1 };
+          sort = { rating: -1 };
           break;
         default:
           break;
       }
     }
 
+    const sanitizedLimit = Number(limit) || 0;
+
     //Fetch products and apply sorting an limit
-    let products = await Product.find(query)
-      .sort(sortBy)
-      .limit(Number(limit) || 0);
+    const products = await Product.find(query)
+      .sort(sort)
+      .limit(sanitizedLimit);
     res.json(products);
   } catch (error) {
     console.error(error);
@@ -258,12 +261,16 @@ router.get("/", async (req, res) => {
 //@access Public
 router.get("/best-seller", async (req, res) => {
   try {
-    const bestSellers = await Product.findOne().sort({ rating: -1 });
-    if (bestSellers) {
-      res.json(bestSellers);
-    } else {
-      res.status(404).json({ message: "No best-selling products found" });
+    const limit = Number(req.query.limit) || 4;
+    const bestSellers = await Product.find()
+      .sort({ rating: -1, numReviews: -1 })
+      .limit(limit);
+
+    if (!bestSellers || bestSellers.length === 0) {
+      return res.status(404).json({ message: "No best-selling products found" });
     }
+
+    res.json(bestSellers);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });

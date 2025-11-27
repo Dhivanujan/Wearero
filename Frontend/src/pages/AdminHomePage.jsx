@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from '../lib/api'
+import { toast } from 'sonner'
 
 const AdminHomePage = () => {
   const [orders, setOrders] = useState([]);
@@ -8,23 +10,31 @@ const AdminHomePage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/orders', {
+        const response = await fetch(`${API_BASE_URL}/api/orders`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
-        setOrders(data);
+        if (response.ok) {
+          setOrders(data);
+        } else {
+          toast.error(data.message || 'Unable to load orders');
+        }
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong while loading orders');
       }
     };
 
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         const data = await response.json();
-        setProducts(data);
+        if (response.ok) {
+          setProducts(data);
+        }
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong while loading products');
       }
     };
 

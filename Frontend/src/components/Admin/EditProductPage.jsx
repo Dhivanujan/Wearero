@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE_URL } from "../../lib/api";
+import { toast } from "sonner";
 
 const EditProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [productData, setProductData] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const defaultProductState = {
     name: "",
     description: "",
     price: 0,
@@ -18,19 +21,28 @@ const EditProductPage = () => {
     material: "",
     gender: "",
     images: [],
-  });
+  };
+  const [productData, setProductData] = useState(defaultProductState);
 
   useEffect(() => {
     if (id) {
       const fetchProduct = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/products/${id}`);
+          const response = await fetch(`${API_BASE_URL}/api/products/${id}`);
           const data = await response.json();
           if (response.ok) {
-            setProductData(data);
+            setProductData({
+              ...data,
+              sizes: data.sizes || [],
+              colors: data.colors || [],
+              images: data.images || [],
+            });
+          } else {
+            toast.error(data.message || 'Unable to load the product');
           }
         } catch (error) {
           console.error("Error fetching product:", error);
+          toast.error('Something went wrong while loading the product');
         }
       };
       fetchProduct();
@@ -67,6 +79,7 @@ const EditProductPage = () => {
         : 'http://localhost:3000/api/products';
       const method = id ? 'PUT' : 'POST';
 
+      setIsSubmitting(true);
       const response = await fetch(url, {
         method: method,
         headers: {
@@ -77,12 +90,18 @@ const EditProductPage = () => {
       });
 
       if (response.ok) {
+        toast.success(id ? 'Product updated' : 'Product created');
+        setProductData(defaultProductState);
         navigate('/admin/products');
       } else {
-        console.error("Failed to save product");
+        const payload = await response.json();
+        toast.error(payload.message || "Failed to save product");
       }
     } catch (error) {
       console.error("Error saving product:", error);
+      toast.error('Something went wrong while saving the product');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -217,9 +236,10 @@ const EditProductPage = () => {
 
         <button
           type="submit"
-          className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors"
+          disabled={isSubmitting}
+          className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {id ? "Update Product" : "Create Product"}
+          {isSubmitting ? 'Saving...' : id ? "Update Product" : "Create Product"}
         </button>
       </form>
     </div>

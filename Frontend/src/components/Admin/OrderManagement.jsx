@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { API_BASE_URL } from '../../lib/api'
+import { toast } from 'sonner'
 
 const OrderManagement = () => {
     const [orders, setOrders] = useState([]);
@@ -9,21 +11,26 @@ const OrderManagement = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/orders', {
+            const response = await fetch(`${API_BASE_URL}/api/orders`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             const data = await response.json();
-            setOrders(data);
+            if (response.ok) {
+                setOrders(data);
+            } else {
+                toast.error(data.message || 'Unable to load orders');
+            }
         } catch (error) {
             console.error("Error fetching orders:", error);
+            toast.error('Something went wrong while loading orders');
         }
     };
 
     const handleStatusChange = async (orderId, status) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+            const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,9 +40,14 @@ const OrderManagement = () => {
             });
             if (response.ok) {
                 fetchOrders();
+                toast.success('Order updated');
+            } else {
+                const payload = await response.json();
+                toast.error(payload.message || 'Unable to update order');
             }
         } catch (error) {
             console.error("Error updating order status:", error);
+            toast.error('Something went wrong while updating the order');
         }
     }
   return (
@@ -61,7 +73,7 @@ const OrderManagement = () => {
                                 <td className='py-4 px-4 font-medium text-gray-900 whitespace-nowrap'>
                                     #{order._id}
                                 </td>
-                                <td className="p-4">{order.user.name}</td>
+                                <td className="p-4">{order.user?.name || 'Guest'}</td>
                                 <td className="p-4">{order.totalPrice}</td>
                                 <td className="p-4">
                                     <select 
