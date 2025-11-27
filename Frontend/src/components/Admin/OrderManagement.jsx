@@ -1,20 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const OrderManagement = () => {
-    const orders = [
-        {
-            _id: 12312312,
-            user: {
-                name: "John",
-            },
-            totalPrice: 100,
-            status: "processing"
-        }
-    ]
+    const [orders, setOrders] = useState([]);
 
-    const handleStatusChange = (orderId, status) => {
-        console.log({id: orderId, status});
-        
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/orders', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+            setOrders(data);
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+        }
+    };
+
+    const handleStatusChange = async (orderId, status) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ status })
+            });
+            if (response.ok) {
+                fetchOrders();
+            }
+        } catch (error) {
+            console.error("Error updating order status:", error);
+        }
     }
   return (
     <div className="max-w-7xl mx-auto p-6">

@@ -1,33 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const AdminHomePage = () => {
-  const orders = [
-    {
-      _id: 123123,
-      user: {
-        name: "John Doe"
-      },
-      totalPrice: 150,
-      status: "Processing"
-    }
-  ]
+  const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/orders', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await response.json();
+        setOrders(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/products');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchOrders();
+    fetchProducts();
+  }, []);
+
+  const totalRevenue = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+  const totalOrders = orders.length;
+  const totalProducts = products.length;
+  const recentOrders = orders.slice(0, 5);
+
   return (
     <div className='max-w-7xl mx-auto p-6'>
       <h1 className='text-3xl font-bold mb-6'>Admin Dashboard</h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
         <div className="p-4 shadow-md rounded-lg">
           <h2 className='text-xl font-semibold'>Revenue</h2>
-          <p className='text-2xl'>$10000</p>
+          <p className='text-2xl'>${totalRevenue}</p>
         </div>
         <div className="p-4 shadow-md rounded-lg">
           <h2 className='text-xl font-semibold'>Total Orders</h2>
-          <p className='text-2xl'>200</p>
+          <p className='text-2xl'>{totalOrders}</p>
           <Link to="/admin/orders" className="text-blue-500 hover:underline">Manage Orders</Link>
         </div>
         <div className="p-4 shadow-md rounded-lg">
           <h2 className='text-xl font-semibold'>Total Products</h2>
-          <p className='text-2xl'>100</p>
+          <p className='text-2xl'>{totalProducts}</p>
           <Link to="/admin/products" className="text-blue-500 hover:underline">Manage Products</Link>
         </div>
       </div>
@@ -44,11 +69,11 @@ const AdminHomePage = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.length > 0 ? (
-                orders.map((order) => (
+              {recentOrders.length > 0 ? (
+                recentOrders.map((order) => (
                   <tr key={order._id} className='border-b hover:bg-gray-50 cursor-pointer'>
                     <td className='p-4'>#{order._id}</td>
-                    <td className='p-4'>{order.user.name}</td>
+                    <td className='p-4'>{order.user?.name || "Unknown"}</td>
                     <td className='p-4'>{order.totalPrice}</td>
                     <td className='p-4'>{order.status}</td>
                   </tr>

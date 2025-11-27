@@ -1,6 +1,6 @@
 const express = require('express');
 const Order = require('../models/Order');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -64,6 +64,59 @@ router.get('/:id', protect, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route GET /api/orders
+// @desc Get all orders (Admin only)
+// @access Private/Admin
+router.get("/", protect, admin, async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate("user", "id name email").sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// @route PUT /api/orders/:id/status
+// @desc Update order status (Admin only)
+// @access Private/Admin
+router.put("/:id/status", protect, admin, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.status = req.body.status || order.status;
+      order.isDelivered = req.body.status === "Delivered" ? true : order.isDelivered;
+      order.deliveredAt = req.body.status === "Delivered" ? Date.now() : order.deliveredAt;
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// @route DELETE /api/orders/:id
+// @desc Delete order (Admin only)
+// @access Private/Admin
+router.delete("/:id", protect, admin, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      await order.deleteOne();
+      res.json({ message: "Order removed" });
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 });
 

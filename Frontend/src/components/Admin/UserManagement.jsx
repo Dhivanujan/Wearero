@@ -1,20 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const UserManagement = () => {
-    const users = [
-        {
-            _id:123123,
-            name: "John Doe",
-            email: "john@example.com",
-            role: "admin"
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/users', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+            setUsers(data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
         }
-    ]
+    };
 
     const [formData, setFormData] =  useState({
         name: "",
         email: "",
         password: "",
-        role: "Customer", //Default role
+        role: "customer", //Default role
     })
 
     const handleChange = (e) => {
@@ -23,25 +34,64 @@ const UserManagement = () => {
             [e.target.name]: e.target.value
         })
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
-        //Reset the form after the submission
-        setFormData({
-            name: "",
-            email: "",
-            password: "",
-            role: "Customer"
-        })
+        try {
+            const response = await fetch('http://localhost:3000/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                fetchUsers();
+                setFormData({
+                    name: "",
+                    email: "",
+                    password: "",
+                    role: "customer"
+                });
+            }
+        } catch (error) {
+            console.error("Error adding user:", error);
+        }
     }
 
-    const handleRoleChange = (userId, newRole) => {
-       console.log({id:userId, role: newRole})
+    const handleRoleChange = async (userId, newRole) => {
+       try {
+           const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+               method: 'PUT',
+               headers: {
+                   'Content-Type': 'application/json',
+                   Authorization: `Bearer ${localStorage.getItem('token')}`
+               },
+               body: JSON.stringify({ role: newRole })
+           });
+           if (response.ok) {
+               fetchUsers();
+           }
+       } catch (error) {
+           console.error("Error updating role:", error);
+       }
     }
 
-    const handleDeleteUser = (userId) => {
+    const handleDeleteUser = async (userId) => {
        if(window.confirm("Are you sure you want to delete the User? ")){
-        console.log("deleting user with ID", userId)
+           try {
+               const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                   method: 'DELETE',
+                   headers: {
+                       Authorization: `Bearer ${localStorage.getItem('token')}`
+                   }
+               });
+               if (response.ok) {
+                   fetchUsers();
+               }
+           } catch (error) {
+               console.error("Error deleting user:", error);
+           }
        }
     }
   return (

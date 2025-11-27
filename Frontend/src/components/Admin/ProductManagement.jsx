@@ -1,25 +1,52 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const ProductManagement = () => {
-  const products = [
-    {
-      _id: 123123,
-      name: "Shirt",
-      price: 110,
-      sku:"123123123"
-    }
-  ]
+  const [products, setProducts] = useState([]);
 
-  const handleDelete = (id) => {
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/products');
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
     if(window.confirm("Are you sure you want to delete the Product?")) {
-      consolelog("Delete Product with id:", id)
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          fetchProducts();
+        } else {
+          console.error("Failed to delete product");
+        }
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
     }
   }
   return (
     <div className="max-w-7xl mx-auto p-6">
 
       <h2 className="text-2xl font-bold mb-6">Product Management</h2>
+      <div className='mb-4 text-right'>
+        <Link to="/admin/products/new" className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>
+          Add Product
+        </Link>
+      </div>
       <div className='overflow-x-auto shadow sm:rounded-lg'>
         <table className='min-w-full text-left text-gray-500'>
           <thead className="bg-gray-100 text-xs uppercase text-gray-700">
