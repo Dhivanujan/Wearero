@@ -7,37 +7,33 @@ const OrderDetailsPage = () => {
     const [orderDetails, setOrderDetails] = useState(null);
 
     useEffect(() => {
-        const mockOrderDetails = {
-            _id: id,
-            createdAt: new Date(),
-            isPaid: true,
-            isDelivered: false,
-            paymentMethod: "PayPal",
-            shippingMethod: "Standard",
-            ShippingAddress: {city: "New York", country: "USA"},
-            orderItems: [
-                {
-                    productId: "1",
-                    name: "Jacket",
-                    price: 120,
-                    quantity: 1,
-                    image: "https://picsum.photos/150?random=1"
-                },
-                {
-                    productId: "",
-                    name: "T-Shirt",
-                    price: 150,
-                    quantity: 2,
-                    image: "https://picsum.photos/150?random=2"
+        const fetchOrderDetails = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setOrderDetails(data);
+                } else {
+                    console.error("Failed to fetch order details");
                 }
-            ]
-        }
-        setOrderDetails(mockOrderDetails)
+            } catch (error) {
+                console.error("Error fetching order details:", error);
+            }
+        };
+
+        fetchOrderDetails();
     }, [id])
   return (
     <div className='max-w-7xl mx-auto p-4 sm:p-6'>
         <h2 className='text-2xl md:text-3xl font-bold mb-6'>Order Details</h2>
-        {!orderDetails ? (<p>No Order deatils found</p>) : (<div className="p-4 sm:p-6 rounded-lg border">
+        {!orderDetails ? (<p>Loading Order Details...</p>) : (<div className="p-4 sm:p-6 rounded-lg border">
             {/* {Order info}  */}
             <div className="flex flex-col sm:flex-row justify-between mb-8">
                 <div>
@@ -67,7 +63,7 @@ const OrderDetailsPage = () => {
                 <div>
                     <h4 className='text-lg font-semibold mb-2'>Shipping Info</h4>
                     <p>Shipping Method: {orderDetails.shippingMethod}</p>
-                    <p>Address:{" "} {`${orderDetails.ShippingAddress.city}, ${orderDetails.ShippingAddress.country}`}</p>
+                    <p>Address: {`${orderDetails.shippingAddress.address}, ${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.country}`}</p>
                 </div>
             </div>
             {/* {Product List} */}

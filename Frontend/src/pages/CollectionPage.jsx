@@ -3,11 +3,13 @@ import { FaFilter } from "react-icons/fa";
 import FilterSidebar from "../components/Products/FilterSidebar";
 import SortOptions from "./SortOptions";
 import ProductGrid from "../components/Products/ProductGrid";
+import { useSearchParams } from "react-router-dom";
 
 const CollectionPage = () => {
   const [products, setProducts] = useState([]);
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchParams] = useSearchParams();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -31,60 +33,22 @@ const CollectionPage = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      const fetchedProducts = [
-        {
-          _id: "1",
-          name: "Product 1",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=3" }],
-        },
-        {
-          _id: "2",
-          name: "Product 2",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=4" }],
-        },
-        {
-          _id: "3",
-          name: "Product 3",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=5" }],
-        },
-        {
-          _id: "4",
-          name: "Product 4",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=6" }],
-        },
-        {
-          _id: "5",
-          name: "Product 5",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=7" }],
-        },
-        {
-          _id: "6",
-          name: "Product 6",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=8" }],
-        },
-        {
-          _id: "7",
-          name: "Product 7",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=9" }],
-        },
-        {
-          _id: "8",
-          name: "Product 8",
-          price: 100,
-          images: [{ url: "https://picsum.photos/200/200?random=10" }],
-        },
-      ];
-      setProducts(fetchedProducts);
-    }, 1000);
-  }, []);
+    const fetchProducts = async () => {
+        try {
+            const params = new URLSearchParams(searchParams);
+            const response = await fetch(`http://localhost:3000/api/products?${params.toString()}`);
+            const data = await response.json();
+            if (response.ok) {
+                setProducts(data);
+            }
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    };
+
+    fetchProducts();
+  }, [searchParams]);
+
 
   return (
     <div className="flex flex-col lg:flex-row">

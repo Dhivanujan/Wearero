@@ -6,39 +6,26 @@ const MyOrders = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate fetching orders
-    setTimeout(() => {
-      const mockOrders = [
-        {
-          _id: "12345",
-          createdAt: new Date(),
-          shippingAddress: { city: "New York", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 1",
-              image: "https://picsum.photos/500/500?random=4"
-            }
-          ],
-          totalPrice: 100,
-          isPaid: true
-        },
-        {
-          _id: "34567",
-          createdAt: new Date(),
-          shippingAddress: { city: "New York", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 1",
-              image: "https://picsum.photos/500/500?random=5"
-            }
-          ],
-          totalPrice: 100,
-          isPaid: true
-        },
-      ];
+    const fetchOrders = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
 
-      setOrders(mockOrders);
-    }, 1000);
+        try {
+            const response = await fetch('http://localhost:3000/api/orders/my-orders', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setOrders(data);
+            }
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+        }
+    };
+
+    fetchOrders();
   }, []);
 
   const handleRowClick = (orderId) => {

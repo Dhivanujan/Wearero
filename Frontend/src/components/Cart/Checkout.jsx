@@ -1,30 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 // import StripeButton from './StripeButton';
-
-const cart = {
-  products: [
-    {
-      name: "Stylish Jacket",
-      size: "M",
-      color: "Black",
-      price: 120,
-      image: "https://picsum.photos/150?random=1",
-    },
-    {
-      name: "Casual Sneakers",
-      size: "42",
-      color: "White",
-      price: 75,
-      image: "https://picsum.photos/150?random=2",
-    },
-  ],
-  totalPrice: 195,
-};
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [checkoutId, setCheckoutId] = useState(null)
+  const [cart, setCart] = useState(null);
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
@@ -35,10 +16,83 @@ const Checkout = () => {
     phone: ""
   });
 
-  const handleCreateCheckout = (e) => {
+  useEffect(() => {
+    const fetchCart = async () => {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      const guestId = localStorage.getItem('guestId');
+
+      let url = 'http://localhost:3000/api/cart';
+      if (userId) {
+        url += `?userId=${userId}`;
+      } else if (guestId) {
+        url += `?guestId=${guestId}`;
+      } else {
+        return; // No user or guest
+      }
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (response.ok) {
+          setCart(data);
+        }
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    };
+
+    fetchCart();
+  }, []);
+
+  const handleCreateCheckout = async (e) => {
     e.preventDefault();
-    // setCheckoutId(123);
+    const token = localStorage.getItem('token');
+    if (!token) {
+        navigate('/login');
+        return;
+    }
+
+    if (!cart || !cart.products || cart.products.length === 0) {
+        alert("Your cart is empty");
+        return;
+    }
+
+    const orderData = {
+        orderItems: cart.products,
+        shippingAddress: {
+            address: shippingAddress.address,
+            city: shippingAddress.city,
+            postalCode: shippingAddress.postalCode,
+            country: shippingAddress.country,
+            phone: shippingAddress.phone,
+        },
+        paymentMethod: "COD", // Default for now
+        totalPrice: cart.totalPrice,
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(orderData),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            setCheckoutId(data._id);
+            navigate(`/order-confirmation`); // Or navigate to order details
+        } else {
+            alert(data.message || "Failed to place order");
+        }
+    } catch (error) {
+        console.error("Error placing order:", error);
+    }
   }
+
 
 const handlePaymentSuccess =  (details) => {
     console.log("Payment Successful", details);

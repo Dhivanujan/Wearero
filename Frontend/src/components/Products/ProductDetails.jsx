@@ -1,78 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import ProductGrid from './ProductGrid';
-
-const selectedProduct = {
-  name: "Stylish Jacket",
-  price: 120,
-  originalPrice: 150,
-  description: "This is a stylish Jacket perfect for any occasion.",
-  brand: "FashionBrand",
-  material: "Leather",
-  sizes: ["S", "M", "L", "XL"],
-  colors: ["Red", "Black"],
-  images: [
-    { url: "https://picsum.photos/500/500?random=1", altText: "Stylish Jacket 1" },
-    { url: "https://picsum.photos/500/500?random=2", altText: "Stylish Jacket 2" }
-  ]
-};
-
-const similarProducts = [
-  {
-    _id: "1",
-    name: "Product 1",
-    price: 100,
-    images: [{ url: "https://picsum.photos/200/200?random=3" }]
-  },
-  {
-    _id: "2",
-    name: "Product 2",
-    price: 100,
-    images: [{ url: "https://picsum.photos/200/200?random=4" }]
-  },
-  {
-    _id: "3",
-    name: "Product 3",
-    price: 100,
-    images: [{ url: "https://picsum.photos/200/200?random=5" }]
-  },
-  {
-    _id: "4",
-    name: "Product 4",
-    price: 100,
-    images: [{ url: "https://picsum.photos/200/200?random=6" }]
-  }
-];
+import { useParams } from 'react-router-dom';
 
 const ProductDetails = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [similarProducts, setSimilarProducts] = useState([]);
   const [mainImage, setMainImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(""); // Added color state
 
   useEffect(() => {
-    if (selectedProduct?.images?.length > 0) {
-      setMainImage(selectedProduct.images[0].url);
-    }
-  }, []);
+    const fetchProduct = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/products/${id}`);
+            const data = await response.json();
+            if (response.ok) {
+                setProduct(data);
+                setMainImage(data.images[0]?.url);
+            }
+        } catch (error) {
+            console.error("Error fetching product:", error);
+        }
+    };
+
+    const fetchSimilarProducts = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/products/similar/${id}`);
+            const data = await response.json();
+            if (response.ok) {
+                setSimilarProducts(data);
+            }
+        } catch (error) {
+            console.error("Error fetching similar products:", error);
+        }
+    };
+
+    fetchProduct();
+    fetchSimilarProducts();
+  }, [id]);
+
+  const handleAddToCart = async () => {
+      if (!selectedSize) {
+          toast.error("Please select a size");
+          return;
+      }
+      // Assuming color selection is also needed if product has colors
+      // if (!selectedColor) { toast.error("Please select a color"); return; }
+
+      const userId = localStorage.getItem('userId');
+      let guestId = localStorage.getItem('guestId');
+      if (!userId && !guestId) {
+          guestId = `guest_${new Date().getTime()}`;
+          localStorage.setItem('guestId', guestId);
+      }
+
+      try {
+          const response = await fetch('http://localhost:3000/api/cart', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  productId: product._id,
+                  quantity,
+                  size: selectedSize,
+                  color: selectedColor || product.colors[0], // Default to first color if not selected
+                  userId,
+                  guestId
+              })
+          });
+
+          if (response.ok) {
+              toast.success("Product added to cart");
+          } else {
+              toast.error("Failed to add to cart");
+          }
+      } catch (error) {
+          console.error("Error adding to cart:", error);
+          toast.error("Error adding to cart");
+      }
+  };
+
+  if (!product) return <div>Loading...</div>;
+
+  // Use product data instead of selectedProduct mock
+  const { name, price, originalPrice, description, brand, material, sizes, colors, images } = product;
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleQuantityChange = (action) => {
     if (action === 'plus') setQuantity((prev) => prev + 1);
     if (action === 'minus' && quantity > 1) setQuantity((prev) => prev - 1);
   };
 
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      toast.error("Please select a size and color before adding to cart", { duration: 1000 });
-      return;
-    }
-    setIsButtonDisabled(true);
-    setTimeout(() => {
-      toast.success("Product added to cart!", { duration: 1000 });
-      setIsButtonDisabled(false);
-    }, 500);
-  };
+
 
   return (
     <div className='p-6'>
@@ -80,7 +102,7 @@ const ProductDetails = () => {
         <div className='flex flex-col md:flex-row'>
           {/* Left Thumbnails */}
           <div className='hidden md:flex flex-col space-y-4 mr-6'>
-            {selectedProduct.images.map((image, index) => (
+            {images.map((image, index) => (
               <img
                 key={index}
                 src={image.url}
@@ -104,7 +126,7 @@ const ProductDetails = () => {
 
           {/* Mobile Thumbnails */}
           <div className='md:hidden flex overflow-x-scroll space-x-4 mb-4'>
-            {selectedProduct.images.map((image, index) => (
+            {images.map((image, index) => (
               <img
                 key={index}
                 src={image.url}
@@ -117,21 +139,21 @@ const ProductDetails = () => {
 
           {/* Right Section */}
           <div className='md:w-1/2 md:ml-10'>
-            <h1 className='text-2xl md:text-3xl font-semibold mb-2'>{selectedProduct.name}</h1>
+            <h1 className='text-2xl md:text-3xl font-semibold mb-2'>{name}</h1>
 
-            {selectedProduct.originalPrice && (
+            {originalPrice && (
               <p className='text-lg text-gray-600 mb-1 line-through'>
-                ${selectedProduct.originalPrice}
+                ${originalPrice}
               </p>
             )}
-            <p className='text-xl text-gray-500 mb-2'>${selectedProduct.price}</p>
-            <p className='text-gray-600 mb-4'>{selectedProduct.description}</p>
+            <p className='text-xl text-gray-500 mb-2'>${price}</p>
+            <p className='text-gray-600 mb-4'>{description}</p>
 
             {/* Colors */}
             <div className='mb-4'>
               <p className='text-gray-700'>Color:</p>
               <div className='flex gap-2 mt-2'>
-                {selectedProduct.colors.map((color) => (
+                {colors.map((color) => (
                   <button
                     key={color}
                     onClick={() => setSelectedColor(color)}
@@ -146,7 +168,7 @@ const ProductDetails = () => {
             <div className='mb-4'>
               <p className='text-gray-700'>Size:</p>
               <div className='flex gap-2 mt-2'>
-                {selectedProduct.sizes.map((size) => (
+                {sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
@@ -193,11 +215,11 @@ const ProductDetails = () => {
                 <tbody>
                   <tr>
                     <th className='py-1'>Brand</th>
-                    <td className='py-1'>{selectedProduct.brand}</td>
+                    <td className='py-1'>{brand}</td>
                   </tr>
                   <tr>
                     <th className='py-1'>Material</th>
-                    <td className='py-1'>{selectedProduct.material}</td>
+                    <td className='py-1'>{material}</td>
                   </tr>
                 </tbody>
               </table>

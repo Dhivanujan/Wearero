@@ -1,15 +1,50 @@
 import React, { useState } from 'react'
 import register from '../assets/register.jpg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Register = () => {
     const [name, setName] = useState('')
     const [email,setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate();
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("User registered: ", {name, email, password})
+    try {
+        const response = await fetch('http://localhost:3000/api/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email, password }),
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.user._id);
+            localStorage.setItem('role', data.user.role);
+             // Merge guest cart if exists
+             const guestId = localStorage.getItem('guestId');
+             if (guestId) {
+                 await fetch('http://localhost:3000/api/cart/merge', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json',
+                         'Authorization': `Bearer ${data.token}`
+                     },
+                     body: JSON.stringify({ guestId }),
+                 });
+                 localStorage.removeItem('guestId');
+             }
+            navigate('/');
+        } else {
+            alert(data.message || 'Registration failed');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred');
+    }
 }
 
   return (
