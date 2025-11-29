@@ -27,7 +27,11 @@ const ProductDetails = () => {
             const data = await response.json();
             if (response.ok) {
                 setProduct(data);
-          setMainImage(data.images?.[0]?.url || "https://picsum.photos/600/800?blur=2");
+          const rawMainImage = data.images?.[0]?.url;
+          const mainImageUrl = rawMainImage 
+            ? (rawMainImage.startsWith('http') ? rawMainImage : `${API_BASE_URL}${rawMainImage}`)
+            : "https://picsum.photos/600/800?blur=2";
+          setMainImage(mainImageUrl);
           setSelectedSize(data.sizes?.[0] || "");
           setSelectedColor(data.colors?.[0] || "");
         } else {
@@ -101,15 +105,17 @@ const ProductDetails = () => {
         <div className='flex flex-col md:flex-row'>
           {/* Left Thumbnails */}
           <div className='hidden md:flex flex-col space-y-4 mr-6'>
-            {galleryImages.map((image, index) => (
+            {galleryImages.map((image, index) => {
+              const imageUrl = image.url?.startsWith('http') ? image.url : `${API_BASE_URL}${image.url}`;
+              return (
               <img
                 key={index}
-                src={image.url}
+                src={imageUrl}
                 alt={image.altText || `Thumbnail ${index}`}
-                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${mainImage === image.url ? "border-black" : "border-gray-300"}`}
-                onClick={() => setMainImage(image.url)}
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${mainImage === imageUrl ? "border-black" : "border-gray-300"}`}
+                onClick={() => setMainImage(imageUrl)}
               />
-            ))}
+            )})}
           </div>
 
           {/* Main Image */}
@@ -125,15 +131,17 @@ const ProductDetails = () => {
 
           {/* Mobile Thumbnails */}
           <div className='md:hidden flex overflow-x-scroll space-x-4 mb-4'>
-            {galleryImages.map((image, index) => (
+            {galleryImages.map((image, index) => {
+              const imageUrl = image.url?.startsWith('http') ? image.url : `${API_BASE_URL}${image.url}`;
+              return (
               <img
                 key={index}
-                src={image.url}
+                src={imageUrl}
                 alt={image.altText || `Thumbnail ${index}`}
-                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${mainImage === image.url ? "border-black" : "border-gray-300"}`}
-                onClick={() => setMainImage(image.url)}
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${mainImage === imageUrl ? "border-black" : "border-gray-300"}`}
+                onClick={() => setMainImage(imageUrl)}
               />
-            ))}
+            )})}
           </div>
 
           {/* Right Section */}

@@ -83,17 +83,19 @@ const OrderDetailsPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orderDetails.orderItems.map((item) => (
+                        {orderDetails.orderItems.map((item) => {
+                            const imageUrl = item.image?.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`;
+                            return (
                             <tr key={item.productId} className='border-b'>
                                 <td className='py-2 px-4 flex items-center'>
-                                    <img src={item.image || 'https://picsum.photos/80?blur=2'} alt={item.name} className='w-12 h-12 object-cover rounded-lg mr-4'/>
+                                    <img src={imageUrl || 'https://picsum.photos/80?blur=2'} alt={item.name} className='w-12 h-12 object-cover rounded-lg mr-4'/>
                                     <Link to={`/product/${item.productId}`} className="text-blue-500 hover:underline">{item.name}</Link>
                                 </td>
                                 <td className='py-2 px-4'>${item.price}</td>
                                 <td className='py-2 px-4'>{item.quantity}</td>
                                 <td className='py-2 px-4'>${item.price * item.quantity}</td>
                             </tr>
-                        ))}
+                        )})}
                     </tbody>
                 </table>
             </div>

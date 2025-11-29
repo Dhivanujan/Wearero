@@ -6,6 +6,8 @@ const userRoutes = require('./routes/UserRoutes.js');
 const productRoutes = require('./routes/ProductRoutes.js');
 const cartRoutes = require('./routes/CartRoutes.js');
 const orderRoutes = require('./routes/OrderRoutes.js');
+const uploadRoutes = require('./routes/uploadRoutes.js');
+const path = require('path');
 
 const app = express();
 
@@ -28,6 +30,10 @@ app.use('/api/users',userRoutes);
 app.use('/api/products',productRoutes);
 app.use('/api/cart',cartRoutes);
 app.use('/api/orders',orderRoutes);
+app.use('/api/upload', uploadRoutes);
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

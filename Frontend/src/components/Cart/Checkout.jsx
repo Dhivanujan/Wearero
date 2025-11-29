@@ -209,11 +209,13 @@ const Checkout = () => {
       <div className='bg-gray-50 p-6 rounded-lg '>
         <h3 className='text-lg mb-4'>Order Summary</h3>
         <div className="border-t py-4 mb-4">
-          {cart.products.map((product, index) => (
+          {cart.products.map((product, index) => {
+            const imageUrl = product.image?.startsWith('http') ? product.image : `${API_BASE_URL}${product.image}`;
+            return (
             <div key={index} className='flex items-start justify-between py-2 border-b'>
               <div className="flex items-start">
                 <img 
-                src={product.image || 'https://picsum.photos/120?blur=2'} 
+                src={imageUrl || 'https://picsum.photos/120?blur=2'} 
                 alt={product.name} 
                 className='w-20 h-24 object-cover mr-4' />
                 <div>
@@ -224,7 +226,7 @@ const Checkout = () => {
               </div>
               <p className='text-xl'>${product.price?.toLocaleString()}</p>
             </div>
-          ))}
+          )})}
         </div>
         <div className='flex justify-between items-center text-lg mb-4'>
           <p>Subtotal</p>

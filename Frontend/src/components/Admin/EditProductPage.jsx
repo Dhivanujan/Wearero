@@ -246,23 +246,64 @@ const EditProductPage = () => {
           />
         </div>
 
-        {/* Image URL Input */}
+        {/* Image Upload */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Image URL</label>
+          <label className="block font-semibold mb-2">Product Images</label>
           <input
-            type="text"
-            name="image"
-            placeholder="Enter Image URL"
-            value={productData.images[0]?.url || ""}
-            onChange={(e) => {
-                const url = e.target.value;
-                setProductData(prev => ({
-                    ...prev,
-                    images: url ? [{ url, alt: prev.name || "Product image" }] : [],
-                }));
+            type="file"
+            onChange={async (e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const formData = new FormData();
+                formData.append("image", file);
+
+                try {
+                  const response = await fetch(`${API_BASE_URL}/api/upload`, {
+                    method: "POST",
+                    body: formData,
+                  });
+                  const data = await response.json();
+                  if (response.ok) {
+                    setProductData((prev) => ({
+                      ...prev,
+                      images: [...prev.images, { url: data.imageUrl, alt: prev.name }],
+                    }));
+                    toast.success("Image uploaded successfully");
+                  } else {
+                    toast.error(data.message || "Failed to upload image");
+                  }
+                } catch (error) {
+                  console.error("Error uploading image:", error);
+                  toast.error("Error uploading image");
+                }
+              }
             }}
             className="w-full border border-gray-300 rounded-md p-2"
           />
+          <div className="flex gap-4 mt-4">
+            {productData.images.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={image.url}
+                  alt={image.alt || "Product Image"}
+                  className="w-20 h-20 object-cover rounded-md shadow-md"
+                />
+                {/* Remove Image Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProductData((prev) => ({
+                      ...prev,
+                      images: prev.images.filter((_, i) => i !== index),
+                    }));
+                  }}
+                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                >
+                  x
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         <button

@@ -56,10 +56,12 @@ const MyOrders = () => {
           </thead>
           <tbody>
             {orders.length > 0 ? (
-              orders.map((order) => (
+              orders.map((order) => {
+                const imageUrl = order.orderItems[0].image?.startsWith('http') ? order.orderItems[0].image : `${API_BASE_URL}${order.orderItems[0].image}`;
+                return (
                 <tr onClick={() => handleRowClick(order._id)} key={order._id} className='border-b hover:border-gray-50 cursor-pointer'>
                   <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    <img src={order.orderItems[0].image} alt={order.orderItems[0].name} 
+                    <img src={imageUrl} alt={order.orderItems[0].name} 
                     className='w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg'/>
                   </td>
                   <td className='py-2 px-2 sm:py-4 sm:px-4 font-medium text-gray-900 whitespace-nowrap'>
@@ -84,7 +86,7 @@ const MyOrders = () => {
                     </span>
                   </td>
                 </tr>
-              ))
+              )})
             ): (
               <tr>
                 <td className='py-4 px-4 text-center text-gray-500'>

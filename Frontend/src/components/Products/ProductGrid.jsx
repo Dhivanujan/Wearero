@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { API_BASE_URL } from '../../lib/api'
 
 const ProductGrid = ({products}) => {
     const safeProducts = Array.isArray(products) ? products : [];
@@ -10,7 +11,10 @@ const ProductGrid = ({products}) => {
             <p className='col-span-full text-center text-gray-500'>No products to display yet.</p>
         )}
                 {safeProducts.map((product, index) => {
-            const imageUrl = product.images?.[0]?.url || 'https://picsum.photos/400/500?blur=4';
+            const rawUrl = product.images?.[0]?.url;
+            const imageUrl = rawUrl 
+                ? (rawUrl.startsWith('http') ? rawUrl : `${API_BASE_URL}${rawUrl}`)
+                : 'https://picsum.photos/400/500?blur=4';
             const imageAlt = product.images?.[0]?.altText || product.name;
             return (
             <motion.div

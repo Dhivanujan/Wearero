@@ -1,6 +1,7 @@
 import React from 'react'
 import { RiDeleteBin3Line } from 'react-icons/ri'
 import { useCart } from '../../context/CartContext';
+import { API_BASE_URL } from '../../lib/api';
 
 const CartContents = () => {
   const { cart, loading, updateQuantity, removeFromCart } = useCart();
@@ -13,11 +14,13 @@ const CartContents = () => {
 
   return (
     <div className='max-w-3xl mx-auto'>
-      {cart.products.map((product, index) => (
+      {cart.products.map((product, index) => {
+        const imageUrl = product.image?.startsWith('http') ? product.image : `${API_BASE_URL}${product.image}`;
+        return (
         <div key={index} className='flex items-start justify-between py-4 border-b'>
           
           {/* Image */}
-          <img src={product.image} alt={product.name} className='w-24 h-24 object-cover rounded mr-4' />
+          <img src={imageUrl} alt={product.name} className='w-24 h-24 object-cover rounded mr-4' />
 
           {/* Product Details */}
           <div className='flex-1'>
@@ -46,7 +49,7 @@ const CartContents = () => {
             </button>
           </div>
         </div>
-      ))}
+      )})}
     </div>
   )
 }

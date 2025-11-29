@@ -106,16 +106,47 @@ const NewArrivals = () => {
         >
           Elevate your wardrobe with the newest arrivals — curated for those who live on the cutting edge of fashion.
         </motion.p>
+      </div>
 
-        {/* Scroll buttons */}
-        <div className='absolute right-0 bottom-[-30px] flex space-x-2'>
-          <button
+      {/* Scrollable content */}
+      <div className='container mx-auto relative'>
+        <div
+            ref={scrollRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onMouseLeave={handleMouseUpOrLeave}
+            className={`container mx-auto overflow-x-scroll flex space-x-6 relative ${
+            isDragging ? 'cursor-grabbing' : 'cursor-grab'
+            } scrollbar-hide`}
+        >
+            {newArrivals.map((product) => (
+            <div
+                key={product._id}
+                className='min-w-[100%] sm:min-w-[50%] md:min-w-[30%] lg:min-w-[25%] relative'
+            >
+                <img
+                src={product.images[0]?.url?.startsWith('http') ? product.images[0]?.url : `${API_BASE_URL}${product.images[0]?.url}`}
+                alt={product.images[0]?.altText || product.name}
+                className='w-full h-[500px] object-cover rounded-lg'
+                draggable="false"
+                />
+                <div className='absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-md text-white p-4 rounded-b-lg'>
+                <Link to={`/product/${product._id}`} className='block'>
+                    <h4 className='font-medium'>{product.name}</h4>
+                    <p className='mt-1'>${product.price}</p>
+                </Link>
+                </div>
+            </div>
+            ))}
+        </div>
+
+         {/* Scroll buttons */}
+         <button
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
-            className={`p-2 rounded border ${
-              canScrollLeft
-                ? 'bg-white text-black hover:bg-gray-100'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            className={`absolute top-1/2 left-0 transform -translate-y-1/2 p-2 rounded-full border bg-white text-black shadow-lg z-10 hover:bg-gray-100 transition-all duration-300 ${
+              canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           >
             <FiChevronLeft className='text-2xl' />
@@ -123,47 +154,12 @@ const NewArrivals = () => {
           <button
             onClick={() => scroll("right")}
             disabled={!canScrollRight}
-            className={`p-2 rounded border ${
-              canScrollRight
-                ? 'bg-white text-black hover:bg-gray-100'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            className={`absolute top-1/2 right-0 transform -translate-y-1/2 p-2 rounded-full border bg-white text-black shadow-lg z-10 hover:bg-gray-100 transition-all duration-300 ${
+              canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           >
             <FiChevronRight className='text-2xl' />
           </button>
-        </div>
-      </div>
-
-      {/* Scrollable content */}
-      <div
-        ref={scrollRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUpOrLeave}
-        onMouseLeave={handleMouseUpOrLeave}
-        className={`container mx-auto overflow-x-scroll flex space-x-6 relative ${
-          isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        } hide-scrollbar`}
-      >
-        {newArrivals.map((product) => (
-          <div
-            key={product._id}
-            className='min-w-[90%] sm:min-w-[45%] md:min-w-[33%] lg:min-w-[25%] xl:min-w-[20%] relative'
-          >
-            <img
-              src={product.images[0]?.url}
-              alt={product.images[0]?.altText || product.name}
-              className='w-full h-[400px] md:h-[500px] object-cover rounded-lg'
-              draggable="false"
-            />
-            <div className='absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-sm text-white p-4 rounded-b-lg'>
-              <Link to={`/product/${product._id}`}>
-                <h4 className='font-medium'>{product.name}</h4>
-                <p className='mt-1'>${product.price}</p>
-              </Link>
-            </div>
-          </div>
-        ))}
       </div>
     </section>
   )
