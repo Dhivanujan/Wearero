@@ -3,6 +3,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { API_BASE_URL } from '../../lib/api'
 import { toast } from 'sonner'
+import { motion } from 'framer-motion'
 
 const NewArrivals = () => {
   const scrollRef = useRef(null)
@@ -87,10 +88,24 @@ const NewArrivals = () => {
   return (
     <section className='py-16 px-4 lg:px-0'>
       <div className='container mx-auto text-center mb-10 relative'>
-        <h2 className='text-3xl font-bold mb-4'>Explore New Arrivals</h2>
-        <p className='text-lg text-gray-600 mb-8'>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className='text-3xl font-bold mb-4'
+        >
+          Explore New Arrivals
+        </motion.h2>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className='text-lg text-gray-600 mb-8'
+        >
           Elevate your wardrobe with the newest arrivals — curated for those who live on the cutting edge of fashion.
-        </p>
+        </motion.p>
 
         {/* Scroll buttons */}
         <div className='absolute right-0 bottom-[-30px] flex space-x-2'>

@@ -1,37 +1,56 @@
 import React from 'react'
 import {HiOutlineCreditCard, HiShoppingBag} from 'react-icons/hi'
 import { HiArrowPathRoundedSquare } from 'react-icons/hi2'
+import { motion } from 'framer-motion'
 
 const FeaturesSection = () => {
   return (
-    <section className='py-16 px-4 bg-white'>
+    <section className='py-16 px-4 bg-white border-t border-gray-100'>
         <div className='container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center'>
             {/* {Feature 1} */}
-            <div className='flex flex-col items-center'>
-                <div className='p-4 rounded-full mb-4'>
-                    <HiShoppingBag className='text-xl'/>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className='flex flex-col items-center group'
+            >
+                <div className='p-4 rounded-full mb-4 bg-gray-100 group-hover:bg-black group-hover:text-white transition-colors duration-300'>
+                    <HiShoppingBag className='text-2xl'/>
                 </div>
-                <h4 className='tracking-tighter mb-2'>FREE INTERNATIONAL SHIPPING</h4>
+                <h4 className='tracking-tighter mb-2 font-bold uppercase text-sm'>FREE INTERNATIONAL SHIPPING</h4>
                 <p className='text-gray-500 text-sm tracking-tighter'>On all orders over $100</p>
-            </div>
+            </motion.div>
 
             {/* {Feature 2} */}
-            <div className='flex flex-col items-center'>
-                <div className='p-4 rounded-full mb-4'>
-                    <HiArrowPathRoundedSquare className='text-xl'/>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className='flex flex-col items-center group'
+            >
+                <div className='p-4 rounded-full mb-4 bg-gray-100 group-hover:bg-black group-hover:text-white transition-colors duration-300'>
+                    <HiArrowPathRoundedSquare className='text-2xl'/>
                 </div>
-                <h4 className='tracking-tighter mb-2'>45-DAY RETURNS</h4>
+                <h4 className='tracking-tighter mb-2 font-bold uppercase text-sm'>45-DAY RETURNS</h4>
                 <p className='text-gray-500 text-sm tracking-tighter'>Money-back guarantee</p>
-            </div>
+            </motion.div>
 
             {/* {Feature 3} */}
-            <div className='flex flex-col items-center'>
-                <div className='p-4 rounded-full mb-4'>
-                    <HiOutlineCreditCard className='text-xl'/>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className='flex flex-col items-center group'
+            >
+                <div className='p-4 rounded-full mb-4 bg-gray-100 group-hover:bg-black group-hover:text-white transition-colors duration-300'>
+                    <HiOutlineCreditCard className='text-2xl'/>
                 </div>
-                <h4 className='tracking-tighter mb-2'>SECURE CHECKOUT</h4>
+                <h4 className='tracking-tighter mb-2 font-bold uppercase text-sm'>SECURE CHECKOUT</h4>
                 <p className='text-gray-500 text-sm tracking-tighter'>100% safe & encrypted</p>
-            </div>
+            </motion.div>
         </div>
     </section>
   )
