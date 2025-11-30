@@ -45,42 +45,43 @@ const userInitials = user?.name
   : '';
   return (
     <>
-        <nav className="container mx-auto flex items-center justify-between py-4 px-6">
+        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+            <div className="container mx-auto flex items-center justify-between py-4 px-6">
             <div>
-                 <Link to="/" className="text-2xl font-medium">Wearero</Link>
+                 <Link to="/" className="text-2xl font-bold tracking-tight">Wearero</Link>
             </div>
-            <div className='hidden md:flex space-x-6'>
+            <div className='hidden md:flex space-x-8'>
                 {navLinks.map((item) => (
-                  <Link key={item.label} to={item.to} className='text-gray-700 hover:text-black text-sm font-medium uppercase'>
+                  <Link key={item.label} to={item.to} className='text-gray-600 hover:text-black text-sm font-medium uppercase tracking-wide transition-colors'>
                     {item.label}
                   </Link>
                 ))}
             </div>
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-6'>
                 {isAdmin && (
-                  <Link to="/admin" className='hidden sm:block bg-black px-3 py-1.5 rounded text-sm text-white'>Admin</Link>
+                  <Link to="/admin" className='hidden sm:block bg-black px-4 py-1.5 rounded-md text-sm text-white font-medium hover:bg-gray-800 transition-colors'>Admin</Link>
                 )}
 
                 {user ? (
                   <div className='flex items-center space-x-3'>
-                    <Link to='/profile' className='flex items-center space-x-2 hover:text-black'>
-                      <span className='inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-white text-xs font-semibold'>
+                    <Link to='/profile' className='flex items-center space-x-2 hover:text-black transition-colors'>
+                      <span className='inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-800 text-xs font-bold border border-gray-200'>
                         {userInitials || <HiOutlineUser className='h-4 w-4' />}
                       </span>
                       <span className='hidden sm:inline text-sm font-medium text-gray-700'>{user.name}</span>
                     </Link>
-                    <button onClick={handleLogout} className='text-xs text-gray-600 hover:text-black'>Logout</button>
+                    <button onClick={handleLogout} className='text-xs text-gray-500 hover:text-red-500 font-medium transition-colors'>Logout</button>
                   </div>
                 ) : (
-                  <div className='hidden sm:flex items-center space-x-3'>
-                    <Link to='/login' className='text-sm font-semibold text-gray-700 hover:text-black'>Sign In</Link>
-                    <Link to='/register' className='bg-black text-white text-sm font-semibold px-4 py-2 rounded'>Join Now</Link>
+                  <div className='hidden sm:flex items-center space-x-4'>
+                    <Link to='/login' className='text-sm font-medium text-gray-600 hover:text-black transition-colors'>Sign In</Link>
+                    <Link to='/register' className='bg-black text-white text-sm font-medium px-5 py-2 rounded-md hover:bg-gray-800 transition-colors'>Join Now</Link>
                   </div>
                 )}
-                <button onClick={toggleCartDrawer} className='relative hover:text-black'>
+                <button onClick={toggleCartDrawer} className='relative hover:text-black transition-colors'>
                   <HiOutlineShoppingBag className='h-6 w-6 text-gray-700'/>
                   {cartCount > 0 && (
-                    <span className='absolute -top-1 bg-bluish text-white text-xs rounded-full px-2 py-0.5'>{cartCount}</span>
+                    <span className='absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center'>{cartCount}</span>
                   )}
                 </button>
                 {/* {Search} */}
@@ -92,6 +93,7 @@ const userInitials = user?.name
                   <HiBars3CenterLeft className='h-6 w-6 text-gray-700'/>
                 </button>
 
+            </div>
             </div>
         </nav>
         <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer}/>

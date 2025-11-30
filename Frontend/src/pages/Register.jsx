@@ -54,45 +54,45 @@ const handleSubmit = async (e) => {
 }
 
   return (
-    <div className='flex '>
-        <div className='w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12'>
-            <form onSubmit={handleSubmit} className='w-full max-w-md bg-white p-8 rounded-lg border shadow-sm'>
+    <div className='flex min-h-screen'>
+        <div className='w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12 bg-gray-50'>
+            <form onSubmit={handleSubmit} className='w-full max-w-md bg-white p-8 rounded-xl shadow-lg border border-gray-100'>
                 <div className='flex justify-center mb-6'>
-                    <h2 className='text-xl font-medium'>Wearero</h2>
+                    <h2 className='text-3xl font-bold tracking-tight'>Wearero</h2>
                 </div>
-                <h2 className='text-2xl font-bold text-center mb-6'>Create your Wearero account</h2>
-                <p className='text-center mb-6 text-sm text-gray-600'>Choose the role that fits your work—customers can shop seamlessly while admins unlock product, order, and user management.</p>
+                <h2 className='text-2xl font-bold text-center mb-6'>Create your account</h2>
+                <p className='text-center mb-6 text-sm text-gray-500'>Welcome to Wearero! Please enter your details below to create an account and get started.</p>
                 <div className='mb-4'>
-                    <label className='block text-sm font-semibold mb-2'>Name</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Name</label>
                     <input 
                     type="text" 
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
-                    className='w-full p-2 border rounded' 
+                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all' 
                     placeholder='Enter your Name' />
                 </div>
                 <div className='mb-4'>
-                    <label className='block text-sm font-semibold mb-2'>Email</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
                     <input 
                     type="email" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
-                    className='w-full p-2 border rounded' 
+                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all' 
                     placeholder='Enter your email address' />
                 </div>
                 <div className='mb-4 '>
-                    <label className="block text-sm font-semibold mb-2">Password</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <input 
                     type="password" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
-                    className='w-full p-2 border rounded' 
+                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all' 
                     placeholder='Enter your password' />
                 </div>
                 <div className='mb-6'>
-                    <p className='block text-sm font-semibold mb-2'>Account Type</p>
+                    <p className='block text-sm font-medium text-gray-700 mb-2'>Account Type</p>
                     <div className='flex flex-col gap-2 sm:flex-row'>
-                        <label className={`flex flex-1 flex-col gap-2 border rounded-lg p-3 cursor-pointer transition ${role === 'customer' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                        <label className={`flex flex-1 flex-col gap-2 border rounded-lg p-3 cursor-pointer transition-all hover:bg-gray-50 ${role === 'customer' ? 'border-black bg-gray-50 ring-1 ring-black' : 'border-gray-200'}`}>
                             <div className='flex items-center gap-2'>
                                 <input
                                     type="radio"
@@ -102,11 +102,11 @@ const handleSubmit = async (e) => {
                                     onChange={(e) => setRole(e.target.value)}
                                     className='accent-black'
                                 />
-                                <span className='font-medium'>Customer</span>
+                                <span className='font-medium text-sm'>Customer</span>
                             </div>
                             <p className='text-xs text-gray-500 mt-1'>Shop products, track orders, and manage your profile.</p>
                         </label>
-                        <label className={`flex flex-1 flex-col gap-2 border rounded-lg p-3 cursor-pointer transition ${role === 'admin' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                        <label className={`flex flex-1 flex-col gap-2 border rounded-lg p-3 cursor-pointer transition-all hover:bg-gray-50 ${role === 'admin' ? 'border-black bg-gray-50 ring-1 ring-black' : 'border-gray-200'}`}>
                             <div className='flex items-center gap-2'>
                                 <input
                                     type="radio"
@@ -116,25 +116,25 @@ const handleSubmit = async (e) => {
                                     onChange={(e) => setRole(e.target.value)}
                                     className='accent-black'
                                 />
-                                <span className='font-medium'>Admin</span>
+                                <span className='font-medium text-sm'>Admin</span>
                             </div>
                             <p className='text-xs text-gray-500 mt-1'>Manage catalog, orders, fulfillment, and other users.</p>
                         </label>
                     </div>
                 </div>
-                <button type='submit' disabled={isSubmitting} className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'>
+                <button type='submit' disabled={isSubmitting} className='w-full bg-black text-white p-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-md'>
                     {isSubmitting ? 'Creating account...' : 'Sign Up'}
                 </button>
-                <p className='mt-6 text-center text-sm'>
+                <p className='mt-6 text-center text-sm text-gray-600'>
                     Already have an account? {" "}
-                    <Link to='/login' className='text-blue-500'>Login</Link>
+                    <Link to='/login' className='text-black font-semibold hover:underline'>Login</Link>
                     </p>
             </form>
         </div>
 
     <div className='hidden md:block w-1/2 bg-gray-800'>
         <div className='h-full flex flex-col justify-center items-center'>
-            <img src={register} alt="Register to Account" className='h-[750px] w-full object-cover'  />
+            <img src={register} alt="Register to Account" className='h-full w-full object-cover'  />
         </div>
     </div>
 
