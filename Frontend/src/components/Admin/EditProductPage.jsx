@@ -99,32 +99,32 @@ const EditProductPage = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
-      <h2 className="text-3xl font-bold mb-6">
+    <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md bg-white dark:bg-gray-800">
+      <h2 className="text-3xl font-bold mb-6 text-black dark:text-white">
         {id ? "Edit Product" : "Create Product"}
       </h2>
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Product Name</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Product Name</label>
           <input
             type="text"
             name="name"
             value={productData.name}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
             required
           />
         </div>
 
         {/* Description */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Product Description</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Product Description</label>
           <textarea
             name="description"
             value={productData.description}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
             rows={4}
             required
           ></textarea>
@@ -132,74 +132,74 @@ const EditProductPage = () => {
 
         {/* Price */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Price</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Price</label>
           <input
             type="number"
             name="price"
             value={productData.price}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
         </div>
 
         {/* Count in Stock */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Count in Stock</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Count in Stock</label>
           <input
             type="number"
             name="countInStock"
             value={productData.countInStock}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
         </div>
 
         {/* SKU */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">SKU</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">SKU</label>
           <input
             type="text"
             name="sku"
             value={productData.sku}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
         </div>
 
         {/* Category */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Category</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Category</label>
           <input
             type="text"
             name="category"
             value={productData.category}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
             required
           />
         </div>
 
         {/* Collection */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Collection</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Collection</label>
           <input
             type="text"
             name="collections"
             value={productData.collections}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
             required
           />
         </div>
 
         {/* Gender */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Gender</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Gender</label>
           <select
             name="gender"
             value={productData.gender}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
             required
           >
             <option value="Men">Men</option>
@@ -210,7 +210,7 @@ const EditProductPage = () => {
 
         {/* Sizes */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">
+          <label className="block font-semibold mb-2 text-black dark:text-white">
             Sizes (comma-separated)
           </label>
           <input
@@ -223,13 +223,13 @@ const EditProductPage = () => {
                 sizes: e.target.value.split(",").map((s) => s.trim()),
               })
             }
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
         </div>
 
         {/* Colors */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">
+          <label className="block font-semibold mb-2 text-black dark:text-white">
             Colors (comma-separated)
           </label>
           <input
@@ -242,13 +242,13 @@ const EditProductPage = () => {
                 colors: e.target.value.split(",").map((c) => c.trim()),
               })
             }
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
         </div>
 
         {/* Image Upload */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Product Images</label>
+          <label className="block font-semibold mb-2 text-black dark:text-white">Product Images</label>
           <input
             type="file"
             onChange={async (e) => {
@@ -278,7 +278,7 @@ const EditProductPage = () => {
                 }
               }
             }}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
           <div className="flex gap-4 mt-4">
             {productData.images.map((image, index) => (

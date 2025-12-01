@@ -21,9 +21,9 @@ const GenderCollection = () => {
                     alt="Women's collection" 
                     className='w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-105' 
                 />
-                <div className='absolute bottom-8 left-8 bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-md'>
-                    <h2 className='text-2xl font-bold text-gray-900 mb-3'>Women's Collection</h2>
-                    <Link to="/collections/all?gender=Women" className="text-gray-900 underline hover:text-gray-600 transition-colors">Shop Now</Link>
+                <div className='absolute bottom-8 left-8 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-6 rounded-lg shadow-md'>
+                    <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-3'>Women's Collection</h2>
+                    <Link to="/collections/all?gender=Women" className="text-gray-900 dark:text-white underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Shop Now</Link>
                 </div>
             </motion.div>
             {/* {Men's collection} */}
@@ -39,9 +39,9 @@ const GenderCollection = () => {
                     alt="Men's collection" 
                     className='w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-105' 
                 />
-                <div className='absolute bottom-8 left-8 bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-md'>
-                    <h2 className='text-2xl font-bold text-gray-900 mb-3'>Men's Collection</h2>
-                    <Link to="/collections/all?gender=Men" className="text-gray-900 underline hover:text-gray-600 transition-colors">Shop Now</Link>
+                <div className='absolute bottom-8 left-8 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-6 rounded-lg shadow-md'>
+                    <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-3'>Men's Collection</h2>
+                    <Link to="/collections/all?gender=Men" className="text-gray-900 dark:text-white underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Shop Now</Link>
                 </div>
             </motion.div>
 

@@ -59,37 +59,37 @@ const handleSubmit = async (e) => {
 
   return (
     <div className='flex min-h-screen'>
-        <div className='w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12 bg-gray-50'>
-            <form onSubmit={handleSubmit} className='w-full max-w-md bg-white p-10 rounded-xl shadow-lg border border-gray-100'>
+        <div className='w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12 bg-gray-50 dark:bg-gray-900 transition-colors'>
+            <form onSubmit={handleSubmit} className='w-full max-w-md bg-white dark:bg-gray-800 p-10 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-colors'>
                 <div className='flex justify-center mb-8'>
-                    <h2 className='text-3xl font-bold tracking-tight'>Wearero</h2>
+                    <h2 className='text-3xl font-bold tracking-tight text-black dark:text-white'>Wearero</h2>
                 </div>
-                <h2 className='text-2xl font-bold text-center mb-2'>Welcome back 👋🏻</h2>
-                <p className='text-center mb-8 text-sm text-gray-500'>Sign in with your Wearero credentials. Admins gain access to catalog, order, and user management tools.</p>
+                <h2 className='text-2xl font-bold text-center mb-2 text-black dark:text-white'>Welcome back 👋🏻</h2>
+                <p className='text-center mb-8 text-sm text-gray-500 dark:text-gray-400'>Sign in with your Wearero credentials. Admins gain access to catalog, order, and user management tools.</p>
                 <div className='mb-6'>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
+                    <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>Email</label>
                     <input 
                     type="email" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
-                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all' 
+                    className='w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all bg-white dark:bg-gray-700 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500' 
                     placeholder='Enter your email address' />
                 </div>
                 <div className='mb-8'>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
                     <input 
                     type="password" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
-                    className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all' 
+                    className='w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all bg-white dark:bg-gray-700 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500' 
                     placeholder='Enter your password' />
                 </div>
-                <button type='submit' disabled={isSubmitting} className='w-full bg-black text-white p-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-md'>
+                <button type='submit' disabled={isSubmitting} className='w-full bg-black dark:bg-white text-white dark:text-black p-3 rounded-lg font-semibold hover:bg-gray-900 dark:hover:bg-gray-200 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-md'>
                     {isSubmitting ? 'Signing in...' : 'Sign In'}
                 </button>
-                <p className='mt-8 text-center text-sm text-gray-600'>
+                <p className='mt-8 text-center text-sm text-gray-600 dark:text-gray-400'>
                     Don't have an account? {" "}
-                    <Link to='/register' className='text-black font-semibold hover:underline'>Register</Link>
+                    <Link to='/register' className='text-black dark:text-white font-semibold hover:underline'>Register</Link>
                     </p>
             </form>
         </div>

@@ -60,7 +60,7 @@ const CollectionPage = () => {
       {/* {Mobile filter Button} */}
       <button
         onClick={toggleSidebar}
-        className="lg:hidden border p-2 flex justify-center items-center"
+        className="lg:hidden border p-2 flex justify-center items-center bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white"
       >
         <FaFilter className="mr-2" />
       </button>
@@ -68,12 +68,12 @@ const CollectionPage = () => {
       {/* {Filter sidebar} */}
       <div
         ref={sidebarRef}
-        className={`${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 z-50 left-0 w-64 bg-white overflow-auto tansition-transform duration-300 lg:static lg:translate-x-0`}
+        className={`${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 z-50 left-0 w-64 bg-white dark:bg-gray-900 overflow-auto tansition-transform duration-300 lg:static lg:translate-x-0`}
       >
         <FilterSidebar />
       </div>
       <div className="flex-grow p-4">
-        <h2 className="text-2xl uppercase mb-4">All Collection</h2>
+        <h2 className="text-2xl uppercase mb-4 text-black dark:text-white">All Collection</h2>
         {/* {Sort options} */}
         <SortOptions/>
 

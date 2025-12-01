@@ -34,7 +34,7 @@ const BestSeller = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className='text-3xl text-center font-bold mb-4'
+          className='text-3xl text-center font-bold mb-4 text-black dark:text-white'
         >
           Best Seller
         </motion.h2>
@@ -43,7 +43,7 @@ const BestSeller = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className='text-center text-gray-600 mb-12 max-w-2xl mx-auto'
+          className='text-center text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto'
         >
           Discover our most popular styles, loved by customers everywhere. From timeless classics to modern trends, these pieces are flying off the shelves.
         </motion.p>

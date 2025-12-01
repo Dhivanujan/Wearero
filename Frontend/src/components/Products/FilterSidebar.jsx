@@ -90,11 +90,11 @@ const handlePriceChange = (e) => {
 
   return (
     <div className="p-4">
-      <h3 className="text-xl font-medium text-gray-800 mb-4">Filter</h3>
+      <h3 className="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Filter</h3>
 
       {/* Category filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Category</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Category</label>
         {categories.map((category) => (
           <div key={category} className="flex items-center mb-1">
             <input
@@ -103,16 +103,16 @@ const handlePriceChange = (e) => {
               value={category}
               checked={filters.category === category}
               onChange={handleFilterChange}
-              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
+              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 dark:border-gray-600"
             />
-            <span className="text-gray-700">{category}</span>
+            <span className="text-gray-700 dark:text-gray-300">{category}</span>
           </div>
         ))}
       </div>
 
       {/* Gender filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Gender</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Gender</label>
         {genders.map((gender) => (
           <div key={gender} className="flex items-center mb-1">
             <input
@@ -121,16 +121,16 @@ const handlePriceChange = (e) => {
               value={gender}
               checked={filters.gender === gender}
               onChange={handleFilterChange}
-              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
+              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 dark:border-gray-600"
             />
-            <span className="text-gray-700">{gender}</span>
+            <span className="text-gray-700 dark:text-gray-300">{gender}</span>
           </div>
         ))}
       </div>
 
       {/* Color filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Color</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Color</label>
         <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
@@ -142,7 +142,7 @@ const handlePriceChange = (e) => {
                 handleFilterChange({ target: { name: "color", value: color, type: "text" } });
               }}
               className={`w-8 h-8 rounded-full border cursor-pointer transition hover:scale-105 ${
-                filters.color === color ? "ring-2 ring-blue-500" : "border-gray-300"
+                filters.color === color ? "ring-2 ring-blue-500" : "border-gray-300 dark:border-gray-600"
               }`}
               style={{ backgroundColor: color.toLowerCase() }}
             />
@@ -152,7 +152,7 @@ const handlePriceChange = (e) => {
 
       {/* Size filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Size</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Size</label>
         {sizes.map((size) => (
           <div key={size} className="flex items-center mb-1">
             <input
@@ -161,16 +161,16 @@ const handlePriceChange = (e) => {
               value={size}
               checked={filters.size.includes(size)}
               onChange={handleFilterChange}
-              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
+              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 dark:border-gray-600"
             />
-            <span className="text-gray-700">{size}</span>
+            <span className="text-gray-700 dark:text-gray-300">{size}</span>
           </div>
         ))}
       </div>
 
       {/* Material filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Material</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Material</label>
         {materials.map((material) => (
           <div key={material} className="flex items-center mb-1">
             <input
@@ -179,16 +179,16 @@ const handlePriceChange = (e) => {
               value={material}
               checked={filters.material.includes(material)}
               onChange={handleFilterChange}
-              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
+              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 dark:border-gray-600"
             />
-            <span className="text-gray-700">{material}</span>
+            <span className="text-gray-700 dark:text-gray-300">{material}</span>
           </div>
         ))}
       </div>
 
       {/* Brand filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Brand</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Brand</label>
         {brands.map((brand) => (
           <div key={brand} className="flex items-center mb-1">
             <input
@@ -197,16 +197,16 @@ const handlePriceChange = (e) => {
               value={brand}
               checked={filters.brand.includes(brand)}
               onChange={handleFilterChange}
-              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
+              className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 dark:border-gray-600"
             />
-            <span className="text-gray-700">{brand}</span>
+            <span className="text-gray-700 dark:text-gray-300">{brand}</span>
           </div>
         ))}
       </div>
 
       {/* Price Range filter */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2">Price Range</label>
+        <label className="block text-gray-600 dark:text-gray-400 font-medium mb-2">Price Range</label>
         <input
           type="range"
           name="maxPrice"
@@ -214,9 +214,9 @@ const handlePriceChange = (e) => {
           max={100}
           value={priceRange[1]}
           onChange={handlePriceChange}
-          className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+          className="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"
         />
-        <div className="flex justify-between text-gray-600 mt-2">
+        <div className="flex justify-between text-gray-600 dark:text-gray-400 mt-2">
           <span>${priceRange[0]}</span>
           <span>${priceRange[1]}</span>
         </div>

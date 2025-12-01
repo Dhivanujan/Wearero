@@ -93,7 +93,7 @@ const NewArrivals = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className='text-3xl font-bold mb-4'
+          className='text-3xl font-bold mb-4 text-black dark:text-white'
         >
           Explore New Arrivals
         </motion.h2>
@@ -102,7 +102,7 @@ const NewArrivals = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className='text-lg text-gray-600 mb-8'
+          className='text-lg text-gray-600 dark:text-gray-400 mb-8'
         >
           Elevate your wardrobe with the newest arrivals — curated for those who live on the cutting edge of fashion.
         </motion.p>
@@ -145,7 +145,7 @@ const NewArrivals = () => {
          <button
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
-            className={`absolute top-1/2 left-0 transform -translate-y-1/2 p-2 rounded-full border bg-white text-black shadow-lg z-10 hover:bg-gray-100 transition-all duration-300 ${
+            className={`absolute top-1/2 left-0 transform -translate-y-1/2 p-2 rounded-full border bg-white dark:bg-gray-800 text-black dark:text-white border-gray-200 dark:border-gray-700 shadow-lg z-10 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 ${
               canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           >
@@ -154,7 +154,7 @@ const NewArrivals = () => {
           <button
             onClick={() => scroll("right")}
             disabled={!canScrollRight}
-            className={`absolute top-1/2 right-0 transform -translate-y-1/2 p-2 rounded-full border bg-white text-black shadow-lg z-10 hover:bg-gray-100 transition-all duration-300 ${
+            className={`absolute top-1/2 right-0 transform -translate-y-1/2 p-2 rounded-full border bg-white dark:bg-gray-800 text-black dark:text-white border-gray-200 dark:border-gray-700 shadow-lg z-10 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 ${
               canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           >

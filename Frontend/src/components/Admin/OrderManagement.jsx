@@ -52,10 +52,10 @@ const OrderManagement = () => {
     }
   return (
     <div className="max-w-7xl mx-auto p-6">
-        <h2 className="text-2xl font-bold mb-6">Order Management</h2>
-        <div className="overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="min-w-full text-left text-gray-500">
-                <thead className="bg-gray-100 text-xs uppercase text-gray-700">
+        <h2 className="text-2xl font-bold mb-6 text-black dark:text-white">Order Management</h2>
+        <div className="overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-800">
+            <table className="min-w-full text-left text-gray-500 dark:text-gray-400">
+                <thead className="bg-gray-100 dark:bg-gray-700 text-xs uppercase text-gray-700 dark:text-gray-300">
                     <tr>
                         <th className="py-3 px-4">Order ID</th>
                         <th className="py-3 px-4">Customer</th>
@@ -69,8 +69,8 @@ const OrderManagement = () => {
                         orders.map((order) => (
                             <tr 
                             key={order._id}
-                            className='border-b hover:bg-gray-50 cursor-pointer'>
-                                <td className='py-4 px-4 font-medium text-gray-900 whitespace-nowrap'>
+                            className='border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer'>
+                                <td className='py-4 px-4 font-medium text-gray-900 dark:text-white whitespace-nowrap'>
                                     #{order._id}
                                 </td>
                                 <td className="p-4">{order.user?.name || 'Guest'}</td>
@@ -79,7 +79,7 @@ const OrderManagement = () => {
                                     <select 
                                     value={order.status} 
                                     onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5'>
+                                    className='bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5'>
                                         <option value="Processing">Processing</option>
                                         <option value="Shipped">Shipped</option>
                                         <option value="Delivered">Delivered</option>
@@ -93,7 +93,7 @@ const OrderManagement = () => {
                             </tr>
                         ))
                     ) : (<tr>
-                        <td colSpan={5} className='p-4 text-center text-gray-500'>No Orders found.</td>
+                        <td colSpan={5} className='p-4 text-center text-gray-500 dark:text-gray-400'>No Orders found.</td>
                     </tr>)}
                 </tbody>
             </table>
