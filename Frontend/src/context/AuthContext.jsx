@@ -63,50 +63,39 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('guestId');
   };
 
+  const fetchProfile = async () => {
+    if (!token) return;
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to fetch profile');
+      }
+
+      const profile = await response.json();
+      const normalizedProfile = formatUser(profile);
+      setUser(normalizedProfile);
+      persistAuthState(normalizedProfile, token);
+    } catch (error) {
+      console.error('Auth profile fetch failed:', error.message);
+      handleLogout();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       handleLogout();
       return;
     }
 
-    let isMounted = true;
-
-    const fetchProfile = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Unable to fetch profile');
-        }
-
-        const profile = await response.json();
-        if (isMounted) {
-          const normalizedProfile = formatUser(profile);
-          setUser(normalizedProfile);
-          persistAuthState(normalizedProfile, token);
-        }
-      } catch (error) {
-        console.error('Auth profile fetch failed:', error.message);
-        if (isMounted) {
-          handleLogout();
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
     fetchProfile();
-
-    return () => {
-      isMounted = false;
-    };
   }, [token]);
 
   const login = (authPayload) => {
@@ -128,6 +117,7 @@ export const AuthProvider = ({ children }) => {
       isAdmin: normalizeRole(user?.role) === 'admin',
       login,
       logout: handleLogout,
+      refreshProfile: fetchProfile,
     }),
     [token, user, isLoading]
   );

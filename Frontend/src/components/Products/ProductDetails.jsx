@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import ProductGrid from './ProductGrid';
+import Reviews from './Reviews';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { API_BASE_URL } from '../../lib/api';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { user, token, refreshProfile } = useAuth();
   const [product, setProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
   const [mainImage, setMainImage] = useState("");
@@ -83,6 +86,35 @@ const ProductDetails = () => {
       }
   };
 
+  const handleWishlistClick = async () => {
+      if (!user) {
+          toast.error("Please login to add to wishlist");
+          return;
+      }
+
+      try {
+          const response = await fetch(`${API_BASE_URL}/api/users/wishlist`, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ productId: product._id }),
+          });
+
+          if (response.ok) {
+              const data = await response.json();
+              toast.success(data.message);
+              await refreshProfile();
+          } else {
+              toast.error("Failed to update wishlist");
+          }
+      } catch (error) {
+          console.error(error);
+          toast.error("Error updating wishlist");
+      }
+  };
+
     if (!id) {
     return <div className='p-6 text-center text-gray-600 dark:text-gray-400'>No product selected.</div>;
     }
@@ -96,8 +128,8 @@ const ProductDetails = () => {
     if (action === 'plus') setQuantity((prev) => prev + 1);
     if (action === 'minus' && quantity > 1) setQuantity((prev) => prev - 1);
   };
-
-
+  
+  const isInWishlist = user?.wishlist?.includes(product._id);
 
   return (
     <div className='p-6'>
@@ -208,13 +240,21 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              disabled={isButtonDisabled}
-              className={`bg-black dark:bg-white text-white dark:text-black py-2 px-6 rounded w-full mb-4 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-900 dark:hover:bg-gray-200'}`}
-            >
-              {isButtonDisabled ? "Adding..." : "ADD TO CART"}
-            </button>
+            <div className="flex gap-4 mb-4">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isButtonDisabled}
+                  className={`bg-black dark:bg-white text-white dark:text-black py-2 px-6 rounded w-full ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-900 dark:hover:bg-gray-200'}`}
+                >
+                  {isButtonDisabled ? "Adding..." : "ADD TO CART"}
+                </button>
+                <button
+                    onClick={handleWishlistClick}
+                    className={`py-2 px-4 rounded border ${isInWishlist ? 'bg-red-50 text-red-500 border-red-200' : 'border-gray-300 text-gray-700 hover:bg-gray-50'} dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800`}
+                >
+                    <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-xl`}></i>
+                </button>
+            </div>
 
             {/* Characteristics */}
             <div className='mt-10 text-gray-700 dark:text-gray-300'>
@@ -234,6 +274,9 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+
+        <Reviews productId={id} reviews={product.reviews} />
+
         <div className='mt-20'>
           <h2 className='text-2xl text-center font-medium mb-4 text-black dark:text-white'>You Might Be Interested In</h2>
           <ProductGrid products={similarProducts}/>

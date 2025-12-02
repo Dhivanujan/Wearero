@@ -175,4 +175,49 @@ router.delete("/:id", protect, admin, async (req, res) => {
   }
 });
 
+// @route POST /api/users/wishlist
+// @desc Toggle wishlist item
+// @access Private
+router.post("/wishlist", protect, async (req, res) => {
+  const { productId } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isProductInWishlist = user.wishlist.includes(productId);
+
+    if (isProductInWishlist) {
+      // Remove from wishlist
+      user.wishlist = user.wishlist.filter(
+        (id) => id.toString() !== productId.toString()
+      );
+      await user.save();
+      res.json({ message: "Product removed from wishlist", wishlist: user.wishlist });
+    } else {
+      // Add to wishlist
+      user.wishlist.push(productId);
+      await user.save();
+      res.json({ message: "Product added to wishlist", wishlist: user.wishlist });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// @route GET /api/users/wishlist
+// @desc Get user wishlist
+// @access Private
+router.get("/wishlist", protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate("wishlist");
+    res.json(user.wishlist);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 module.exports = router;
