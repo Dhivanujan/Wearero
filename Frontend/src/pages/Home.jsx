@@ -33,35 +33,40 @@ const Home = () => {
   return (
     <div>
         <Hero/>
-        <GenderCollection/>
-        <NewArrivals/>
-        
-        {/* Best Seller */}
-        <BestSeller />
+        <div className="space-y-24 mb-24">
+            <GenderCollection/>
+            <NewArrivals/>
+            
+            {/* Best Seller */}
+            <BestSeller />
 
-        <div className='container mx-auto'>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className='text-3xl text-center font-bold mb-4 text-black dark:text-white'
-          >
-            Top Wears for Women
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className='text-center text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto'
-          >
-            Explore our curated selection of top-rated women's clothing. Comfort, style, and elegance combined.
-          </motion.p>
-          <ProductGrid products={topWears}/>
+            <div className='container mx-auto px-4'>
+              <div className='text-center mb-16'>
+                <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className='text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight'
+                >
+                    Top Wears for Women
+                </motion.h2>
+                <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'
+                >
+                    Explore our curated selection of top-rated women's clothing. Comfort, style, and elegance combined.
+                </motion.p>
+              </div>
+              <ProductGrid products={topWears}/>
+            </div>
+            
+            <FeaturedCollection/>
+            <FeaturesSection />
         </div>
-        <FeaturedCollection/>
-        <FeaturesSection />
     </div>
   )
 }

@@ -61,21 +61,29 @@ const ProductGrid = ({products}) => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Link to={`/product/${product._id}`} className='block group'>
-                  <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 relative'>
+                  <div className='bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative border border-gray-100 dark:border-gray-700'>
                       <button 
                           onClick={(e) => handleWishlistClick(e, product._id)}
-                          className={`absolute top-4 right-4 z-10 p-2 rounded-full ${isInWishlist ? 'bg-red-50 text-red-500' : 'bg-white/80 text-gray-500'} hover:bg-red-100 hover:text-red-500 transition-colors shadow-sm`}
+                          className={`absolute top-3 right-3 z-10 p-2 rounded-full ${isInWishlist ? 'bg-red-50 text-red-500' : 'bg-white/90 text-gray-600'} hover:bg-red-100 hover:text-red-500 transition-all shadow-md transform hover:scale-110`}
                       >
-                          <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'}`}></i>
+                          <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-lg`}></i>
                       </button>
-                      <div className='w-full h-96 mb-4 overflow-hidden rounded-lg relative'>
+                      <div className='w-full h-[400px] overflow-hidden relative bg-gray-100 dark:bg-gray-700'>
                           <img
                               src={imageUrl}
                               alt={imageAlt}
-                              className='w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300'/>
+                              className='w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out'/>
                       </div>
-                      <h3 className='text-sm mb-2 font-semibold text-gray-800 dark:text-white'>{product.name}</h3>
-                      <p className='text-gray-500 dark:text-gray-300 font-medium text-sm tracking-tighter'>${product.price}</p>
+                      <div className='p-4'>
+                        <h3 className='text-base font-medium text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors truncate'>{product.name}</h3>
+                        <div className='flex items-center justify-between mt-2'>
+                            <p className='text-gray-900 dark:text-gray-100 font-bold text-lg'>${product.price}</p>
+                            <div className='flex items-center'>
+                                <i className="ri-star-fill text-yellow-400 text-sm mr-1"></i>
+                                <span className='text-xs text-gray-500 dark:text-gray-400'>({product.rating || 0})</span>
+                            </div>
+                        </div>
+                      </div>
                   </div>
               </Link>
             </motion.div>

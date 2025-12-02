@@ -275,7 +275,9 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        <Reviews productId={id} reviews={product.reviews} />
+        <div className="mt-20">
+          <Reviews productId={id} reviews={product.reviews} />
+        </div>
 
         <div className='mt-20'>
           <h2 className='text-2xl text-center font-medium mb-4 text-black dark:text-white'>You Might Be Interested In</h2>

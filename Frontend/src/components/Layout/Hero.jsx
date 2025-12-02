@@ -5,23 +5,27 @@ import { motion } from 'framer-motion'
 
 const Hero = () => {
   return (
-    <section className='relative'>
-        <img src={heroImg} alt="Wearero" className='w-full h-[400px] md:h-[600px] lg:h-[750px] object-cover'/>
-        <div className='absolute inset-0 bg-black/30 flex items-center justify-center'>
-            <div className='text-center text-white p-6'>
+    <section className='relative h-[80vh] md:h-[90vh] overflow-hidden'>
+        <img 
+          src={heroImg} 
+          alt="Wearero" 
+          className='w-full h-full object-cover object-center'
+        />
+        <div className='absolute inset-0 bg-black/40 flex items-center justify-center'>
+            <div className='text-center text-white p-6 max-w-4xl mx-auto'>
                 <motion.h1 
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className='text-4xl md:text-9xl font-bold tracking-tighter uppercase mb-4'
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className='text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter uppercase mb-6'
                 >
-                  Vacation <br />Ready
+                  Vacation <br /> <span className='text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400'>Ready</span>
                 </motion.h1>
                 <motion.p 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className='text-sm tracking-tighter md:text-lg mb-6'
+                  className='text-lg md:text-xl mb-10 tracking-wide font-light'
                 >
                     Your Vacation, Your Look – Shop Outfits with Quick Global Shipping
                 </motion.p>
@@ -30,7 +34,12 @@ const Hero = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                  <Link to='/collections/all' className='bg-white text-gray-950 px-6 py-2 rounded-sm text-lg hover:bg-gray-200 transition-colors'>Shop Now</Link>
+                  <Link 
+                    to='/collections/all' 
+                    className='bg-white text-black px-10 py-4 rounded-full text-lg font-medium hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg'
+                  >
+                    Shop Collection
+                  </Link>
                 </motion.div>
             </div>
         </div>
