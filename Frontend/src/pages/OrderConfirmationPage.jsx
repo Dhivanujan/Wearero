@@ -77,9 +77,11 @@ const OrderConfirmationPage = () => {
 
                 {/* {Ordered Items} */}
                 <div className='mb-20'>
-                    {checkout.orderItems.map((item) => (
+                    {checkout.orderItems.map((item) => {
+                        const imageUrl = item.image?.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`;
+                        return (
                         <div key={item.productId} className='flex items-center mb-4'>
-                            <img src={item.image || "https://picsum.photos/150?random=1"} alt={item.name} className='w-16 h-16 object-cover rounded-md mr-4' />
+                            <img src={imageUrl || "https://picsum.photos/150?random=1"} alt={item.name} className='w-16 h-16 object-cover rounded-md mr-4' />
                             <div>
                                 <h4 className='text-md font-semibold text-black dark:text-white'>{item.name}</h4>
                                 <p className='text-sm text-gray-500 dark:text-gray-400'>
@@ -91,14 +93,14 @@ const OrderConfirmationPage = () => {
                                 <p className='text-sm text-gray-500 dark:text-gray-400'>Qty: {item.quantity}</p>
                             </div>
                         </div>
-                    ))}
+                    )})}
                 </div>
 
                 {/* {Payment and Delivery Info} */}
                 <div className='grid grid-cols-2 gap-8'>
                     <div>
                         <h4 className='text-lg font-semibold mb-2 text-black dark:text-white'>Payment</h4>
-                        <p className='text-gray-600 dark:text-gray-400'>COD</p>
+                        <p className='text-gray-600 dark:text-gray-400'>{checkout.paymentMethod}</p>
                     </div>
                     <div>
                         <h4 className='text-lg font-semibold mb-2 text-black dark:text-white'>Delivery</h4>
