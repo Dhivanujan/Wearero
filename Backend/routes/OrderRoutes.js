@@ -15,6 +15,8 @@ router.post('/', protect, async (req, res) => {
       shippingAddress,
       paymentMethod,
       totalPrice,
+      paymentStatus,
+      paymentResult,
     } = req.body;
 
     if (orderItems && orderItems.length === 0) {
@@ -27,6 +29,10 @@ router.post('/', protect, async (req, res) => {
       shippingAddress,
       paymentMethod,
       totalPrice,
+      paymentStatus,
+      paymentResult,
+      isPaid: paymentStatus === 'paid',
+      paidAt: paymentStatus === 'paid' ? Date.now() : null,
     });
 
     const createdOrder = await order.save();
