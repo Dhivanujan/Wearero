@@ -46,15 +46,16 @@ const userInitials = user?.name
   : '';
   return (
     <>
-        <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
+        <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800 transition-all duration-300">
             <div className="container mx-auto flex items-center justify-between py-4 px-6">
             <div>
-                 <Link to="/" className="text-2xl font-bold tracking-tight text-black dark:text-white">Wearero</Link>
+                 <Link to="/" className="text-2xl font-bold tracking-tight text-black dark:text-white font-heading">Wearero</Link>
             </div>
             <div className='hidden md:flex space-x-8'>
                 {navLinks.map((item) => (
-                  <Link key={item.label} to={item.to} className='text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white text-sm font-medium uppercase tracking-wide transition-colors'>
+                  <Link key={item.label} to={item.to} className='text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white text-sm font-medium uppercase tracking-wide transition-colors relative group'>
                     {item.label}
+                    <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black dark:bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"></span>
                   </Link>
                 ))}
             </div>
@@ -65,6 +66,9 @@ const userInitials = user?.name
 
                 {user ? (
                   <div className='flex items-center space-x-3'>
+                    <Link to='/wishlist' className='hover:text-black dark:hover:text-white transition-colors'>
+                        <i className="ri-heart-line text-xl text-gray-700 dark:text-gray-300"></i>
+                    </Link>
                     <Link to='/profile' className='flex items-center space-x-2 hover:text-black dark:hover:text-white transition-colors'>
                       <span className='inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs font-bold border border-gray-200 dark:border-gray-700'>
                         {userInitials || <HiOutlineUser className='h-4 w-4' />}
@@ -76,16 +80,16 @@ const userInitials = user?.name
                 ) : (
                   <div className='hidden sm:flex items-center space-x-4'>
                     <Link to='/login' className='text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors'>Sign In</Link>
-                    <Link to='/register' className='bg-black dark:bg-white text-white dark:text-black text-sm font-medium px-5 py-2 rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors'>Join Now</Link>
+                    <Link to='/register' className='bg-black dark:bg-white text-white dark:text-black text-sm font-medium px-5 py-2 rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors shadow-sm hover:shadow-md'>Join Now</Link>
                   </div>
                 )}
                 
                 <ThemeToggle />
 
-                <button onClick={toggleCartDrawer} className='relative hover:text-black dark:hover:text-white transition-colors'>
-                  <HiOutlineShoppingBag className='h-6 w-6 text-gray-700 dark:text-gray-300'/>
+                <button onClick={toggleCartDrawer} className='relative hover:text-black dark:hover:text-white transition-colors group'>
+                  <HiOutlineShoppingBag className='h-6 w-6 text-gray-700 dark:text-gray-300 group-hover:scale-110 transition-transform'/>
                   {cartCount > 0 && (
-                    <span className='absolute -top-1 -right-1 bg-black dark:bg-white text-white dark:text-black text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center'>{cartCount}</span>
+                    <span className='absolute -top-1 -right-1 bg-rabbit-red text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-sm'>{cartCount}</span>
                   )}
                 </button>
                 {/* {Search} */}

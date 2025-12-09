@@ -178,41 +178,44 @@ const ProductDetails = () => {
 
           {/* Right Section */}
           <div className='md:w-1/2 md:ml-10'>
-            <h1 className='text-2xl md:text-3xl font-semibold mb-2 text-black dark:text-white'>{name}</h1>
+            <h1 className='text-3xl md:text-4xl font-bold mb-4 text-black dark:text-white font-heading'>{name}</h1>
 
-            {originalPrice && (
-              <p className='text-lg text-gray-600 dark:text-gray-400 mb-1 line-through'>
-                ${originalPrice}
-              </p>
-            )}
-            <p className='text-xl text-gray-500 dark:text-gray-300 mb-2'>${price}</p>
-            <p className='text-gray-600 dark:text-gray-400 mb-4'>{description}</p>
+            <div className='flex items-center mb-6 space-x-4'>
+                {originalPrice && (
+                  <p className='text-xl text-gray-500 dark:text-gray-400 line-through'>
+                    ${originalPrice}
+                  </p>
+                )}
+                <p className='text-2xl font-semibold text-black dark:text-white'>${price}</p>
+            </div>
+            
+            <p className='text-gray-600 dark:text-gray-300 mb-8 leading-relaxed'>{description}</p>
 
             {/* Colors */}
-            <div className='mb-4'>
-              <p className='text-gray-700 dark:text-gray-300'>Color:</p>
-              <div className='flex gap-2 mt-2'>
+            <div className='mb-6'>
+              <p className='text-sm font-medium text-gray-900 dark:text-gray-100 mb-2 uppercase tracking-wide'>Color</p>
+              <div className='flex gap-3'>
                 {(colors || []).map((color) => (
                   <button
                     key={color}
                     onClick={() => setSelectedColor(color)}
-                    className={`px-3 py-1 rounded border text-sm ${selectedColor === color ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-                  >
-                    {color}
-                  </button>
+                    className={`h-8 w-8 rounded-full border-2 focus:outline-none transition-all ${selectedColor === color ? 'border-black dark:border-white ring-2 ring-offset-2 ring-gray-200 dark:ring-gray-700' : 'border-transparent hover:border-gray-300'}`}
+                    style={{ backgroundColor: color.toLowerCase() }}
+                    title={color}
+                  ></button>
                 ))}
               </div>
             </div>
 
             {/* Sizes */}
-            <div className='mb-4'>
-              <p className='text-gray-700 dark:text-gray-300'>Size:</p>
-              <div className='flex gap-2 mt-2'>
+            <div className='mb-8'>
+              <p className='text-sm font-medium text-gray-900 dark:text-gray-100 mb-2 uppercase tracking-wide'>Size</p>
+              <div className='flex gap-3'>
                 {(sizes || []).map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-2 rounded border ${selectedSize === size ? "bg-black dark:bg-white text-white dark:text-black" : "border-gray-300 dark:border-gray-600 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`}
+                    className={`px-6 py-2 rounded-md border text-sm font-medium transition-all ${selectedSize === size ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white shadow-md" : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"}`}
                   >
                     {size}
                   </button>
@@ -221,18 +224,18 @@ const ProductDetails = () => {
             </div>
 
             {/* Quantity */}
-            <div className='mb-6'>
-              <p className='text-gray-700 dark:text-gray-300'>Quantity:</p>
-              <div className='flex items-center space-x-4 mt-2'>
+            <div className='mb-8'>
+              <p className='text-sm font-medium text-gray-900 dark:text-gray-100 mb-2 uppercase tracking-wide'>Quantity</p>
+              <div className='flex items-center space-x-4'>
                 <button
-                  className='px-2 py-1 bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded text-lg'
+                  className='w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'
                   onClick={() => handleQuantityChange('minus')}
                 >
                   -
                 </button>
-                <span className='text-lg text-black dark:text-white'>{quantity}</span>
+                <span className='text-lg font-medium text-black dark:text-white w-8 text-center'>{quantity}</span>
                 <button
-                  className='px-2 py-1 bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded text-lg'
+                  className='w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'
                   onClick={() => handleQuantityChange('plus')}
                 >
                   +
@@ -240,37 +243,35 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-4 mb-8">
                 <button
                   onClick={handleAddToCart}
                   disabled={isButtonDisabled}
-                  className={`bg-black dark:bg-white text-white dark:text-black py-2 px-6 rounded w-full ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-900 dark:hover:bg-gray-200'}`}
+                  className={`flex-1 bg-black dark:bg-white text-white dark:text-black py-3.5 px-8 rounded-full font-semibold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-900 dark:hover:bg-gray-100'}`}
                 >
-                  {isButtonDisabled ? "Adding..." : "ADD TO CART"}
+                  {isButtonDisabled ? "Adding..." : "Add to Cart"}
                 </button>
                 <button
                     onClick={handleWishlistClick}
-                    className={`py-2 px-4 rounded border ${isInWishlist ? 'bg-red-50 text-red-500 border-red-200' : 'border-gray-300 text-gray-700 hover:bg-gray-50'} dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800`}
+                    className={`p-3.5 rounded-full border transition-all duration-200 ${isInWishlist ? 'bg-red-50 text-red-500 border-red-100' : 'border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-black'} dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white`}
                 >
                     <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-xl`}></i>
                 </button>
             </div>
 
             {/* Characteristics */}
-            <div className='mt-10 text-gray-700 dark:text-gray-300'>
-              <h3 className='text-xl font-bold mb-4'>Characteristics:</h3>
-              <table className='w-full text-left text-sm text-gray-600 dark:text-gray-400'>
-                <tbody>
-                  <tr>
-                    <th className='py-1'>Brand</th>
-                    <td className='py-1'>{brand}</td>
-                  </tr>
-                  <tr>
-                    <th className='py-1'>Material</th>
-                    <td className='py-1'>{material}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className='pt-6 border-t border-gray-200 dark:border-gray-700'>
+              <h3 className='text-sm font-bold text-black dark:text-white mb-4 uppercase tracking-wide'>Characteristics</h3>
+              <dl className='grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2'>
+                <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+                  <dt className="font-medium text-gray-900 dark:text-white">Brand</dt>
+                  <dd className="mt-2 text-sm text-gray-500 dark:text-gray-400">{brand}</dd>
+                </div>
+                <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+                  <dt className="font-medium text-gray-900 dark:text-white">Material</dt>
+                  <dd className="mt-2 text-sm text-gray-500 dark:text-gray-400">{material}</dd>
+                </div>
+              </dl>
             </div>
           </div>
         </div>

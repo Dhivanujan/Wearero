@@ -11,24 +11,24 @@ const handleCheckout = () => {
 }
 
     return (
-    <div className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] h-full bg-white dark:bg-gray-900 shadow-lg transform transition-transform duration-300 flex flex-col z-50 ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}>
+    <div className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] h-full bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 flex flex-col z-50 ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}>
         {/* (Close Button) */}
-        <div className='flex justify-end p-4'>
-            <button onClick={toggleCartDrawer}>
+        <div className='flex justify-between items-center p-6 border-b border-gray-100 dark:border-gray-800'>
+            <h2 className='text-xl font-bold text-black dark:text-white font-heading'>Your Cart</h2>
+            <button onClick={toggleCartDrawer} className='p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors'>
                 <IoMdClose className='h-6 w-6 text-gray-600 dark:text-gray-400'/>
             </button>
         </div>
         {/* {Cart contents with scrollable area} */}
-        <div className='flex-grow p-4 overflow-y-auto'>
-            <h2 className='text-xl font-semibold mb-4 text-black dark:text-white'>Your Cart</h2>
+        <div className='flex-grow p-6 overflow-y-auto'>
             <CartContents />
         </div>
         {/* {Checkout Button fixed at the bottom} */}
-        <div className='p-4 bg-white dark:bg-gray-900 stickey bottom-0'>
+        <div className='p-6 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800'>
             <button 
             onClick={handleCheckout}
-            className='w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-200 transition'>Checkout</button>
-            <p className='text-sm tracking-tighter text-gray-500 dark:text-gray-400 mt-2 text-center'>Final shipping costs, taxes, and discounts will be calculated at checkout</p>
+            className='w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-full font-semibold text-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'>Checkout</button>
+            <p className='text-xs tracking-wide text-gray-500 dark:text-gray-400 mt-4 text-center'>Shipping, taxes, and discounts calculated at checkout</p>
         </div>
     </div>
   )

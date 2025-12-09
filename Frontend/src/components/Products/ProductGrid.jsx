@@ -61,7 +61,7 @@ const ProductGrid = ({products}) => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Link to={`/product/${product._id}`} className='block group'>
-                  <div className='bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative border border-gray-100 dark:border-gray-700'>
+                  <div className='bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 relative border border-gray-100 dark:border-gray-700'>
                       <button 
                           onClick={(e) => handleWishlistClick(e, product._id)}
                           className={`absolute top-3 right-3 z-10 p-2 rounded-full ${isInWishlist ? 'bg-red-50 text-red-500' : 'bg-white/90 text-gray-600'} hover:bg-red-100 hover:text-red-500 transition-all shadow-md transform hover:scale-110`}
@@ -75,7 +75,7 @@ const ProductGrid = ({products}) => {
                               className='w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out'/>
                       </div>
                       <div className='p-4'>
-                        <h3 className='text-base font-medium text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors truncate'>{product.name}</h3>
+                        <h3 className='text-base font-medium text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors truncate font-heading'>{product.name}</h3>
                         <div className='flex items-center justify-between mt-2'>
                             <p className='text-gray-900 dark:text-gray-100 font-bold text-lg'>${product.price}</p>
                             <div className='flex items-center'>

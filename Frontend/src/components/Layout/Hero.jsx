@@ -17,15 +17,15 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  className='text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter uppercase mb-6'
+                  className='text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter uppercase mb-6 font-heading'
                 >
-                  Vacation <br /> <span className='text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400'>Ready</span>
+                  Vacation <br /> <span className='text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300'>Ready</span>
                 </motion.h1>
                 <motion.p 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className='text-lg md:text-xl mb-10 tracking-wide font-light'
+                  className='text-lg md:text-xl mb-10 tracking-wide font-light max-w-2xl mx-auto'
                 >
                     Your Vacation, Your Look – Shop Outfits with Quick Global Shipping
                 </motion.p>
@@ -36,7 +36,7 @@ const Hero = () => {
                 >
                   <Link 
                     to='/collections/all' 
-                    className='bg-white text-black px-10 py-4 rounded-full text-lg font-medium hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg'
+                    className='bg-white text-black px-10 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl'
                   >
                     Shop Collection
                   </Link>

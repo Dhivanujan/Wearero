@@ -20,6 +20,7 @@ import EditProductPage from './components/Admin/EditProductPage'
 import OrderManagement from './components/Admin/OrderManagement'
 import { CartProvider } from './context/CartContext'
 import ProtectedRoute from './components/Common/ProtectedRoute'
+import WishlistPage from './pages/WishlistPage'
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
             <Route path='login' element={<Login />}/>
             <Route path='register' element={<Register/>}/>
             <Route path='profile' element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
+            <Route path='wishlist' element={<ProtectedRoute><WishlistPage/></ProtectedRoute>}/>
             <Route path='collections/:collection' element={<CollectionPage/>}/>
             <Route path='product/:id' element={<ProductDetails/>}/>
             <Route path='checkout' element={<ProtectedRoute><Checkout/></ProtectedRoute>}/>
