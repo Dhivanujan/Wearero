@@ -21,9 +21,10 @@ router.post('/create-payment-intent', protect, async (req, res) => {
         let totalAmount = 0;
 
         for (const item of products) {
-            const product = await Product.findById(item.productId);
+            const id = item.productId._id || item.productId;
+            const product = await Product.findById(id);
             if (!product) {
-                return res.status(404).json({ error: `Product not found: ${item.productId}` });
+                return res.status(404).json({ error: `Product not found: ${id}` });
             }
             totalAmount += product.price * item.quantity;
         }

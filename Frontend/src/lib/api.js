@@ -4,7 +4,7 @@ const normalizeBaseUrl = (url) => {
 };
 
 const inferLocalApiUrl = () => {
-  const DEFAULT_PORT = 9000;
+  const DEFAULT_PORT = 3000;
   if (typeof window !== 'undefined') {
     const protocol = window.location?.protocol || 'http:';
     const hostname = window.location?.hostname || 'localhost';
