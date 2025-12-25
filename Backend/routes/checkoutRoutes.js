@@ -7,6 +7,9 @@ const { protect } = require('../middleware/authMiddleware');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+const toCents = (amount = 0) => Math.round(Number(amount) * 100);
+const resolveUnitPrice = (product) => Number(product.discountPrice ?? product.price ?? 0);
+
 // @route   POST /api/checkout/create-payment-intent
 // @desc    Create a payment intent
 // @access  Private
@@ -26,15 +29,18 @@ router.post('/create-payment-intent', protect, async (req, res) => {
             if (!product) {
                 return res.status(404).json({ error: `Product not found: ${id}` });
             }
-            totalAmount += product.price * item.quantity;
+            const quantity = Math.max(1, Number(item.quantity) || 1);
+            totalAmount += resolveUnitPrice(product) * quantity;
         }
 
         // Create a PaymentIntent with the order amount and currency
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.round(totalAmount * 100), // Stripe expects amount in cents
+            amount: toCents(totalAmount), // Stripe expects amount in cents
             currency: 'usd',
             metadata: {
                 userId: req.user._id.toString(),
+                cartTotal: totalAmount.toFixed(2),
+                itemCount: products.length.toString(),
             },
         });
 

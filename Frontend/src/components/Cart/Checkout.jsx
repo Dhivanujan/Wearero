@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -26,6 +26,13 @@ const Checkout = () => {
         country: "",
         phone: ""
     });
+
+    const isShippingValid = useMemo(() => {
+        const { firstName, lastName, address, city, postalCode, country, phone } = shippingAddress;
+        return [firstName, lastName, address, city, postalCode, country, phone].every(
+            (value) => typeof value === 'string' && value.trim().length > 0
+        );
+    }, [shippingAddress]);
 
     useEffect(() => {
         if (paymentMethod === "Stripe" && cart && cart.products.length > 0) {
@@ -275,6 +282,7 @@ const Checkout = () => {
                                     clientSecret={clientSecret}
                                     totalPrice={cart.totalPrice}
                                     onPaymentSuccess={handlePaymentSuccess}
+                                    isShippingValid={isShippingValid}
                                 />
                             </Elements>
                         ) : paymentMethod === "Stripe" ? (

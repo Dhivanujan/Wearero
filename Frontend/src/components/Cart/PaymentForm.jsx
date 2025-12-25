@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { toast } from 'sonner';
-import { API_BASE_URL } from '../../lib/api';
 
-const PaymentForm = ({ clientSecret, totalPrice, onPaymentSuccess }) => {
+const PaymentForm = ({ clientSecret, totalPrice, onPaymentSuccess, isShippingValid }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +12,16 @@ const PaymentForm = ({ clientSecret, totalPrice, onPaymentSuccess }) => {
         e.preventDefault();
 
         if (!stripe || !elements) {
+            return;
+        }
+
+        if (!clientSecret) {
+            toast.error('Payment is not ready yet. Please try again.');
+            return;
+        }
+
+        if (!isShippingValid) {
+            toast.error('Please complete your shipping details before paying.');
             return;
         }
 
@@ -44,7 +53,7 @@ const PaymentForm = ({ clientSecret, totalPrice, onPaymentSuccess }) => {
         <form onSubmit={handleSubmit} className="mt-4">
             <PaymentElement />
             <button
-                disabled={isLoading || !stripe || !elements}
+                disabled={isLoading || !stripe || !elements || !isShippingValid || !clientSecret}
                 id="submit"
                 className="w-full bg-black text-white py-3 rounded mt-4 hover:bg-gray-800 transition"
             >
@@ -52,6 +61,11 @@ const PaymentForm = ({ clientSecret, totalPrice, onPaymentSuccess }) => {
                     {isLoading ? <div className="spinner" id="spinner">Processing...</div> : `Pay $${totalPrice}`}
                 </span>
             </button>
+            {!isShippingValid && (
+                <div className="text-sm text-red-500 mt-2">
+                    Please fill in delivery details to enable payment.
+                </div>
+            )}
             {message && <div id="payment-message" className="text-red-500 mt-2">{message}</div>}
         </form>
     );
