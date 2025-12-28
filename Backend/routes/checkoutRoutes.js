@@ -5,7 +5,8 @@ const Product = require('../models/Product');
 const Order = require('../models/Order');
 const { protect } = require('../middleware/authMiddleware');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
 
 const toCents = (amount = 0) => Math.round(Number(amount) * 100);
 const resolveUnitPrice = (product) => Number(product.discountPrice ?? product.price ?? 0);
@@ -14,6 +15,10 @@ const resolveUnitPrice = (product) => Number(product.discountPrice ?? product.pr
 // @desc    Create a payment intent
 // @access  Private
 router.post('/create-payment-intent', protect, async (req, res) => {
+    if (!stripe) {
+        return res.status(503).json({ error: 'Stripe is not configured for this environment' });
+    }
+
     const { products } = req.body;
 
     if (!products || products.length === 0) {

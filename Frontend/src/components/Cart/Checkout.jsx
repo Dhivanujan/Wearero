@@ -8,14 +8,16 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentForm from './PaymentForm';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePromise = stripePublicKey ? loadStripe(stripePublicKey) : null;
+const isStripeConfigured = Boolean(stripePublicKey);
 
 const Checkout = () => {
     const navigate = useNavigate();
     const { cart, loading, clearCart } = useCart();
     const { user } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState("Stripe");
+    const [paymentMethod, setPaymentMethod] = useState(isStripeConfigured ? "Stripe" : "DemoPay");
     const [clientSecret, setClientSecret] = useState("");
     const [shippingAddress, setShippingAddress] = useState({
         firstName: "",
@@ -35,36 +37,38 @@ const Checkout = () => {
     }, [shippingAddress]);
 
     useEffect(() => {
-        if (paymentMethod === "Stripe" && cart && cart.products.length > 0) {
-            // Create Payment Intent
-            const createPaymentIntent = async () => {
-                const token = localStorage.getItem('token');
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/payment/create-payment-intent`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            products: cart.products
-                        }),
-                    });
-                    const data = await response.json();
-                    if (response.ok) {
-                        setClientSecret(data.clientSecret);
-                    } else {
-                        console.error("Failed to create payment intent:", data.error);
-                        toast.error("Failed to initialize payment");
-                    }
-                } catch (error) {
-                    console.error("Error creating payment intent:", error);
-                    toast.error("Error initializing payment");
-                }
-            };
-            createPaymentIntent();
+        if (paymentMethod !== "Stripe" || !isStripeConfigured || !cart || cart.products.length === 0) {
+            return;
         }
-    }, [paymentMethod, cart]);
+
+        const createPaymentIntent = async () => {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/payment/create-payment-intent`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        products: cart.products
+                    }),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setClientSecret(data.clientSecret);
+                } else {
+                    console.error("Failed to create payment intent:", data.error);
+                    toast.error(data.error || "Failed to initialize payment");
+                }
+            } catch (error) {
+                console.error("Error creating payment intent:", error);
+                toast.error("Error initializing payment");
+            }
+        };
+
+        createPaymentIntent();
+    }, [paymentMethod, cart, isStripeConfigured]);
 
     const handleOrderCreation = async (paymentStatus, paymentResult = {}) => {
         const token = localStorage.getItem('token');
@@ -251,17 +255,30 @@ const Checkout = () => {
 
                     <div className="mt-6">
                         <h3 className='text-lg mb-4 text-black dark:text-white'>Payment Method</h3>
-                        <div className="flex gap-4 mb-4">
+                        <div className="flex flex-col gap-2 mb-4">
+                            {isStripeConfigured && (
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="Stripe"
+                                        checked={paymentMethod === "Stripe"}
+                                        onChange={() => setPaymentMethod("Stripe")}
+                                        className="mr-2"
+                                    />
+                                    Card (Stripe)
+                                </label>
+                            )}
                             <label className="flex items-center cursor-pointer">
                                 <input
                                     type="radio"
                                     name="paymentMethod"
-                                    value="Stripe"
-                                    checked={paymentMethod === "Stripe"}
-                                    onChange={() => setPaymentMethod("Stripe")}
+                                    value="DemoPay"
+                                    checked={paymentMethod === "DemoPay"}
+                                    onChange={() => setPaymentMethod("DemoPay")}
                                     className="mr-2"
                                 />
-                                Stripe
+                                Test Payment (no Stripe account)
                             </label>
                             <label className="flex items-center cursor-pointer">
                                 <input
@@ -276,17 +293,36 @@ const Checkout = () => {
                             </label>
                         </div>
 
-                        {paymentMethod === "Stripe" && clientSecret ? (
-                            <Elements stripe={stripePromise} options={options}>
+                        {!isStripeConfigured && paymentMethod === "Stripe" && (
+                            <div className='text-sm text-red-500 mb-4'>Stripe keys are not configured. Please choose Test Payment or Cash on Delivery.</div>
+                        )}
+
+                        {paymentMethod === "Stripe" && isStripeConfigured ? (
+                            clientSecret && stripePromise ? (
+                                <Elements stripe={stripePromise} options={options}>
+                                    <PaymentForm
+                                        mode="stripe"
+                                        clientSecret={clientSecret}
+                                        totalPrice={cart.totalPrice}
+                                        onPaymentSuccess={handlePaymentSuccess}
+                                        isShippingValid={isShippingValid}
+                                        customerEmail={user?.email}
+                                    />
+                                </Elements>
+                            ) : (
+                                <div>Loading payment...</div>
+                            )
+                        ) : paymentMethod === "DemoPay" ? (
+                            <Elements stripe={null}>
                                 <PaymentForm
-                                    clientSecret={clientSecret}
+                                    mode="mock"
+                                    clientSecret={null}
                                     totalPrice={cart.totalPrice}
                                     onPaymentSuccess={handlePaymentSuccess}
                                     isShippingValid={isShippingValid}
+                                    customerEmail={user?.email}
                                 />
                             </Elements>
-                        ) : paymentMethod === "Stripe" ? (
-                            <div>Loading Payment...</div>
                         ) : (
                             <button type="submit" disabled={isSubmitting} className='w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded disabled:opacity-70 disabled:cursor-not-allowed hover:bg-gray-900 dark:hover:bg-gray-200 transition-colors'>
                                 {isSubmitting ? 'Processing order...' : 'Place Order'}
