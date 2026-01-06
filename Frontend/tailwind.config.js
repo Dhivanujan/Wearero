@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#000000",
-        secondary: "#1f2937",
+        primary: "#171717",
+        secondary: "#262626",
         accent: "#2563eb",
         "rabbit-red": "#ea2e0e",
       },
@@ -15,9 +15,19 @@ export default {
         heading: ['Poppins', 'sans-serif'],
       },
       boxShadow: {
-        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
         'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
-        'card-hover': '0 0 0 1px rgba(0,0,0,0.03), 0 8px 16px rgba(0,0,0,0.08)',
+        'card-hover': '0 0 0 1px rgba(0,0,0,0.03), 0 12px 24px -8px rgba(0,0,0,0.08)',
+        'float': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      },
+      animation: {
+        'subtle-zoom': 'subtle-zoom 20s infinite alternate',
+      },
+      keyframes: {
+        'subtle-zoom': {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(1.05)' },
+        }
       }
     },
   },

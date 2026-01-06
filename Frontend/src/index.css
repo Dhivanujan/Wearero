@@ -5,25 +5,25 @@
 @tailwind utilities;
 
 :root {
-  --bg-color: #f9fafb; /* gray-50 */
-  --text-color: #1f2937; /* gray-800 */
+  --bg-color: #ffffff; /* Cleaner white background */
+  --text-color: #171717; /* Soft black */
   --card-bg: #ffffff;
-  --border-color: #e5e7eb; /* gray-200 */
-  --primary-color: #000000;
-  --secondary-color: #4b5563; /* gray-600 */
-  --input-bg: #ffffff;
-  --accent-color: #2563eb; /* blue-600 */
+  --border-color: #f3f4f6; /* gray-100 */
+  --primary-color: #171717;
+  --secondary-color: #525252; /* gray-600 */
+  --input-bg: #f9fafb;
+  --accent-color: #2563eb;
 }
 
 .dark {
-  --bg-color: #111827; /* gray-900 */
-  --text-color: #f3f4f6; /* gray-100 */
-  --card-bg: #1f2937; /* gray-800 */
-  --border-color: #374151; /* gray-700 */
+  --bg-color: #0a0a0a; /* Deep black */
+  --text-color: #e5e5e5;
+  --card-bg: #171717;
+  --border-color: #262626;
   --primary-color: #ffffff;
-  --secondary-color: #9ca3af; /* gray-400 */
-  --input-bg: #374151; /* gray-700 */
-  --accent-color: #3b82f6; /* blue-500 */
+  --secondary-color: #a3a3a3;
+  --input-bg: #171717;
+  --accent-color: #3b82f6;
 }
 
 body {

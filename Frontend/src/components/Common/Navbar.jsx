@@ -46,16 +46,16 @@ const userInitials = user?.name
   : '';
   return (
     <>
-        <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800 transition-all duration-300">
-            <div className="container mx-auto flex items-center justify-between py-4 px-6">
+        <nav className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-soft border-b border-white/10 dark:border-gray-800 transition-all duration-300">
+            <div className="container mx-auto flex items-center justify-between py-5 px-6">
             <div>
-                 <Link to="/" className="text-2xl font-bold tracking-tight text-black dark:text-white font-heading">Wearero</Link>
+                 <Link to="/" className="text-3xl font-bold tracking-tight text-black dark:text-white font-heading hover:opacity-80 transition-opacity">Wearero</Link>
             </div>
-            <div className='hidden md:flex space-x-8'>
+            <div className='hidden md:flex space-x-10'>
                 {navLinks.map((item) => (
-                  <Link key={item.label} to={item.to} className='text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white text-sm font-medium uppercase tracking-wide transition-colors relative group'>
+                  <Link key={item.label} to={item.to} className='text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-sm font-semibold uppercase tracking-widest transition-colors relative group'>
                     {item.label}
-                    <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black dark:bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"></span>
+                    <span className="absolute inset-x-0 -bottom-2 h-0.5 bg-black dark:bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"></span>
                   </Link>
                 ))}
             </div>

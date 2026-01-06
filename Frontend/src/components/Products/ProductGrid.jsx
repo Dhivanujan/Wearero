@@ -61,25 +61,25 @@ const ProductGrid = ({products}) => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Link to={`/product/${product._id}`} className='block group'>
-                  <div className='bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 relative border border-gray-100 dark:border-gray-700'>
-                      <button 
-                          onClick={(e) => handleWishlistClick(e, product._id)}
-                          className={`absolute top-3 right-3 z-10 p-2 rounded-full ${isInWishlist ? 'bg-red-50 text-red-500' : 'bg-white/90 text-gray-600'} hover:bg-red-100 hover:text-red-500 transition-all shadow-md transform hover:scale-110`}
-                      >
-                          <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-lg`}></i>
-                      </button>
-                      <div className='w-full h-[400px] overflow-hidden relative bg-gray-100 dark:bg-gray-700'>
+                  <div className='bg-white dark:bg-gray-800 rounded-lg overflow-hidden relative'>
+                      <div className='w-full h-[450px] overflow-hidden relative bg-gray-100 dark:bg-gray-700'>
                           <img
                               src={imageUrl}
                               alt={imageAlt}
                               className='w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out'/>
+                           <button 
+                              onClick={(e) => handleWishlistClick(e, product._id)}
+                              className={`absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/80 backdrop-blur-sm text-black hover:bg-white hover:text-red-500 transition-all shadow-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 duration-300`}
+                          >
+                              <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-lg ${isInWishlist ? 'text-red-500' : ''}`}></i>
+                          </button>
                       </div>
-                      <div className='p-4'>
-                        <h3 className='text-base font-medium text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors truncate font-heading'>{product.name}</h3>
-                        <div className='flex items-center justify-between mt-2'>
+                      <div className='p-4 pt-5'>
+                        <h3 className='text-md font-medium text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors truncate font-heading tracking-wide'>{product.name}</h3>
+                        <div className='flex items-center justify-between'>
                             <p className='text-gray-900 dark:text-gray-100 font-bold text-lg'>${product.price}</p>
-                            <div className='flex items-center'>
-                                <i className="ri-star-fill text-yellow-400 text-sm mr-1"></i>
+                            <div className='flex items-center space-x-1'>
+                                <i className="ri-star-fill text-yellow-400 text-sm"></i>
                                 <span className='text-xs text-gray-500 dark:text-gray-400'>({product.rating || 0})</span>
                             </div>
                         </div>
