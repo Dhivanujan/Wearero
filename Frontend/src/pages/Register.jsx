@@ -26,6 +26,11 @@ const handleSubmit = async (e) => {
         return;
     }
 
+    if (password.length < 6) {
+        toast.error('Password must be at least 6 characters');
+        return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -36,7 +41,10 @@ const handleSubmit = async (e) => {
             },
             body: JSON.stringify({ name, email, password, role }),
         });
-        const data = await response.json();
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+          ? await response.json()
+          : await response.text();
 
         if (response.ok) {
             login(data);
@@ -46,7 +54,10 @@ const handleSubmit = async (e) => {
             toast.success(role === 'admin' ? 'Admin account created' : 'Registration successful');
             navigate(role === 'admin' ? '/admin' : '/');
         } else {
-            toast.error(data.message || 'Registration failed');
+            const message = typeof data === 'string' && data
+              ? data
+              : data?.message;
+            toast.error(message || 'Registration failed');
         }
     } catch (error) {
         console.error(error);
