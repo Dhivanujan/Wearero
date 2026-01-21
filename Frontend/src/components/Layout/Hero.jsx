@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 const Hero = () => {
   return (
-    <section className='relative h-[90vh] md:h-[95vh] overflow-hidden'>
+    <section className='relative overflow-hidden min-h-[calc(100vh-130px)] md:min-h-[calc(100vh-150px)]'>
         {/* Background Image with Overlay */}
         <div className='absolute inset-0 z-0'>
           <img 
@@ -19,8 +19,8 @@ const Hero = () => {
         </div>
         
         {/* Content */}
-        <div className='absolute inset-0 flex items-center justify-center z-10'>
-            <div className='text-center text-white px-6 max-w-5xl mx-auto'>
+        <div className='relative z-10 container mx-auto min-h-[calc(100vh-130px)] md:min-h-[calc(100vh-150px)] px-6 sm:px-8 flex items-center justify-center'>
+            <div className='text-center text-white max-w-5xl mx-auto'>
                 {/* Badge */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
