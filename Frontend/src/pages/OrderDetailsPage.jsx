@@ -58,7 +58,7 @@ const OrderDetailsPage = () => {
                 </div>
             </div>
             {/* {Customer, Payment, Shipping Info} */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8 text-gray-600 dark:text-gray-400">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8 text-gray-700 dark:text-gray-300">
                 <div>
                     <h4 className='text-lg font-semibold mb-2 text-black dark:text-white'>Payment Info</h4>
                     <p>Payment Method: {orderDetails.paymentMethod}</p>
@@ -73,7 +73,7 @@ const OrderDetailsPage = () => {
             {/* {Product List} */}
             <div className="overflow-x-auto">
                 <h4 className='text-lg font-semibold mb-4 text-black dark:text-white'>Products</h4>
-                <table className='min-w-full text-gray-600 dark:text-gray-400 mb-4'>
+                <table className='min-w-full text-gray-700 dark:text-gray-300 mb-4'>
                     <thead className='bg-gray-100 dark:bg-gray-700 text-black dark:text-white'>
                         <tr>
                             <th className='py-2 px-4'>Name</th>

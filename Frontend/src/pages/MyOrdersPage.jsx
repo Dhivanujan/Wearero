@@ -42,7 +42,7 @@ const MyOrders = () => {
       <h2 className="text-xl sm:text-2xl font-bold mb-6 text-black dark:text-white">My Orders</h2>
 
       <div className="relative shadow-md sm:rounded-lg overflow-hidden bg-white dark:bg-gray-800">
-        <table className="min-w-full text-left text-gray-500 dark:text-gray-400">
+        <table className="min-w-full text-left text-gray-700 dark:text-gray-300">
           <thead className="bg-gray-100 dark:bg-gray-700 text-xs uppercase text-gray-700 dark:text-gray-300">
             <tr>
               <th className="py-2 px-4 sm:py-3">Image</th>

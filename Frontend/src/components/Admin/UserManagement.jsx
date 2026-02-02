@@ -159,7 +159,7 @@ const UserManagement = () => {
         </div>
         {/* {User list Management} */}
         <div className="overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-800">
-            <table className="min-w-full text-left text-gray-500 dark:text-gray-400">
+            <table className="min-w-full text-left text-gray-700 dark:text-gray-300">
                 <thead className='bg-gray-100 dark:bg-gray-700 text-xs uppercase text-gray-700 dark:text-gray-300'>
                     <tr>
                         <th className='py-3 px-4'>Name</th>
