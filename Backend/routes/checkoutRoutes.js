@@ -39,9 +39,13 @@ router.post('/create-payment-intent', protect, async (req, res) => {
         }
 
         // Create a PaymentIntent with the order amount and currency
+        // Enable automatic payment methods so it works with Stripe PaymentElement
         const paymentIntent = await stripe.paymentIntents.create({
             amount: toCents(totalAmount), // Stripe expects amount in cents
             currency: 'usd',
+            automatic_payment_methods: {
+                enabled: true,
+            },
             metadata: {
                 userId: req.user._id.toString(),
                 cartTotal: totalAmount.toFixed(2),
