@@ -1,12 +1,52 @@
-# React + Vite
+## WEARERO – MERN E‑Commerce Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a full‑stack MERN e‑commerce application. The backend exposes a REST API built with Express and MongoDB, and the frontend is a React app bundled with Vite and styled with Tailwind CSS.
 
-Currently, two official plugins are available:
+### Tech Stack
+- Frontend: React, React Router, Redux Toolkit, Vite, Tailwind CSS
+- Backend: Node.js, Express, MongoDB (Mongoose)
+- Payments & Uploads: Stripe, Multer
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Project Structure
+- `Backend/` – Express API (users, products, cart, orders, uploads, checkout)
+- `Frontend/` – React SPA (pages, components, contexts, and API client)
 
-## Expanding the ESLint configuration
+### Prerequisites
+- Node.js (LTS recommended)
+- MongoDB instance (local or hosted)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Setup & Run
+
+1. Clone or download this repository, then open it in your editor.
+
+2. Install backend dependencies and start the API:
+	 ```bash
+	 cd Backend
+	 npm install
+	 # configure environment variables in a .env file (e.g. MONGO_URI, PORT, Stripe keys)
+	 npm run dev   # or: npm start
+	 ```
+
+3. Install frontend dependencies and start the React dev server:
+	 ```bash
+	 cd ../Frontend
+	 npm install
+	 npm run dev
+	 ```
+
+4. Open the URL printed by Vite (by default http://localhost:5173) and ensure the backend server URL configured in the frontend matches your API (e.g. http://localhost:3000).
+
+### Scripts
+- Backend
+	- `npm run dev` – Start API with nodemon
+	- `npm start` – Start API with Node
+	- `npm run seed` – Seed database with initial data
+- Frontend
+	- `npm run dev` – Run Vite dev server
+	- `npm run build` – Build for production
+	- `npm run preview` – Preview production build
+	- `npm run lint` – Run ESLint
+
+### Notes
+- Uploads are served from the backend `uploads/` directory.
+- Payment webhooks and sensitive settings must be configured via environment variables; do not commit secrets to version control.
