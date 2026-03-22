@@ -51,6 +51,7 @@ const MyOrders = () => {
               <th className="py-2 px-4 sm:py-3">Shipping Address</th>
               <th className="py-2 px-4 sm:py-3">Items</th>
               <th className="py-2 px-4 sm:py-3">Price</th>
+              <th className="py-2 px-4 sm:py-3">Payment</th>
               <th className="py-2 px-4 sm:py-3">Status</th>
             </tr>
           </thead>
@@ -79,6 +80,9 @@ const MyOrders = () => {
                   </td>
                   <td className='py-2 px-2 sm:py-4 sm:px-4'>
                     ${order.totalPrice}
+                  </td>
+                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                    {order.paymentMethod === 'Stripe' ? 'Stripe (Card)' : order.paymentMethod === 'COD' ? 'Cash on Delivery' : order.paymentMethod || 'N/A'}
                   </td>
                   <td className='py-2 px-2 sm:py-4 sm:px-4'>
                     <span className={`${order.isPaid ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300" : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300"} px-2 py-1 rounded-full text-xs sm:text-sm font-medium`}>

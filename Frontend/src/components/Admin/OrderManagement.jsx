@@ -60,6 +60,7 @@ const OrderManagement = () => {
                         <th className="py-3 px-4">Order ID</th>
                         <th className="py-3 px-4">Customer</th>
                         <th className="py-3 px-4">Total Price</th>
+                        <th className="py-3 px-4">Payment</th>
                         <th className="py-3 px-4">Status</th>
                         <th className="py-3 px-4">Actions</th>
                     </tr>
@@ -75,6 +76,9 @@ const OrderManagement = () => {
                                 </td>
                                 <td className="p-4">{order.user?.name || 'Guest'}</td>
                                 <td className="p-4">{order.totalPrice}</td>
+                                <td className="p-4">
+                                    {order.paymentMethod === 'Stripe' ? 'Stripe (Card)' : order.paymentMethod === 'COD' ? 'Cash on Delivery' : order.paymentMethod || 'N/A'}
+                                </td>
                                 <td className="p-4">
                                     <select 
                                     value={order.status} 
