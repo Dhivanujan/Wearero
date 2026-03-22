@@ -313,7 +313,7 @@ const Checkout = () => {
                                         {paymentMethod === "Stripe" && isStripeConfigured ? (
                                             clientSecret && stripePromise ? (
                                                 <Elements stripe={stripePromise} options={options}>
-                                                    <PaymentForm mode="stripe" clientSecret={clientSecret} totalPrice={cart.totalPrice} onPaymentSuccess={handlePaymentSuccess} isShippingValid={isShippingValid} customerEmail={user?.email} />
+                                                    <PaymentForm clientSecret={clientSecret} totalPrice={cart.totalPrice} onPaymentSuccess={handlePaymentSuccess} isShippingValid={isShippingValid} customerEmail={user?.email} />
                                                 </Elements>
                                             ) : (
                                                 <div className='flex items-center justify-center py-4'>
