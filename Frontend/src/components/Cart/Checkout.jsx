@@ -17,7 +17,7 @@ const Checkout = () => {
     const { cart, loading, clearCart } = useCart();
     const { user } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState(isStripeConfigured ? "Stripe" : "DemoPay");
+    const [paymentMethod, setPaymentMethod] = useState(isStripeConfigured ? "Stripe" : "COD");
     const [clientSecret, setClientSecret] = useState("");
     const [shippingAddress, setShippingAddress] = useState({
         firstName: "",
@@ -101,7 +101,7 @@ const Checkout = () => {
             if (response.ok) {
                 clearCart();
                 toast.success('Order placed successfully');
-                navigate(`/order-confirmation`, { state: { checkoutId: data._id } });
+                navigate(`/order-confirmation`, { state: { orderId: data._id } });
             } else {
                 toast.error(data.message || "Failed to place order");
             }
@@ -297,16 +297,6 @@ const Checkout = () => {
                                                 </svg>
                                             </label>
                                         )}
-                                        <label className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === 'DemoPay' ? 'border-accent bg-accent/5' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'}`}>
-                                            <input type="radio" name="paymentMethod" value="DemoPay" checked={paymentMethod === "DemoPay"} onChange={() => setPaymentMethod("DemoPay")} className="sr-only" />
-                                            <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${paymentMethod === 'DemoPay' ? 'border-accent' : 'border-gray-300 dark:border-gray-600'}`}>
-                                                {paymentMethod === 'DemoPay' && <div className='w-2.5 h-2.5 rounded-full bg-accent'></div>}
-                                            </div>
-                                            <div className='flex-1'>
-                                                <span className='font-medium text-gray-900 dark:text-white'>Test Payment</span>
-                                                <p className='text-sm text-gray-500 dark:text-gray-400'>Demo mode - no real payment</p>
-                                            </div>
-                                        </label>
                                         <label className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === 'COD' ? 'border-accent bg-accent/5' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'}`}>
                                             <input type="radio" name="paymentMethod" value="COD" checked={paymentMethod === "COD"} onChange={() => setPaymentMethod("COD")} className="sr-only" />
                                             <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${paymentMethod === 'COD' ? 'border-accent' : 'border-gray-300 dark:border-gray-600'}`}>
@@ -319,12 +309,6 @@ const Checkout = () => {
                                         </label>
                                     </div>
 
-                                    {!isStripeConfigured && paymentMethod === "Stripe" && (
-                                        <div className='mt-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl text-sm text-red-600 dark:text-red-400'>
-                                            Stripe keys are not configured. Please choose Test Payment or Cash on Delivery.
-                                        </div>
-                                    )}
-
                                     <div className='mt-6'>
                                         {paymentMethod === "Stripe" && isStripeConfigured ? (
                                             clientSecret && stripePromise ? (
@@ -336,11 +320,7 @@ const Checkout = () => {
                                                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-accent'></div>
                                                 </div>
                                             )
-                                        ) : paymentMethod === "DemoPay" ? (
-                                            <Elements stripe={null}>
-                                                <PaymentForm mode="mock" clientSecret={null} totalPrice={cart.totalPrice} onPaymentSuccess={handlePaymentSuccess} isShippingValid={isShippingValid} customerEmail={user?.email} />
-                                            </Elements>
-                                        ) : (
+                                            ) : (
                                             <button type="submit" disabled={isSubmitting} className='w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 rounded-xl font-semibold disabled:opacity-70 disabled:cursor-not-allowed hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'>
                                                 {isSubmitting ? 'Processing order...' : 'Place Order'}
                                             </button>

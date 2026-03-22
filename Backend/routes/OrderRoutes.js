@@ -23,6 +23,10 @@ router.post('/', protect, async (req, res) => {
       return res.status(400).json({ message: 'No order items' });
     }
 
+    if (!['Stripe', 'COD'].includes(paymentMethod)) {
+      return res.status(400).json({ message: 'Invalid payment method' });
+    }
+
     const order = new Order({
       user: req.user._id,
       orderItems,
