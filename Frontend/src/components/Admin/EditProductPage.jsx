@@ -192,6 +192,19 @@ const EditProductPage = () => {
           />
         </div>
 
+        {/* Material */}
+        <div className="mb-6">
+          <label className="block font-semibold mb-2 text-black dark:text-white">Material</label>
+          <input
+            type="text"
+            name="material"
+            value={productData.material}
+            onChange={handleChange}
+            className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
+            placeholder="e.g. Cotton, Polyester blend"
+          />
+        </div>
+
         {/* Gender */}
         <div className="mb-6">
           <label className="block font-semibold mb-2 text-black dark:text-white">Gender</label>
