@@ -19,15 +19,17 @@ import ProductManagement from './components/Admin/ProductManagement'
 import EditProductPage from './components/Admin/EditProductPage'
 import OrderManagement from './components/Admin/OrderManagement'
 import { CartProvider } from './context/CartContext'
+import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/Common/ProtectedRoute'
 import WishlistPage from './pages/WishlistPage'
 
 const App = () => {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <Toaster position='top-right' />
-        <Routes>
+      <AuthProvider>
+        <CartProvider>
+          <Toaster position='top-right' />
+          <Routes>
           <Route path='/' element={<UserLayout/>}>
             <Route index element={<Home/>}/>
             <Route path='login' element={<Login />}/>
@@ -41,7 +43,7 @@ const App = () => {
             <Route path='order/:id' element={<ProtectedRoute><OrderDetailsPage/></ProtectedRoute>}/>
             <Route path='my-orders' element={<ProtectedRoute><MyOrdersPage/></ProtectedRoute>}/>
           </Route>
-          <Route path='/admin' element={<AdminOutlet/>}>
+          <Route path='/admin' element={<ProtectedRoute requireAdmin={true}><AdminOutlet/></ProtectedRoute>}>
             <Route index element={<AdminHomePage/>}/>
             <Route path="users" element={<UserManagement/>}/>
             <Route path="products" element={<ProductManagement/>}/>
@@ -50,7 +52,8 @@ const App = () => {
             <Route path="orders" element={<OrderManagement/>}/>
           </Route>
         </Routes>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

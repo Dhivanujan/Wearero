@@ -263,7 +263,7 @@ router.post("/merge", protect, async (req, res) => {
         return res.status(200).json(userCart);
       } else {
         // ✅ Assign guest cart to user
-        guestCart.user = req.user.id;
+        guestCart.user = req.user._id;
         guestCart.guestId = undefined;
         await guestCart.save();
 

@@ -291,23 +291,6 @@ router.get("/new-arrivals", async (req, res) => {
   }
 });
 
-//@route GET /api/products/:id
-//@desc Get product by ID
-//@access Public
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).json({ message: "Product not found" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
-  }
-});
-
 //@route GET /api/products/similar/:id
 //@desc Get similar products by category
 //@access Public
@@ -326,6 +309,23 @@ router.get("/similar/:id", async (req, res) => {
       category: product.category,
     }).limit(4);
     res.json(similarProducts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+//@route GET /api/products/:id
+//@desc Get product by ID
+//@access Public
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });

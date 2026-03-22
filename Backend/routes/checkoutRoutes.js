@@ -68,6 +68,11 @@ router.post('/create-payment-intent', protect, async (req, res) => {
 // @access  Public
 // Note: This needs to be configured in Stripe Dashboard to point to this URL
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+    if (!stripe) {
+        console.error('Stripe webhook called but STRIPE_SECRET_KEY is not configured');
+        return res.status(503).json({ error: 'Stripe is not configured for this environment' });
+    }
+
     const sig = req.headers['stripe-signature'];
     let event;
 

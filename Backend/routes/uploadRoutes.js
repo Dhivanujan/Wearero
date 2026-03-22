@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -27,8 +28,8 @@ const upload = multer({ storage, fileFilter });
 
 // @route POST /api/upload
 // @desc Upload an image
-// @access Public (or Private/Admin if you want to restrict it)
-router.post('/', upload.single('image'), (req, res) => {
+// @access Private/Admin
+router.post('/', protect, admin, upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }

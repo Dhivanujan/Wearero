@@ -7,19 +7,20 @@ import { toast } from 'sonner'
 const OrderConfirmationPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { checkoutId } = location.state || {};
+    // State is expected to contain orderId from the checkout flow
+    const { orderId } = location.state || {};
     const [checkout, setCheckout] = useState(null);
     const { clearCart } = useCart();
 
     useEffect(() => {
-        if (!checkoutId) {
+        if (!orderId) {
             navigate('/my-orders');
             return;
         }
 
         const fetchOrder = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/orders/${checkoutId}`, {
+                const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -39,7 +40,7 @@ const OrderConfirmationPage = () => {
         };
 
         fetchOrder();
-    }, [checkoutId, clearCart, navigate]);
+    }, [orderId, clearCart, navigate]);
 
     const calculateEstimateDelivery = (createdAt) => {
         const orderDate = new Date(createdAt);

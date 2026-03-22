@@ -1,6 +1,4 @@
-const { sign } = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const User = require("./User");
 
 const productSchema = new mongoose.Schema(
   {

@@ -3,17 +3,18 @@ import { useState } from 'react';
 import {FaBars} from 'react-icons/fa';
 import AdminSidebar from './AdminSidebar';
 import { Outlet, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext';
 
 const AdminLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const navigate = useNavigate();
+    const { isAdmin, isAuthenticated } = useAuth();
 
     useEffect(() => {
-        const role = localStorage.getItem('role');
-        if (role !== 'admin') {
+        if (!isAuthenticated || !isAdmin) {
             navigate('/');
         }
-    }, [navigate]);
+    }, [isAuthenticated, isAdmin, navigate]);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen)

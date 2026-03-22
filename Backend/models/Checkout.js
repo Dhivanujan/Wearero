@@ -1,4 +1,3 @@
-const { request } = require('express');
 const mongoose =require('mongoose');
 
 const checkoutItemSchema = new mongoose.Schema({
