@@ -86,25 +86,25 @@ const NewArrivals = () => {
   }, [])
 
   return (
-    <section className='py-8 px-4 lg:px-0'>
-      <div className='container mx-auto text-center mb-10 relative'>
+    <section className='py-20 px-4 lg:px-0 bg-gray-50 dark:bg-gray-900/50'>
+      <div className='container mx-auto text-center mb-16 relative'>
         <motion.h2  
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className='text-3xl font-bold mb-4 text-black dark:text-white'
+          className='text-4xl md:text-5xl font-bold mb-6 tracking-tight text-gray-900 dark:text-white font-heading'
         >
-          Explore New Arrivals
+          New Arrivals
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className='text-lg text-gray-600 dark:text-gray-400 mb-8'
+          className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed'
         >
-          Elevate your wardrobe with the newest arrivals — curated for those who live on the cutting edge of fashion.
+          Discover the latest trends and enhance your style with our freshest collection.
         </motion.p>
       </div>
 
