@@ -264,6 +264,7 @@ const EditProductPage = () => {
           <label className="block font-semibold mb-2 text-black dark:text-white">Product Images</label>
           <input
             type="file"
+            accept="image/png, image/jpeg, image/jpg"
             onChange={async (e) => {
               const file = e.target.files[0];
               if (file) {
@@ -271,8 +272,12 @@ const EditProductPage = () => {
                 formData.append("image", file);
 
                 try {
+                  const token = localStorage.getItem('token');
                   const response = await fetch(`${API_BASE_URL}/api/upload`, {
                     method: "POST",
+                    headers: {
+                      'Authorization': `Bearer ${token}`,
+                    },
                     body: formData,
                   });
                   const data = await response.json();
@@ -293,7 +298,8 @@ const EditProductPage = () => {
             }}
             className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 text-black dark:text-white"
           />
-          <div className="flex gap-4 mt-4">
+          <p className="text-sm text-gray-500 mt-1">Accepts JPG, JPEG, and PNG files.</p>
+          <div className="flex gap-4 mt-4 flex-wrap">
             {productData.images.map((image, index) => (
               <div key={index} className="relative">
                 <img
