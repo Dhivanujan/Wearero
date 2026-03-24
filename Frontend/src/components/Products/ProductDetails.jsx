@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductGrid from './ProductGrid';
 import Reviews from './Reviews';
+import RecentlyViewed from './RecentlyViewed'; 
 import { useParams } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -68,6 +69,23 @@ const ProductDetails = () => {
     fetchProduct();
     fetchSimilarProducts();
   }, [id]);
+
+  useEffect(() => {
+      if (!product) return;
+      const addToRecent = () => {
+          try {
+              let stored = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+              // Move current to front
+              stored = [product._id, ...stored.filter(pid => pid !== product._id)];
+              // Limit to 10
+              stored = stored.slice(0, 10);
+              localStorage.setItem('recentlyViewed', JSON.stringify(stored));
+          } catch (e) {
+              console.error("Error saving to local storage", e);
+          }
+      };
+      addToRecent();
+  }, [product]);
 
     const handleAddToCart = async () => {
       if (!selectedSize) {
@@ -180,6 +198,23 @@ const ProductDetails = () => {
     { icon: HiOutlineShieldCheck, label: 'Secure Payment', desc: 'SSL encrypted' },
   ];
 
+  const handleShare = async () => {
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: product.name,
+            text: 'Check out this product!',
+            url: window.location.href,
+          });
+        } else {
+          await navigator.clipboard.writeText(window.location.href);
+          toast.success("Link copied to clipboard!");
+        }
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -235,7 +270,7 @@ const ProductDetails = () => {
               
               {/* Share & Wishlist floating buttons */}
               <div className='absolute top-4 right-4 flex flex-col gap-2'>
-                <button className='p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:scale-110 transition-transform'>
+                <button onClick={handleShare} className='p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:scale-110 transition-transform'>
                   <RiShareLine className='w-5 h-5 text-gray-700 dark:text-gray-300' />
                 </button>
               </div>
@@ -527,6 +562,9 @@ const ProductDetails = () => {
           <Reviews productId={id} reviews={product.reviews} />
         </motion.div>
 
+        
+        {/* Recently Viewed */}
+        <RecentlyViewed excludeId={product?._id} />
         {/* Similar Products */}
         {similarProducts.length > 0 && (
           <motion.div 
