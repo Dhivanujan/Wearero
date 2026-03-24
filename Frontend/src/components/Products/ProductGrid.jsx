@@ -40,7 +40,7 @@ const ProductGrid = ({products}) => {
     };
 
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8'>
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8'>
         {safeProducts.length === 0 && (
             <p className='col-span-full text-center text-gray-500 dark:text-gray-400 py-12'>No products to display yet.</p>
         )}
@@ -78,19 +78,19 @@ const ProductGrid = ({products}) => {
                           {/* Wishlist Button */}
                           <button 
                               onClick={(e) => handleWishlistClick(e, product._id)}
-                              className={`absolute top-4 right-4 z-20 p-3 rounded-full backdrop-blur-md transition-all duration-300 transform ${
+                              className={`absolute top-2 right-2 md:top-4 md:right-4 z-20 p-2 md:p-3 rounded-full backdrop-blur-md transition-all duration-300 transform ${
                                 isInWishlist 
                                   ? 'bg-red-500/90 text-white scale-100' 
                                   : 'bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'
                               } hover:scale-110 shadow-lg`}
                           >
-                              <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-lg`}></i>
+                              <i className={`ri-heart-${isInWishlist ? 'fill' : 'line'} text-base md:text-lg`}></i>
                           </button>
 
                           {/* Quick View Badge */}
                           <Link 
                             to={`/product/${product._id}`} 
-                            className='absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 block'
+                            className='absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 hidden md:block'
                           >
                             <button 
                               className='w-full py-2.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-xl text-sm font-medium text-gray-900 dark:text-white shadow-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center gap-2'
@@ -109,16 +109,16 @@ const ProductGrid = ({products}) => {
                       </div>
 
                       {/* Product Info */}
-                      <div className='p-5'>
-                        <h3 className='text-sm font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-accent dark:group-hover:text-accent-light transition-colors duration-300'>
+                      <div className='p-3 md:p-5'>
+                        <h3 className='text-xs md:text-sm font-semibold text-gray-900 dark:text-white mb-1.5 md:mb-2 line-clamp-2 group-hover:text-accent dark:group-hover:text-accent-light transition-colors duration-300'>
                           {product.name}
                         </h3>
                         
                         <div className='flex items-center justify-between'>
-                            <div className='flex items-baseline space-x-2'>
-                              <p className='text-lg font-bold text-gray-900 dark:text-white'>${product.price}</p>
+                            <div className='flex items-baseline space-x-1.5 md:space-x-2'>
+                              <p className='text-base md:text-lg font-bold text-gray-900 dark:text-white'>${product.price}</p>
                               {product.originalPrice && product.originalPrice > product.price && (
-                                <p className='text-sm text-gray-400 line-through'>${product.originalPrice}</p>
+                                <p className='text-xs md:text-sm text-gray-400 line-through'>${product.originalPrice}</p>
                               )}
                             </div>
                             
@@ -128,12 +128,12 @@ const ProductGrid = ({products}) => {
                                 {product.colors.slice(0, 3).map((color, idx) => (
                                   <span 
                                     key={idx}
-                                    className='w-4 h-4 rounded-full ring-2 ring-white dark:ring-gray-900 shadow-sm'
+                                    className='w-3 h-3 md:w-4 md:h-4 rounded-full ring-2 ring-white dark:ring-gray-900 shadow-sm'
                                     style={{ backgroundColor: color.toLowerCase() }}
                                   ></span>
                                 ))}
                                 {product.colors.length > 3 && (
-                                  <span className='w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-700 ring-2 ring-white dark:ring-gray-900 flex items-center justify-center text-[8px] font-bold text-gray-600 dark:text-gray-400'>
+                                  <span className='w-3 h-3 md:w-4 md:h-4 rounded-full bg-gray-200 dark:bg-gray-700 ring-2 ring-white dark:ring-gray-900 flex items-center justify-center text-[7px] md:text-[8px] font-bold text-gray-600 dark:text-gray-400'>
                                     +{product.colors.length - 3}
                                   </span>
                                 )}

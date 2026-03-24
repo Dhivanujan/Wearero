@@ -20,20 +20,20 @@ const Hero = () => {
         </div>
         
         {/* Content Container */}
-        <div className='relative z-10 container mx-auto flex flex-col justify-center items-center h-full text-center pt-20 pb-32 px-4 min-h-screen'>
+        <div className='relative z-10 container mx-auto flex flex-col justify-center items-center h-full text-center pt-12 pb-20 md:pt-20 md:pb-32 px-4 min-h-screen'>
             <div className='max-w-4xl mx-auto'>
                 {/* Badge */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
-                  className='inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full mb-8 hover:bg-white/20 transition-colors'
+                  className='inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-6 md:mb-8 hover:bg-white/20 transition-colors'
                 >
-                  <span className='relative flex h-3 w-3'>
+                  <span className='relative flex h-2.5 w-2.5 md:h-3 md:w-3'>
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rabbit-red opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-rabbit-red"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-rabbit-red"></span>
                   </span>
-                  <span className='text-sm font-medium tracking-wide text-gray-100'>New Season 2025</span>
+                  <span className='text-xs md:text-sm font-medium tracking-wide text-gray-100'>New Season 2025</span>
                 </motion.div>
 
                 {/* Heading */}
@@ -41,7 +41,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className='text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 font-heading leading-tight drop-shadow-xl'
+                  className='text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-4 md:mb-6 font-heading leading-tight drop-shadow-xl'
                 >
                   Vacation <br className="hidden md:block" /> 
                   <span className='bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400'>
@@ -54,7 +54,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className='text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed font-light tracking-wide'
+                  className='text-base md:text-xl text-gray-200 mb-8 md:mb-10 max-w-lg md:max-w-2xl mx-auto leading-relaxed font-light tracking-wide'
                 >
                   Discover our curated collection of premium essentials designed for the modern explorer. Experience comfort without compromising on style.
                 </motion.p>
