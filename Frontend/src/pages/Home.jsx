@@ -7,6 +7,7 @@ import ProductGrid from '../components/Products/ProductGrid'
 import FeaturedCollection from '../components/Products/FeaturedCollection'
 import FeaturesSection from '../components/Products/FeaturesSection'
 import Newsletter from '../components/Layout/Newsletter'
+import ScrollingText from '../components/Common/ScrollingText'
 import { API_BASE_URL } from '../lib/api'
 import { motion } from 'framer-motion'
 
@@ -34,6 +35,7 @@ const Home = () => {
   return (
     <>
       <Hero />
+      <ScrollingText />
       <GenderCollection />
       <NewArrivals />
       
