@@ -88,11 +88,16 @@ const ProductGrid = ({products}) => {
                           </button>
 
                           {/* Quick View Badge */}
-                          <div className='absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300'>
-                            <span className='inline-flex items-center justify-center w-full py-2.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-xl text-sm font-medium text-gray-900 dark:text-white shadow-lg'>
-                              Quick View
-                            </span>
-                          </div>
+                          <Link 
+                            to={`/product/${product._id}`} 
+                            className='absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 block'
+                          >
+                            <button 
+                              className='w-full py-2.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-xl text-sm font-medium text-gray-900 dark:text-white shadow-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center gap-2'
+                            >
+                              <i className="ri-eye-line"></i> View Product
+                            </button>
+                          </Link>
 
                           {/* Rating Badge */}
                           {product.rating > 0 && (
