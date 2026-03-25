@@ -33,7 +33,7 @@ const Hero = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rabbit-red opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-rabbit-red"></span>
                   </span>
-                  <span className='text-xs md:text-sm font-medium tracking-wide text-gray-100'>New Season 2025</span>
+                  <span className='text-xs md:text-sm font-medium tracking-wide text-gray-100'>New Season 2026</span>
                 </motion.div>
 
                 {/* Heading */}
