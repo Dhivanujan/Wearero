@@ -1,17 +1,23 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Configure Multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Save files to 'uploads' folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'wearero_uploads',
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
   },
 });
 
@@ -34,10 +40,8 @@ router.post('/', protect, admin, upload.single('image'), (req, res) => {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
-  // Return the file URL
-  // Construct the full URL
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
-  const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
+  // Cloudinary URL of the uploaded image
+  const imageUrl = req.file.path;
   
   res.json({
     message: 'Image uploaded successfully',
