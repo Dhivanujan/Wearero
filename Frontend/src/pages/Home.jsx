@@ -4,6 +4,7 @@ import GenderCollection from '../components/Products/GenderCollection'
 import NewArrivals from '../components/Products/NewArrivals'
 import BestSeller from '../components/Products/BestSeller'
 import ProductGrid from '../components/Products/ProductGrid'
+import ProductCardSkeleton from '../components/Products/ProductCardSkeleton'
 import FeaturedCollection from '../components/Products/FeaturedCollection'
 import FeaturesSection from '../components/Products/FeaturesSection'
 import Newsletter from '../components/Layout/Newsletter'
@@ -13,6 +14,7 @@ import { motion } from 'framer-motion'
 
 const Home = () => {
   const [topWears, setTopWears] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTopWears = async () => {
@@ -20,12 +22,15 @@ const Home = () => {
         const response = await fetch(`${API_BASE_URL}/api/products?gender=Women&limit=8`);
         const data = await response.json();
         if (response.ok) {
-          setTopWears(data);
+          // Handle both paginated ({ products }) and flat array responses
+          setTopWears(data.products || data);
         } else {
           console.error('Failed to fetch top wears:', data.message);
         }
       } catch (error) {
         console.error('Error fetching top wears:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -63,7 +68,13 @@ const Home = () => {
              Explore our curated selection of top-rated women's clothing. Comfort, style, and elegance combined.
           </motion.p>
         </div>
-        <ProductGrid products={topWears} />
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <ProductCardSkeleton count={8} />
+          </div>
+        ) : (
+          <ProductGrid products={topWears} />
+        )}
       </section>
 
       <FeaturedCollection />

@@ -39,7 +39,7 @@ const ProductDetails = () => {
           const rawMainImage = data.images?.[0]?.url;
           const mainImageUrl = rawMainImage 
             ? (rawMainImage.startsWith('http') ? rawMainImage : `${API_BASE_URL}${rawMainImage}`)
-            : "https://picsum.photos/600/800?blur=2";
+            : 'https://placehold.co/600x800/f3f4f6/9ca3af?text=No+Image';
           setMainImage(mainImageUrl);
           setSelectedSize(data.sizes?.[0] || "");
           setSelectedColor(data.colors?.[0] || "");
@@ -255,7 +255,7 @@ const ProductDetails = () => {
                   animate={{ opacity: 1, scale: imageZoom ? 1.5 : 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  src={mainImage || 'https://picsum.photos/600/800?blur=3'}
+                  src={mainImage || 'https://placehold.co/600x800/f3f4f6/9ca3af?text=No+Image'}
                   alt={name}
                   className='w-full h-full object-cover'
                 />

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../../context/AuthContext";
 import { API_BASE_URL } from "../../lib/api";
+import { HiStar } from "react-icons/hi2";
+import { HiOutlineStar } from "react-icons/hi2";
 
 const Reviews = ({ productId, reviews = [] }) => {
   const [rating, setRating] = useState(0);
@@ -46,6 +48,13 @@ const Reviews = ({ productId, reviews = [] }) => {
     }
   };
 
+  const StarIcon = ({ filled }) =>
+    filled ? (
+      <HiStar className="w-5 h-5 text-amber-400" />
+    ) : (
+      <HiOutlineStar className="w-5 h-5 text-gray-300 dark:text-gray-600" />
+    );
+
   return (
     <div className="mt-16">
       <h3 className="text-3xl font-bold mb-10 text-gray-900 dark:text-white">
@@ -74,15 +83,9 @@ const Reviews = ({ productId, reviews = [] }) => {
                     </p>
                   </div>
                 </div>
-                <div className="flex text-yellow-400 text-lg">
+                <div className="flex text-lg gap-0.5">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i}>
-                      {i < review.rating ? (
-                        <i className="ri-star-fill"></i>
-                      ) : (
-                        <i className="ri-star-line text-gray-300 dark:text-gray-600"></i>
-                      )}
-                    </span>
+                    <StarIcon key={i} filled={i < review.rating} />
                   ))}
                 </div>
               </div>
@@ -109,13 +112,13 @@ const Reviews = ({ productId, reviews = [] }) => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Rating
               </label>
-              <div className="flex text-yellow-400 text-3xl cursor-pointer gap-1">
+              <div className="flex text-3xl cursor-pointer gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span key={star} onClick={() => setRating(star)} className="hover:scale-110 transition-transform">
                     {star <= rating ? (
-                      <i className="ri-star-fill"></i>
+                      <HiStar className="w-8 h-8 text-amber-400" />
                     ) : (
-                      <i className="ri-star-line text-gray-300 dark:text-gray-600"></i>
+                      <HiOutlineStar className="w-8 h-8 text-gray-300 dark:text-gray-600" />
                     )}
                   </span>
                 ))}

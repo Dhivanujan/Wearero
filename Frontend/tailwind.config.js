@@ -7,8 +7,21 @@ export default {
       colors: {
         primary: "#0f0f0f",
         secondary: "#1a1a1a",
-        accent: "#6366f1", // Modern indigo
+        accent: {
+          DEFAULT: "#6366f1",
+          50: "#eef2ff",
+          100: "#e0e7ff",
+          200: "#c7d2fe",
+          300: "#a5b4fc",
+          400: "#818cf8",
+          500: "#6366f1",
+          600: "#4f46e5",
+          700: "#4338ca",
+          800: "#3730a3",
+          900: "#312e81",
+        },
         "accent-light": "#818cf8",
+        "accent-hover": "#4f46e5",
         "rabbit-red": "#ef4444",
         success: "#10b981",
         warning: "#f59e0b",
@@ -18,15 +31,6 @@ export default {
           200: "#e5e5e5",
           800: "#1f1f1f",
           900: "#0f0f0f",
-        },
-        keyframes: {
-          subtleZoom: {
-            "0%": { transform: "scale(1.05)" },
-            "100%": { transform: "scale(1.15)" },
-          },
-        },
-        animation: {
-          subtleZoom: "subtleZoom 25s ease-in-out infinite alternate",
         },
       },
       fontFamily: {
@@ -69,6 +73,8 @@ export default {
         "scale-in": "scale-in 0.2s ease-out",
         shimmer: "shimmer 2s linear infinite",
         "pulse-soft": "pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "cart-bounce": "cart-bounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        "skeleton": "skeleton 1.5s ease-in-out infinite",
       },
       keyframes: {
         "subtle-zoom": {
@@ -98,6 +104,18 @@ export default {
         "pulse-soft": {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
+        },
+        "cart-bounce": {
+          "0%": { transform: "scale(1)" },
+          "30%": { transform: "scale(1.25)" },
+          "50%": { transform: "scale(0.9)" },
+          "70%": { transform: "scale(1.1)" },
+          "100%": { transform: "scale(1)" },
+        },
+        skeleton: {
+          "0%": { opacity: "0.5" },
+          "50%": { opacity: "1" },
+          "100%": { opacity: "0.5" },
         },
       },
       transitionTimingFunction: {

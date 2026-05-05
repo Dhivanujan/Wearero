@@ -31,7 +31,8 @@ useEffect(() => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/products?search=${searchTerm}&limit=5`);
             const data = await response.json();
-            setSuggestions(Array.isArray(data) ? data : []);
+            const results = data.products || data;
+            setSuggestions(Array.isArray(results) ? results : []);
         } catch(err) {
             console.error(err);
         }
@@ -119,7 +120,7 @@ const handleVoiceSearch = () => {
                       <img 
                         src={product.images?.[0]?.url 
                             ? (product.images[0].url.startsWith('http') ? product.images[0].url : `${API_BASE_URL}${product.images[0].url}`) 
-                            : 'https://picsum.photos/150'} 
+                            : 'https://placehold.co/150x150/f3f4f6/9ca3af?text=No+Image'} 
                         alt={product.name} 
                         className="w-12 h-12 object-cover rounded-md" 
                       />
