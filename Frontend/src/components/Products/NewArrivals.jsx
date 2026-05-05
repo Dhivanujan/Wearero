@@ -6,10 +6,12 @@ import { motion } from 'framer-motion';
 import LazyImage from '../Common/LazyImage';
 
 const SkeletonCard = () => (
-  <div className="min-w-[280px] sm:min-w-[320px] snap-center flex-shrink-0 animate-pulse">
+  <div className="min-w-[260px] sm:min-w-[300px] snap-center flex-shrink-0 animate-pulse">
     <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 h-full">
-      <div className="aspect-[4/5] bg-gray-200 dark:bg-gray-800" />
-      <div className="p-5 space-y-3">
+      <div className="aspect-[4/5] bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent shimmer" />
+      </div>
+      <div className="p-4 md:p-5 space-y-3">
         <div className="flex justify-between">
           <div className="h-5 bg-gray-200 dark:bg-gray-800 rounded w-2/3" />
           <div className="h-5 bg-gray-200 dark:bg-gray-800 rounded w-16" />
@@ -54,7 +56,7 @@ const NewArrivals = () => {
     const container = scrollRef.current;
     if (container) {
       setCanScrollLeft(container.scrollLeft > 0);
-      setCanScrollRight(container.scrollWidth > container.scrollLeft + container.clientWidth);
+      setCanScrollRight(container.scrollWidth > container.scrollLeft + container.clientWidth + 1);
     }
   };
 
@@ -68,14 +70,14 @@ const NewArrivals = () => {
   }, [newArrivals]);
 
   return (
-    <section className="py-24 px-4 lg:px-8 bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
-      <div className="container mx-auto text-center mb-12 relative">
+    <section className="py-16 md:py-24 px-4 lg:px-8 bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+      <div className="container mx-auto text-center mb-10 md:mb-12">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-5xl font-heading font-bold mb-4 tracking-tight text-gray-900 dark:text-white"
+          className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-3 md:mb-4 tracking-tight text-gray-900 dark:text-white"
         >
           Fresh Drops
         </motion.h2>
@@ -84,42 +86,44 @@ const NewArrivals = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
+          className="text-base md:text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
         >
           Be the first to wear our latest releases.
         </motion.p>
       </div>
 
-      <div className="relative container mx-auto group/slider">
+      <div className="relative container mx-auto overflow-hidden">
+        {/* Left scroll button */}
         <button
           onClick={() => handleScroll('left')}
           disabled={!canScrollLeft}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 z-10 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 disabled:opacity-0 disabled:cursor-not-allowed"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2.5 md:p-3 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
           aria-label="Scroll left"
         >
-          <FiChevronLeft className="text-2xl" />
+          <FiChevronLeft className="text-xl md:text-2xl" />
         </button>
+
+        {/* Right scroll button */}
         <button
           onClick={() => handleScroll('right')}
           disabled={!canScrollRight}
-          className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 z-10 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 disabled:opacity-0 disabled:cursor-not-allowed"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2.5 md:p-3 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
           aria-label="Scroll right"
         >
-          <FiChevronRight className="text-2xl" />
+          <FiChevronRight className="text-xl md:text-2xl" />
         </button>
 
         <div
           ref={scrollRef}
-          className="flex space-x-6 overflow-x-auto pb-4 px-4 scrollbar-hide snap-x snap-mandatory scroll-smooth"
-          style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+          className="flex space-x-4 md:space-x-6 overflow-x-auto pb-4 px-2 scrollbar-hide snap-x snap-mandatory scroll-smooth"
         >
           {loading
             ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
             : newArrivals.map((product) => (
-                <div key={product._id} className="min-w-[280px] sm:min-w-[320px] snap-center flex-shrink-0">
+                <div key={product._id} className="min-w-[260px] sm:min-w-[300px] snap-center flex-shrink-0">
                   <Link
                     to={`/product/${product._id}`}
-                    className="block bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 transition-all hover:shadow-xl hover:-translate-y-1 duration-300 h-full flex flex-col group"
+                    className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 transition-all hover:shadow-xl hover:-translate-y-1 duration-300 h-full flex flex-col group"
                   >
                     <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
                       <LazyImage
@@ -130,14 +134,14 @@ const NewArrivals = () => {
                         className="w-full h-full transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
-                    <div className="p-5 flex-1 flex flex-col">
+                    <div className="p-4 md:p-5 flex-1 flex flex-col">
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 flex-1 pr-4">{product.name}</h4>
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400">${product.price}</span>
+                        <h4 className="font-bold text-base md:text-lg text-gray-900 dark:text-white line-clamp-1 flex-1 pr-3">{product.name}</h4>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm md:text-base">${product.price}</span>
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4 flex-1">{product.description}</p>
+                      <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4 flex-1">{product.description}</p>
                       <div className="mt-auto">
-                        <span className="text-sm font-medium text-accent dark:text-accent-light hover:text-accent-600 dark:hover:text-accent-300">
+                        <span className="text-xs md:text-sm font-medium text-accent dark:text-accent-light">
                           View Details &rarr;
                         </span>
                       </div>
