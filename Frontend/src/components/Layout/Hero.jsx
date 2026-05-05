@@ -86,16 +86,6 @@ const Hero = () => {
             Discover Drop
           </Link>
         </motion.div>
-
-        {/* Social Proof */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="mt-10 md:mt-14 text-xs md:text-sm text-gray-400"
-        >
-          ⭐ Rated 4.9 by 12,000+ customers worldwide
-        </motion.div>
       </div>
 
       {/* Scroll Indicator */}

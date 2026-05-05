@@ -41,10 +41,10 @@ const Navbar = () => {
     ? user.name.split(' ').map((s) => s.charAt(0)).join('').slice(0, 2).toUpperCase()
     : '';
 
-  // Transparent on homepage hero, solid otherwise
+  // Unique background on homepage hero, solid otherwise
   const navBg = isScrolled || !isHomePage
     ? 'bg-white/85 dark:bg-gray-950/85 backdrop-blur-xl shadow-lg shadow-black/[0.03] dark:shadow-black/[0.2] border-b border-gray-100/50 dark:border-gray-800/50'
-    : 'bg-transparent border-b border-transparent';
+    : 'bg-black/30 backdrop-blur-sm border-b border-white/10';
 
   const textColor = isScrolled || !isHomePage
     ? 'text-gray-600 dark:text-gray-400'
@@ -56,17 +56,19 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-smooth ${navBg}`}>
+      <nav className={`${isScrolled ? 'fixed top-0' : 'absolute'} w-full left-0 right-0 z-50 transition-all duration-500 ease-smooth ${navBg}`}>
         <div className="container mx-auto flex items-center justify-between py-4 px-6 lg:px-8">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <span className={`text-2xl font-extrabold tracking-tight font-heading transition-all duration-300 group-hover:text-accent dark:group-hover:text-accent-light ${logoColor}`}>
-              Wearero
-            </span>
-          </Link>
+          <div className="flex md:flex-1">
+            <Link to="/" className="flex items-center space-x-2 group">
+              <span className={`text-2xl font-extrabold tracking-tight font-heading transition-all duration-300 group-hover:text-accent dark:group-hover:text-accent-light ${logoColor}`}>
+                Wearero
+              </span>
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center justify-center space-x-1 flex-1">
             {navLinks.map((item) => (
               <Link
                 key={item.label}
@@ -80,7 +82,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-end space-x-2 flex-1">
             {isAdmin && (
               <Link
                 to="/admin"
@@ -163,7 +165,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Spacer for fixed navbar */}
+      {/* Spacer for fixed navbar on non-home pages */}
       <div className={isHomePage ? '' : 'h-[72px]'} />
 
       <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer} />
