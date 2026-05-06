@@ -43,7 +43,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold leading-[0.9] tracking-tight max-w-5xl"
+          className="text-[2.5rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-8xl font-extrabold md:leading-[0.9] tracking-tight max-w-5xl"
         >
           Wear Your <br />
           <span className="bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">

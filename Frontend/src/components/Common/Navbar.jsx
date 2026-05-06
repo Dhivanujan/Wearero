@@ -113,7 +113,7 @@ const Navbar = () => {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className={`px-3 py-1.5 text-xs font-medium transition-all duration-300 rounded-full hover:bg-red-50 dark:hover:bg-red-950/30 ${isScrolled || !isHomePage ? 'text-gray-500 dark:text-gray-400 hover:text-red-500' : 'text-white/70 hover:text-red-300'}`}
+                  className={`hidden sm:block px-3 py-1.5 text-xs font-medium transition-all duration-300 rounded-full hover:bg-red-50 dark:hover:bg-red-950/30 ${isScrolled || !isHomePage ? 'text-gray-500 dark:text-gray-400 hover:text-red-500' : 'text-white/70 hover:text-red-300'}`}
                 >
                   Logout
                 </button>
@@ -196,16 +196,22 @@ const Navbar = () => {
                 </Link>
               ))}
             </nav>
-            {!user && (
-              <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 space-y-3">
-                <Link to="/login" onClick={toggleNavDrawer} className="block w-full text-center px-4 py-3 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800">
-                  Sign In
-                </Link>
-                <Link to="/register" onClick={toggleNavDrawer} className="block w-full text-center px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-medium hover:bg-gray-800 dark:hover:bg-gray-100">
-                  Join Now
-                </Link>
-              </div>
-            )}
+            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 space-y-3">
+              {!user ? (
+                <>
+                  <Link to="/login" onClick={toggleNavDrawer} className="block w-full text-center px-4 py-3 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800">
+                    Sign In
+                  </Link>
+                  <Link to="/register" onClick={toggleNavDrawer} className="block w-full text-center px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-medium hover:bg-gray-800 dark:hover:bg-gray-100">
+                    Join Now
+                  </Link>
+                </>
+              ) : (
+                <button onClick={() => { handleLogout(); toggleNavDrawer(); }} className="block w-full text-center px-4 py-3 text-red-600 bg-red-50 dark:bg-red-950 dark:text-red-400 rounded-xl font-medium hover:bg-red-100 dark:hover:bg-red-900/50">
+                  Logout
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
