@@ -92,30 +92,30 @@ const NewArrivals = () => {
         </motion.p>
       </div>
 
-      <div className="relative container mx-auto overflow-hidden">
+      <div className="relative container mx-auto">
         {/* Left scroll button */}
         <button
           onClick={() => handleScroll('left')}
           disabled={!canScrollLeft}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2.5 md:p-3 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+          className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-0 disabled:pointer-events-none items-center justify-center"
           aria-label="Scroll left"
         >
-          <FiChevronLeft className="text-xl md:text-2xl" />
+          <FiChevronLeft className="text-2xl" />
         </button>
 
         {/* Right scroll button */}
         <button
           onClick={() => handleScroll('right')}
           disabled={!canScrollRight}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2.5 md:p-3 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+          className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-0 disabled:pointer-events-none items-center justify-center"
           aria-label="Scroll right"
         >
-          <FiChevronRight className="text-xl md:text-2xl" />
+          <FiChevronRight className="text-2xl" />
         </button>
 
         <div
           ref={scrollRef}
-          className="flex space-x-4 md:space-x-6 overflow-x-auto pb-4 px-2 scrollbar-hide snap-x snap-mandatory scroll-smooth"
+          className="flex space-x-4 md:space-x-6 overflow-x-auto pb-8 pt-4 px-2 md:px-6 scrollbar-hide snap-x snap-mandatory scroll-smooth -mx-2 md:-mx-6"
         >
           {loading
             ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
