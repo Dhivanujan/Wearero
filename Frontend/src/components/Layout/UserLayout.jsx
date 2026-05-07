@@ -16,14 +16,13 @@ const UserLayout = () => {
   }, [isAdmin, location.pathname, navigate]);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100 selection:bg-accent/20 selection:text-accent">
       <Header/>
-      <main>
+      <main className="flex-grow flex flex-col">
         <Outlet/>
       </main>
       <Footer/>
-    </>
-    
+    </div>
   )
 }
 

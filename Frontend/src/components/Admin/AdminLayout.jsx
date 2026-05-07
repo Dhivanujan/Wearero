@@ -20,7 +20,7 @@ const AdminLayout = () => {
         setIsSidebarOpen(!isSidebarOpen)
     }
   return (
-    <div className="min-h-screen flex flex-col md:flex-row relative">
+    <div className="min-h-screen flex flex-col md:flex-row relative bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden">
         {/* {Mobile toggle button} */}
         <div className="flex md:hidden p-4 bg-white dark:bg-gray-900 text-black dark:text-white z-20 shadow-md">
             <button onClick={toggleSidebar}>
