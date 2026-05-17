@@ -1736,6 +1736,138 @@ const products = [
     ],
     "rating": 4.5,
     "numReviews": 13
+  },
+  {
+    "name": "Oversized Cotton Tee",
+    "description": "Relaxed oversized t-shirt for all genders",
+    "price": 27.99,
+    "countInStock": 140,
+    "sku": "UNI-TOP-001",
+    "category": "Topwear",
+    "brand": "Street Style",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["Black", "White"],
+    "collections": "Street Vibes",
+    "material": "Cotton",
+    "gender": "Unisex",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dvcnhmd2z/image/upload/v1777993645/MenTW01_ksju0m.jpg",
+        "altText": "Oversized Cotton Tee"
+      }
+    ],
+    "rating": 4.5,
+    "numReviews": 10
+  },
+  {
+    "name": "Unisex Denim Jacket",
+    "description": "Classic denim jacket with modern fit",
+    "price": 69.99,
+    "countInStock": 55,
+    "sku": "UNI-TOP-002",
+    "category": "Topwear",
+    "brand": "Urban Threads",
+    "sizes": ["M", "L", "XL"],
+    "colors": ["Blue", "Black"],
+    "collections": "Urban Denim",
+    "material": "Denim",
+    "gender": "Unisex",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dvcnhmd2z/image/upload/v1777993645/MenTW03_vjw3rm.jpg",
+        "altText": "Unisex Denim Jacket"
+      }
+    ],
+    "rating": 4.8,
+    "numReviews": 15
+  },
+  {
+    "name": "Fleece Zip Hoodie",
+    "description": "Comfortable fleece zip hoodie",
+    "price": 46.99,
+    "countInStock": 90,
+    "sku": "UNI-TOP-003",
+    "category": "Topwear",
+    "brand": "Modern Fit",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["Grey", "Navy"],
+    "collections": "Winter Essentials",
+    "material": "Fleece",
+    "gender": "Unisex",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dvcnhmd2z/image/upload/v1777993644/MenTW04_kvc84s.jpg",
+        "altText": "Fleece Zip Hoodie"
+      }
+    ],
+    "rating": 4.7,
+    "numReviews": 12
+  },
+  {
+    "name": "Relaxed Fit Cargo Pants",
+    "description": "Functional cargo pants with relaxed fit",
+    "price": 48.99,
+    "countInStock": 78,
+    "sku": "UNI-BOT-001",
+    "category": "Bottomwear",
+    "brand": "Street Style",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["Olive", "Black"],
+    "collections": "Street Utility",
+    "material": "Cotton",
+    "gender": "Unisex",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dvcnhmd2z/image/upload/v1777993668/UnisexBW01_baevcl.jpg",
+        "altText": "Relaxed Fit Cargo Pants"
+      }
+    ],
+    "rating": 4.4,
+    "numReviews": 8
+  },
+  {
+    "name": "Unisex Cotton Shorts",
+    "description": "Casual cotton shorts for everyday comfort",
+    "price": 25.99,
+    "countInStock": 115,
+    "sku": "UNI-BOT-002",
+    "category": "Bottomwear",
+    "brand": "Beach Breeze",
+    "sizes": ["S", "M", "L"],
+    "colors": ["Grey", "White"],
+    "collections": "Summer Essentials",
+    "material": "Cotton",
+    "gender": "Unisex",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dvcnhmd2z/image/upload/v1777993644/MenBW02_jziad7.jpg",
+        "altText": "Unisex Cotton Shorts"
+      }
+    ],
+    "rating": 4.5,
+    "numReviews": 11
+  },
+  {
+    "name": "Polyester Track Pants",
+    "description": "Sporty track pants with tapered fit",
+    "price": 37.99,
+    "countInStock": 88,
+    "sku": "UNI-BOT-003",
+    "category": "Bottomwear",
+    "brand": "ChicStyle",
+    "sizes": ["M", "L", "XL"],
+    "colors": ["Black", "Navy"],
+    "collections": "Active Motion",
+    "material": "Polyester",
+    "gender": "Unisex",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/dvcnhmd2z/image/upload/v1777993668/UnisexBW04_dwjngy.jpg",
+        "altText": "Polyester Track Pants"
+      }
+    ],
+    "rating": 4.6,
+    "numReviews": 20
   }
 ];
 

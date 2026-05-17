@@ -15,7 +15,7 @@ const ProductManagement = () => {
       const response = await fetch(`${API_BASE_URL}/api/products`);
       const data = await response.json();
       if (response.ok) {
-        setProducts(data);
+        setProducts(data.products || []);
       } else {
         toast.error(data.message || 'Unable to load products');
       }

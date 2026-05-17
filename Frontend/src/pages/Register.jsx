@@ -6,13 +6,12 @@ import { API_BASE_URL } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 import { toast } from 'sonner'
-import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineEye, HiOutlineEyeSlash, HiOutlineShoppingBag, HiOutlineCog6Tooth, HiOutlineShieldCheck, HiOutlineSparkles } from 'react-icons/hi2'
+import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineEye, HiOutlineEyeSlash, HiOutlineShieldCheck, HiOutlineSparkles } from 'react-icons/hi2'
 
 const Register = () => {
     const [name, setName] = useState('')
     const [email,setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [role, setRole] = useState('customer')
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const navigate = useNavigate();
@@ -39,7 +38,7 @@ const handleSubmit = async (e) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, password, role }),
+            body: JSON.stringify({ name, email, password }),
         });
         const contentType = response.headers.get('content-type') || '';
         const data = contentType.includes('application/json')
@@ -48,11 +47,9 @@ const handleSubmit = async (e) => {
 
         if (response.ok) {
             login(data);
-            if (role !== 'admin') {
-                await mergeCart();
-            }
-            toast.success(role === 'admin' ? 'Admin account created' : 'Registration successful');
-            navigate(role === 'admin' ? '/admin' : '/');
+            await mergeCart();
+            toast.success('Registration successful');
+            navigate('/');
         } else {
             const message = typeof data === 'string' && data
               ? data
@@ -164,73 +161,7 @@ const handleSubmit = async (e) => {
                             <p className='mt-2 text-xs text-gray-500 dark:text-gray-400'>Must be at least 8 characters</p>
                         </div>
 
-                        {/* Account Type */}
-                        <div>
-                            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-                                Account Type
-                            </label>
-                            <div className='grid grid-cols-2 gap-3'>
-                                <motion.label 
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className={`relative flex flex-col items-center p-4 rounded-xl cursor-pointer transition-all ${
-                                        role === 'customer' 
-                                            ? 'bg-accent-50 dark:bg-accent-900/20 border-2 border-accent-500 ring-2 ring-accent-500/20' 
-                                            : 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                                    }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="role"
-                                        value="customer"
-                                        checked={role === 'customer'}
-                                        onChange={(e) => setRole(e.target.value)}
-                                        className='sr-only'
-                                    />
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${
-                                        role === 'customer' 
-                                            ? 'bg-accent-100 dark:bg-accent-900/40 text-accent-600 dark:text-accent-400' 
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                                    }`}>
-                                        <HiOutlineShoppingBag className='w-5 h-5' />
-                                    </div>
-                                    <span className={`font-medium text-sm ${role === 'customer' ? 'text-accent-700 dark:text-accent-300' : 'text-gray-700 dark:text-gray-300'}`}>
-                                        Customer
-                                    </span>
-                                    <span className='text-xs text-gray-500 dark:text-gray-400 text-center mt-1'>Shop & track orders</span>
-                                </motion.label>
 
-                                <motion.label 
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className={`relative flex flex-col items-center p-4 rounded-xl cursor-pointer transition-all ${
-                                        role === 'admin' 
-                                            ? 'bg-accent-50 dark:bg-accent-900/20 border-2 border-accent-500 ring-2 ring-accent-500/20' 
-                                            : 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                                    }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="role"
-                                        value="admin"
-                                        checked={role === 'admin'}
-                                        onChange={(e) => setRole(e.target.value)}
-                                        className='sr-only'
-                                    />
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${
-                                        role === 'admin' 
-                                            ? 'bg-accent-100 dark:bg-accent-900/40 text-accent-600 dark:text-accent-400' 
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                                    }`}>
-                                        <HiOutlineCog6Tooth className='w-5 h-5' />
-                                    </div>
-                                    <span className={`font-medium text-sm ${role === 'admin' ? 'text-accent-700 dark:text-accent-300' : 'text-gray-700 dark:text-gray-300'}`}>
-                                        Admin
-                                    </span>
-                                    <span className='text-xs text-gray-500 dark:text-gray-400 text-center mt-1'>Manage store</span>
-                                </motion.label>
-                            </div>
-                        </div>
 
                         {/* Submit Button */}
                         <motion.button 

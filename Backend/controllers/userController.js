@@ -9,7 +9,8 @@ const generateToken = (userId, role) => {
 // @access  Public
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
+    const role = 'customer'; // Force role to customer for public registration
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400);
@@ -33,11 +34,16 @@ const register = async (req, res, next) => {
 // @access  Public
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
       res.status(400);
       throw new Error('Invalid Credentials');
+    }
+
+    if (role && user.role !== role) {
+      res.status(403);
+      throw new Error(`Access denied. Not authorized as ${role}`);
     }
 
     const isMatch = await user.matchPassword(password);
