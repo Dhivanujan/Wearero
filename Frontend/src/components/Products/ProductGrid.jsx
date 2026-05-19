@@ -71,13 +71,14 @@ const ProductGrid = ({ products, loading }) => {
                 <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-card-hover dark:hover:shadow-2xl ring-1 ring-gray-100 dark:ring-gray-800 hover:ring-gray-200 dark:hover:ring-gray-700 hover:-translate-y-1">
                   {/* Image Container */}
                   <div className="relative aspect-[3/4] overflow-hidden bg-gray-50 dark:bg-gray-800">
-                    <LazyImage
-                      src={imageUrl}
-                      alt={imageAlt}
-                      width={400}
-                      height={533}
-                      className="w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                    />
+                    {/* IMAGE */}
+<div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
+  <img
+    src={imageUrl}
+    alt={product.name}
+    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+  />
+</div>
 
                     {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
