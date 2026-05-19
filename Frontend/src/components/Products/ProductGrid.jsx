@@ -1,36 +1,49 @@
-import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { HiOutlineEye, HiOutlineHeart, HiHeart } from 'react-icons/hi2';
-import { useAuth } from '../../context/AuthContext';
-import { toast } from 'sonner';
-import { API_BASE_URL, resolveImageUrl } from '../../lib/api';
-import LazyImage from '../Common/LazyImage';
-import QuickViewModal from './QuickViewModal';
+import React, { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { HiOutlineEye, HiOutlineHeart, HiHeart } from "react-icons/hi2";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "sonner";
+import { API_BASE_URL, resolveImageUrl } from "../../lib/api";
+import LazyImage from "../Common/LazyImage";
+import QuickViewModal from "./QuickViewModal";
 
 const ProductGrid = ({ products, loading }) => {
   const { user, token, refreshProfile } = useAuth();
   const safeProducts = Array.isArray(products) ? products : [];
   const [quickViewProduct, setQuickViewProduct] = useState(null);
 
-  const handleWishlistClick = useCallback(async (e, productId) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!user) { toast.error('Please login to add to wishlist'); return; }
+  const handleWishlistClick = useCallback(
+    async (e, productId) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!user) {
+        toast.error("Please login to add to wishlist");
+        return;
+      }
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/users/wishlist`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ productId }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        toast.success(data.message);
-        await refreshProfile();
-      } else { toast.error('Failed to update wishlist'); }
-    } catch { toast.error('Error updating wishlist'); }
-  }, [user, token, refreshProfile]);
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/users/wishlist`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ productId }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          toast.success(data.message);
+          await refreshProfile();
+        } else {
+          toast.error("Failed to update wishlist");
+        }
+      } catch {
+        toast.error("Error updating wishlist");
+      }
+    },
+    [user, token, refreshProfile],
+  );
 
   const handleQuickView = useCallback((e, product) => {
     e.preventDefault();
@@ -46,8 +59,12 @@ const ProductGrid = ({ products, loading }) => {
             <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
               <HiOutlineEye className="w-8 h-8 text-gray-400" />
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">No products found</p>
-            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Try adjusting your filters</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
+              No products found
+            </p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+              Try adjusting your filters
+            </p>
           </div>
         )}
 
@@ -55,8 +72,12 @@ const ProductGrid = ({ products, loading }) => {
           const imageUrl = resolveImageUrl(product.images?.[0]?.url);
           const imageAlt = product.images?.[0]?.altText || product.name;
           const isInWishlist = user?.wishlist?.includes(product._id);
-          const isNew = product.createdAt && (Date.now() - new Date(product.createdAt).getTime()) < 7 * 24 * 60 * 60 * 1000;
-          const hasDiscount = product.discountPrice && product.discountPrice < product.price;
+          const isNew =
+            product.createdAt &&
+            Date.now() - new Date(product.createdAt).getTime() <
+              7 * 24 * 60 * 60 * 1000;
+          const hasDiscount =
+            product.discountPrice && product.discountPrice < product.price;
 
           return (
             <motion.div
@@ -72,13 +93,13 @@ const ProductGrid = ({ products, loading }) => {
                   {/* Image Container */}
                   <div className="relative aspect-[3/4] overflow-hidden bg-gray-50 dark:bg-gray-800">
                     {/* IMAGE */}
-<div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
-  <img
-    src={imageUrl}
-    alt={product.name}
-    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-  />
-</div>
+                    <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
+                      <img
+                        src={imageUrl}
+                        alt={product.name}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    </div>
 
                     {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -92,7 +113,13 @@ const ProductGrid = ({ products, loading }) => {
                       )}
                       {hasDiscount && (
                         <span className="px-2.5 py-1 bg-red-500 text-white text-[10px] md:text-xs font-bold rounded-full shadow-sm">
-                          -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
+                          -
+                          {Math.round(
+                            ((product.price - product.discountPrice) /
+                              product.price) *
+                              100,
+                          )}
+                          %
                         </span>
                       )}
                     </div>
@@ -101,7 +128,9 @@ const ProductGrid = ({ products, loading }) => {
                     {product.rating > 0 && (
                       <div className="absolute top-2 right-2 md:top-3 md:right-3 flex items-center space-x-1 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md px-2 py-1 md:px-2.5 md:py-1.5 rounded-full shadow-sm">
                         <span className="text-amber-400 text-xs">★</span>
-                        <span className="text-[10px] md:text-xs font-semibold text-gray-800 dark:text-gray-200">{product.rating.toFixed(1)}</span>
+                        <span className="text-[10px] md:text-xs font-semibold text-gray-800 dark:text-gray-200">
+                          {product.rating.toFixed(1)}
+                        </span>
                       </div>
                     )}
 
@@ -110,11 +139,15 @@ const ProductGrid = ({ products, loading }) => {
                       onClick={(e) => handleWishlistClick(e, product._id)}
                       className={`absolute bottom-2 right-2 md:bottom-3 md:right-3 z-20 p-2 md:p-2.5 rounded-full backdrop-blur-md transition-all duration-300 transform ${
                         isInWishlist
-                          ? 'bg-red-500/90 text-white scale-100'
-                          : 'bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'
+                          ? "bg-red-500/90 text-white scale-100"
+                          : "bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
                       } hover:scale-110 shadow-lg`}
                     >
-                      {isInWishlist ? <HiHeart className="w-4 h-4 md:w-5 md:h-5" /> : <HiOutlineHeart className="w-4 h-4 md:w-5 md:h-5" />}
+                      {isInWishlist ? (
+                        <HiHeart className="w-4 h-4 md:w-5 md:h-5" />
+                      ) : (
+                        <HiOutlineHeart className="w-4 h-4 md:w-5 md:h-5" />
+                      )}
                     </button>
 
                     {/* Quick View Button */}
@@ -140,7 +173,9 @@ const ProductGrid = ({ products, loading }) => {
                           ${hasDiscount ? product.discountPrice : product.price}
                         </p>
                         {hasDiscount && (
-                          <p className="text-[10px] md:text-xs text-gray-400 line-through">${product.price}</p>
+                          <p className="text-[10px] md:text-xs text-gray-400 line-through">
+                            ${product.price}
+                          </p>
                         )}
                       </div>
 
