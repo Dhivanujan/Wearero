@@ -30,7 +30,9 @@ const AdminHomePage = () => {
         const response = await fetch(`${API_BASE_URL}/api/products`);
         const data = await response.json();
         if (response.ok) {
-          setProducts(data);
+          setProducts(data.products || data);
+        } else {
+          toast.error(data.message || 'Unable to load products');
         }
       } catch (error) {
         console.error(error);
