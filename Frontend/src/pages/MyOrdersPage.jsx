@@ -9,29 +9,29 @@ const MyOrders = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+      const token = localStorage.getItem('token');
+      if (!token) return;
 
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/orders/my-orders`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            if (response.ok) {
-                setOrders(data);
-          } else {
-            toast.error(data.message || 'Unable to load your orders');
-            }
-        } catch (error) {
-            console.error("Error fetching orders:", error);
-          toast.error('Something went wrong while fetching your orders');
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/orders/my-orders`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setOrders(data);
+        } else {
+          toast.error(data.message || 'Unable to load your orders');
         }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        toast.error('Something went wrong while fetching your orders');
+      }
     };
 
-      fetchOrders();
-      }, [navigate]);
+    fetchOrders();
+  }, [navigate]);
 
   const handleRowClick = (orderId) => {
     navigate(`/order/${orderId}`)
@@ -60,38 +60,39 @@ const MyOrders = () => {
               orders.map((order) => {
                 const imageUrl = order.orderItems[0].image?.startsWith('http') ? order.orderItems[0].image : `${API_BASE_URL}${order.orderItems[0].image}`;
                 return (
-                <tr onClick={() => handleRowClick(order._id)} key={order._id} className='border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors'>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    <img src={imageUrl} alt={order.orderItems[0].name} 
-                    className='w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg'/>
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4 font-medium text-gray-900 dark:text-white whitespace-nowrap'>
-                    #{order._id}
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    {new Date(order.createdAt).toLocaleDateString()}{" "}
-                    {new Date(order.createdAt).toLocaleTimeString()}
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    {order.shippingAddress ? `${order.shippingAddress.city}, ${order.shippingAddress.country}` : "N/A"}
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    {order.orderItems.length}
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    ${order.totalPrice}
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    {order.paymentMethod === 'Stripe' ? 'Stripe (Card)' : order.paymentMethod === 'COD' ? 'Cash on Delivery' : order.paymentMethod || 'N/A'}
-                  </td>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
-                    <span className={`${order.isPaid ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300" : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300"} px-2 py-1 rounded-full text-xs sm:text-sm font-medium`}>
-                      {order.isPaid ? "Paid" : "Pending"}
-                    </span>
-                  </td>
-                </tr>
-              )})
-            ): (
+                  <tr onClick={() => handleRowClick(order._id)} key={order._id} className='border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors'>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      <img src={imageUrl} alt={order.orderItems[0].name}
+                        className='w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg' />
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4 font-medium text-gray-900 dark:text-white whitespace-nowrap'>
+                      #{order._id}
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      {new Date(order.createdAt).toLocaleDateString()}{" "}
+                      {new Date(order.createdAt).toLocaleTimeString()}
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      {order.shippingAddress ? `${order.shippingAddress.city}, ${order.shippingAddress.country}` : "N/A"}
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      {order.orderItems.length}
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      ${order.totalPrice}
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      {order.paymentMethod === 'Stripe' ? 'Stripe (Card)' : order.paymentMethod === 'COD' ? 'Cash on Delivery' : order.paymentMethod || 'N/A'}
+                    </td>
+                    <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                      <span className={`${order.isPaid ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300" : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300"} px-2 py-1 rounded-full text-xs sm:text-sm font-medium`}>
+                        {order.isPaid ? "Paid" : "Pending"}
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })
+            ) : (
               <tr>
                 <td colSpan={7} className='py-4 px-4 text-center text-gray-500 dark:text-gray-400'>
                   You have no orders

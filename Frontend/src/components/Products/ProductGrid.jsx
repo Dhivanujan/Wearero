@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { HiOutlineEye, HiOutlineHeart, HiHeart } from 'react-icons/hi2';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'sonner';
-import { API_BASE_URL } from '../../lib/api';
+import { API_BASE_URL, resolveImageUrl } from '../../lib/api';
 import LazyImage from '../Common/LazyImage';
 import QuickViewModal from './QuickViewModal';
 
@@ -52,7 +52,7 @@ const ProductGrid = ({ products, loading }) => {
         )}
 
         {safeProducts.map((product, index) => {
-          const imageUrl = product.images?.[0]?.url || '';
+          const imageUrl = resolveImageUrl(product.images?.[0]?.url);
           const imageAlt = product.images?.[0]?.altText || product.name;
           const isInWishlist = user?.wishlist?.includes(product._id);
           const isNew = product.createdAt && (Date.now() - new Date(product.createdAt).getTime()) < 7 * 24 * 60 * 60 * 1000;

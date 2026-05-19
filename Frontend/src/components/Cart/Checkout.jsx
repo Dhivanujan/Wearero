@@ -293,7 +293,7 @@ const Checkout = () => {
                                                     <p className='text-sm text-gray-500 dark:text-gray-400'>Secure payment via Stripe</p>
                                                 </div>
                                                 <svg className='w-8 h-8 text-gray-400' viewBox='0 0 24 24' fill='currentColor'>
-                                                    <path d='M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z'/>
+                                                    <path d='M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z' />
                                                 </svg>
                                             </label>
                                         )}
@@ -320,7 +320,7 @@ const Checkout = () => {
                                                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-accent'></div>
                                                 </div>
                                             )
-                                            ) : (
+                                        ) : (
                                             <button type="submit" disabled={isSubmitting} className='w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 rounded-xl font-semibold disabled:opacity-70 disabled:cursor-not-allowed hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'>
                                                 {isSubmitting ? 'Processing order...' : 'Place Order'}
                                             </button>
@@ -335,7 +335,7 @@ const Checkout = () => {
                     <div className='lg:col-span-2'>
                         <div className='sticky top-24 bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800'>
                             <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-6'>Order Summary</h3>
-                            
+
                             {/* Products */}
                             <div className='space-y-4 mb-6'>
                                 {cart.products.map((product, index) => {

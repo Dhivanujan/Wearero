@@ -43,7 +43,7 @@ const CartContents = () => {
         {cart.products.map((product, index) => {
           const imageUrl = product.image?.startsWith('http') ? product.image : `${API_BASE_URL}${product.image}`;
           return (
-            <motion.div 
+            <motion.div
               key={`${product.productId}-${product.size}-${product.color}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -53,10 +53,10 @@ const CartContents = () => {
             >
               {/* Image */}
               <div className='relative flex-shrink-0'>
-                <img 
-                  src={imageUrl} 
-                  alt={product.name} 
-                  className='w-20 h-24 object-cover rounded-xl shadow-sm' 
+                <img
+                  src={imageUrl}
+                  alt={product.name}
+                  className='w-20 h-24 object-cover rounded-xl shadow-sm'
                 />
                 <span className='absolute -top-1 -right-1 w-5 h-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-bold rounded-full flex items-center justify-center'>
                   {product.quantity}
@@ -73,7 +73,7 @@ const CartContents = () => {
                     {product.size}
                   </span>
                   <span className='inline-flex items-center gap-1'>
-                    <span 
+                    <span
                       className='w-3 h-3 rounded-full ring-1 ring-gray-200 dark:ring-gray-700'
                       style={{ backgroundColor: product.color?.toLowerCase() }}
                     ></span>
@@ -84,7 +84,7 @@ const CartContents = () => {
                 {/* Quantity Controls */}
                 <div className='flex items-center justify-between'>
                   <div className='inline-flex items-center bg-gray-100 dark:bg-gray-800 rounded-full'>
-                    <button 
+                    <button
                       onClick={() => updateQuantity(product.productId, product.size, product.color, product.quantity - 1)}
                       className='w-8 h-8 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-full hover:bg-gray-200 dark:hover:bg-gray-700'
                     >
@@ -95,7 +95,7 @@ const CartContents = () => {
                     <span className='w-8 text-center text-sm font-semibold text-gray-900 dark:text-white'>
                       {product.quantity}
                     </span>
-                    <button 
+                    <button
                       onClick={() => updateQuantity(product.productId, product.size, product.color, product.quantity + 1)}
                       className='w-8 h-8 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-full hover:bg-gray-200 dark:hover:bg-gray-700'
                     >
@@ -109,11 +109,11 @@ const CartContents = () => {
                     <p className='font-bold text-gray-900 dark:text-white'>
                       ${(product.price * product.quantity).toLocaleString()}
                     </p>
-                    <button 
+                    <button
                       onClick={() => removeFromCart(product.productId, product.size, product.color)}
                       className='p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100'
                     >
-                      <RiDeleteBin3Line className='h-4 w-4'/>
+                      <RiDeleteBin3Line className='h-4 w-4' />
                     </button>
                   </div>
                 </div>

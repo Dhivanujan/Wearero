@@ -188,11 +188,10 @@ const EditProductPage = () => {
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all ${
-                dragActive
+              className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all ${dragActive
                   ? 'border-accent bg-accent/5'
                   : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-              }`}
+                }`}
             >
               <input
                 type="file"

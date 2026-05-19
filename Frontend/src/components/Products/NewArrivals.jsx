@@ -7,9 +7,8 @@ import React, {
 } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "../../lib/api";
+import { API_BASE_URL, resolveImageUrl } from "../../lib/api";
 import { motion } from "framer-motion";
-import LazyImage from "../Common/LazyImage";
 
 const SkeletonCard = () => (
   <div className="min-w-[260px] sm:min-w-[300px] snap-center flex-shrink-0 animate-pulse">
@@ -35,7 +34,7 @@ const NewArrivals = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // ---------- FETCH DATA ----------
+  // FETCH DATA
   useEffect(() => {
     const controller = new AbortController();
 
@@ -68,7 +67,7 @@ const NewArrivals = () => {
     return () => controller.abort();
   }, []);
 
-  // ---------- SCROLL STATE ----------
+  // SCROLL
   const updateScrollButtons = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -89,7 +88,6 @@ const NewArrivals = () => {
     });
   }, []);
 
-  // ---------- EVENT LISTENERS ----------
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -111,14 +109,15 @@ const NewArrivals = () => {
   );
 
   return (
-    <section className="py-16 md:py-24 px-4 lg:px-8 bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+    <section className="py-16 md:py-24 px-4 lg:px-8 bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800">
+      
       {/* HEADER */}
       <div className="container mx-auto text-center mb-10 md:mb-12">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-3 text-gray-900 dark:text-white"
+          className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white"
         >
           Fresh Drops
         </motion.h2>
@@ -128,7 +127,7 @@ const NewArrivals = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-base md:text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
+          className="text-base md:text-lg text-gray-500 dark:text-gray-400 mt-3"
         >
           Be the first to wear our latest releases.
         </motion.p>
@@ -136,6 +135,7 @@ const NewArrivals = () => {
 
       {/* CONTENT */}
       <div className="relative container mx-auto">
+
         {/* LEFT BUTTON */}
         <button
           onClick={() => handleScroll("left")}
@@ -170,51 +170,55 @@ const NewArrivals = () => {
               No new arrivals found.
             </div>
           ) : (
-            newArrivals.map((product) => (
-              <div
-                key={product._id}
-                className="min-w-[260px] sm:min-w-[300px] snap-center flex-shrink-0"
-              >
-                <Link
-                  to={`/product/${product._id}`}
-                  className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 transition-all hover:shadow-xl hover:-translate-y-1 duration-300 h-full flex flex-col group"
+            newArrivals.map((product) => {
+              const imageUrl = resolveImageUrl(product.images?.[0]?.url);
+
+              return (
+                <div
+                  key={product._id}
+                  className="min-w-[260px] sm:min-w-[300px] snap-center flex-shrink-0"
                 >
-                  {/* IMAGE */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
-                    <LazyImage
-                      src={product.images?.[0]?.url || "/placeholder.png"}
-                      alt={product.name || "Product image"}
-                      width={400}
-                      height={500}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 transition-all hover:shadow-xl hover:-translate-y-1 duration-300 h-full flex flex-col group"
+                  >
 
-                  {/* CONTENT */}
-                  <div className="p-4 md:p-5 flex flex-col flex-1">
-                    <div className="flex justify-between gap-2 mb-2">
-                      <h4 className="font-bold text-base md:text-lg text-gray-900 dark:text-white line-clamp-2 h-[48px] overflow-hidden">
-                        {product.name}
-                      </h4>
-
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
-                        ${product.price}
-                      </span>
+                    {/* IMAGE (FIXED UNIFORM SIZE) */}
+                    <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-gray-800">
+                      <img
+                        src={imageUrl}
+                        alt={product.name}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
                     </div>
 
-                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 line-clamp-3 h-[60px] overflow-hidden mb-4">
-                      {product.description}
-                    </p>
+                    {/* CONTENT */}
+                    <div className="p-4 md:p-5 flex flex-col flex-1">
+                      <div className="flex justify-between gap-2 mb-2">
+                        <h4 className="font-bold text-base md:text-lg text-gray-900 dark:text-white line-clamp-2 h-[48px] overflow-hidden">
+                          {product.name}
+                        </h4>
 
-                    <div className="mt-auto">
-                      <span className="text-xs md:text-sm font-medium text-accent dark:text-accent-light">
-                        View Details →
-                      </span>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+                          ${product.price}
+                        </span>
+                      </div>
+
+                      <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 line-clamp-3 h-[60px] overflow-hidden mb-4">
+                        {product.description}
+                      </p>
+
+                      <div className="mt-auto">
+                        <span className="text-xs md:text-sm font-medium text-accent dark:text-accent-light">
+                          View Details →
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            ))
+
+                  </Link>
+                </div>
+              );
+            })
           )}
         </div>
       </div>

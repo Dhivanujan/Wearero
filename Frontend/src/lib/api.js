@@ -40,3 +40,17 @@ export const buildApiUrl = (path) => {
 
   return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 };
+
+export const resolveImageUrl = (url) => {
+  if (!url) return '';
+
+  if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) {
+    return url;
+  }
+
+  if (url.startsWith('//')) {
+    return `https:${url}`;
+  }
+
+  return buildApiUrl(url);
+};

@@ -48,16 +48,24 @@ export const uploadMultipleImages = async (files, token) => {
   return response.json();
 };
 
-/**
- * Build an optimized Cloudinary URL with transformations.
- * Works only for Cloudinary-hosted images; returns original URL otherwise.
- */
 export const cloudinaryUrl = (url, options = {}) => {
   if (!url || !url.includes('cloudinary.com')) return url;
 
   const { width, height, crop = 'fill', quality = 'auto', format = 'auto' } = options;
   const parts = url.split('/upload/');
   if (parts.length !== 2) return url;
+
+  let rest = parts[1];
+  const restParts = rest.split('/');
+  if (restParts.length > 1) {
+    const firstSegment = restParts[0];
+    const isVersion = /^v\d+$/.test(firstSegment);
+    const isTransformation = /c_[a-z]+|f_[a-z]+|q_[a-z0-9]+|w_\d+|h_\d+|dpr_[a-z0-9]+/.test(firstSegment);
+    if (!isVersion && isTransformation) {
+      restParts.shift();
+      rest = restParts.join('/');
+    }
+  }
 
   const transforms = [
     `f_${format}`,
@@ -68,5 +76,5 @@ export const cloudinaryUrl = (url, options = {}) => {
     'dpr_auto',
   ].filter(Boolean).join(',');
 
-  return `${parts[0]}/upload/${transforms}/${parts[1]}`;
+  return `${parts[0]}/upload/${transforms}/${rest}`;
 };

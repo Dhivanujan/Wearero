@@ -5,6 +5,7 @@ import { HiOutlineShoppingBag, HiXMark } from 'react-icons/hi2';
 import { useCart } from '../../context/CartContext';
 import { toast } from 'sonner';
 import LazyImage from '../Common/LazyImage';
+import { resolveImageUrl } from '../../lib/api';
 
 const QuickViewModal = ({ product, isOpen, onClose }) => {
   const [selectedSize, setSelectedSize] = useState('');
@@ -49,7 +50,7 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
 
   if (!product) return null;
 
-  const imageUrl = product.images?.[0]?.url || '';
+  const imageUrl = resolveImageUrl(product.images?.[0]?.url);
 
   return (
     <AnimatePresence>

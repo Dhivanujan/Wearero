@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductGrid from './ProductGrid';
 import Reviews from './Reviews';
-import RecentlyViewed from './RecentlyViewed'; 
+import RecentlyViewed from './RecentlyViewed';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -31,13 +31,13 @@ const ProductDetails = () => {
     }
 
     const fetchProduct = async () => {
-        try {
+      try {
         const response = await fetch(`${API_BASE_URL}/api/products/${id}`);
-            const data = await response.json();
-            if (response.ok) {
-                setProduct(data);
+        const data = await response.json();
+        if (response.ok) {
+          setProduct(data);
           const rawMainImage = data.images?.[0]?.url;
-          const mainImageUrl = rawMainImage 
+          const mainImageUrl = rawMainImage
             ? (rawMainImage.startsWith('http') ? rawMainImage : `${API_BASE_URL}${rawMainImage}`)
             : 'https://placehold.co/600x800/f3f4f6/9ca3af?text=No+Image';
           setMainImage(mainImageUrl);
@@ -45,25 +45,25 @@ const ProductDetails = () => {
           setSelectedColor(data.colors?.[0] || "");
         } else {
           toast.error(data.message || 'Unable to load this product');
-            }
-        } catch (error) {
-            console.error("Error fetching product:", error);
-        toast.error('Something went wrong while loading the product');
         }
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        toast.error('Something went wrong while loading the product');
+      }
     };
 
     const fetchSimilarProducts = async () => {
-        try {
+      try {
         const response = await fetch(`${API_BASE_URL}/api/products/similar/${id}`);
-            const data = await response.json();
-            if (response.ok) {
-                setSimilarProducts(data);
+        const data = await response.json();
+        if (response.ok) {
+          setSimilarProducts(data);
         } else {
           console.error(data.message);
-            }
-        } catch (error) {
-            console.error("Error fetching similar products:", error);
         }
+      } catch (error) {
+        console.error("Error fetching similar products:", error);
+      }
     };
 
     fetchProduct();
@@ -71,74 +71,74 @@ const ProductDetails = () => {
   }, [id]);
 
   useEffect(() => {
-      if (!product) return;
-      const addToRecent = () => {
-          try {
-              let stored = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
-              // Move current to front
-              stored = [product._id, ...stored.filter(pid => pid !== product._id)];
-              // Limit to 10
-              stored = stored.slice(0, 10);
-              localStorage.setItem('recentlyViewed', JSON.stringify(stored));
-          } catch (e) {
-              console.error("Error saving to local storage", e);
-          }
-      };
-      addToRecent();
+    if (!product) return;
+    const addToRecent = () => {
+      try {
+        let stored = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+        // Move current to front
+        stored = [product._id, ...stored.filter(pid => pid !== product._id)];
+        // Limit to 10
+        stored = stored.slice(0, 10);
+        localStorage.setItem('recentlyViewed', JSON.stringify(stored));
+      } catch (e) {
+        console.error("Error saving to local storage", e);
+      }
+    };
+    addToRecent();
   }, [product]);
 
-    const handleAddToCart = async () => {
-      if (!selectedSize) {
-          toast.error("Please select a size");
-          return;
-      }
-      if (!selectedColor) {
-        toast.error("Please select a color");
-        return;
-      }
+  const handleAddToCart = async () => {
+    if (!selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+    if (!selectedColor) {
+      toast.error("Please select a color");
+      return;
+    }
 
-      setIsButtonDisabled(true);
-      
-      try {
+    setIsButtonDisabled(true);
+
+    try {
       await addToCart(product._id, quantity, selectedSize, selectedColor);
       toast.success("Product added to cart");
-      } catch (error) {
+    } catch (error) {
       toast.error('Unable to add the product to your cart right now');
-      } finally {
+    } finally {
       setIsButtonDisabled(false);
-      }
+    }
   };
 
   const handleWishlistClick = async () => {
-      if (!user) {
-          toast.error("Please login to add to wishlist");
-          return;
-      }
+    if (!user) {
+      toast.error("Please login to add to wishlist");
+      return;
+    }
 
-      try {
-          const response = await fetch(`${API_BASE_URL}/api/users/wishlist`, {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({ productId: product._id }),
-          });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/wishlist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ productId: product._id }),
+      });
 
-          if (response.ok) {
-              const data = await response.json();
-              toast.success(data.message);
-              await refreshProfile();
-          } else {
-              toast.error("Failed to update wishlist");
-          }
-      } catch (error) {
-          console.error(error);
-          toast.error("Error updating wishlist");
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(data.message);
+        await refreshProfile();
+      } else {
+        toast.error("Failed to update wishlist");
       }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error updating wishlist");
+    }
   };
 
-    if (!id) {
+  if (!id) {
     return (
       <div className='min-h-[60vh] flex items-center justify-center'>
         <div className='text-center'>
@@ -149,36 +149,36 @@ const ProductDetails = () => {
         </div>
       </div>
     );
-    }
+  }
 
-    if (!product) return (
-      <div className='min-h-screen bg-gray-50 dark:bg-gray-950 py-8'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
-            {/* Image skeleton */}
-            <div className='space-y-4'>
-              <div className='aspect-[3/4] bg-gray-200 dark:bg-gray-800 rounded-2xl animate-pulse'></div>
-              <div className='flex gap-3'>
-                {[1,2,3,4].map(i => (
-                  <div key={i} className='w-20 h-20 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse'></div>
-                ))}
-              </div>
+  if (!product) return (
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-950 py-8'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
+          {/* Image skeleton */}
+          <div className='space-y-4'>
+            <div className='aspect-[3/4] bg-gray-200 dark:bg-gray-800 rounded-2xl animate-pulse'></div>
+            <div className='flex gap-3'>
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className='w-20 h-20 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse'></div>
+              ))}
             </div>
-            {/* Info skeleton */}
-            <div className='space-y-6'>
-              <div className='h-8 w-32 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse'></div>
-              <div className='h-10 w-3/4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse'></div>
-              <div className='h-6 w-24 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse'></div>
-              <div className='space-y-2'>
-                <div className='h-4 w-full bg-gray-200 dark:bg-gray-800 rounded animate-pulse'></div>
-                <div className='h-4 w-5/6 bg-gray-200 dark:bg-gray-800 rounded animate-pulse'></div>
-                <div className='h-4 w-4/6 bg-gray-200 dark:bg-gray-800 rounded animate-pulse'></div>
-              </div>
+          </div>
+          {/* Info skeleton */}
+          <div className='space-y-6'>
+            <div className='h-8 w-32 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse'></div>
+            <div className='h-10 w-3/4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse'></div>
+            <div className='h-6 w-24 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse'></div>
+            <div className='space-y-2'>
+              <div className='h-4 w-full bg-gray-200 dark:bg-gray-800 rounded animate-pulse'></div>
+              <div className='h-4 w-5/6 bg-gray-200 dark:bg-gray-800 rounded animate-pulse'></div>
+              <div className='h-4 w-4/6 bg-gray-200 dark:bg-gray-800 rounded animate-pulse'></div>
             </div>
           </div>
         </div>
       </div>
-    );
+    </div>
+  );
 
   // Use product data instead of selectedProduct mock
   const { name, price, originalPrice, description, brand, material, sizes, colors, images } = product;
@@ -187,9 +187,9 @@ const ProductDetails = () => {
     if (action === 'plus') setQuantity((prev) => prev + 1);
     if (action === 'minus' && quantity > 1) setQuantity((prev) => prev - 1);
   };
-  
+
   const isInWishlist = user?.wishlist?.includes(product._id);
-  
+
   const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   const trustBadges = [
@@ -199,24 +199,24 @@ const ProductDetails = () => {
   ];
 
   const handleShare = async () => {
-      try {
-        if (navigator.share) {
-          await navigator.share({
-            title: product.name,
-            text: 'Check out this product!',
-            url: window.location.href,
-          });
-        } else {
-          await navigator.clipboard.writeText(window.location.href);
-          toast.success("Link copied to clipboard!");
-        }
-      } catch (error) {
-        console.error("Error sharing:", error);
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: product.name,
+          text: 'Check out this product!',
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
       }
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className='min-h-screen bg-gray-50 dark:bg-gray-950'
@@ -237,14 +237,14 @@ const ProductDetails = () => {
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16'>
           {/* Image Gallery */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
             className='space-y-4'
           >
             {/* Main Image */}
-            <div 
+            <div
               className='relative aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-2xl overflow-hidden group cursor-zoom-in'
               onClick={() => setImageZoom(!imageZoom)}
             >
@@ -260,21 +260,21 @@ const ProductDetails = () => {
                   className='w-full h-full object-cover'
                 />
               </AnimatePresence>
-              
+
               {/* Discount Badge */}
               {discount > 0 && (
                 <div className='absolute top-4 left-4 bg-red-500 text-white px-3 py-1.5 rounded-full text-sm font-bold'>
                   -{discount}%
                 </div>
               )}
-              
+
               {/* Share & Wishlist floating buttons */}
               <div className='absolute top-4 right-4 flex flex-col gap-2'>
                 <button onClick={handleShare} className='p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:scale-110 transition-transform'>
                   <RiShareLine className='w-5 h-5 text-gray-700 dark:text-gray-300' />
                 </button>
               </div>
-              
+
               {/* Zoom hint */}
               <div className='absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity'>
                 {imageZoom ? 'Click to zoom out' : 'Click to zoom in'}
@@ -291,11 +291,10 @@ const ProductDetails = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => { setMainImage(imageUrl); setImageZoom(false); }}
-                    className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                      mainImage === imageUrl 
-                        ? 'border-accent-500 ring-2 ring-accent-500/30' 
+                    className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${mainImage === imageUrl
+                        ? 'border-accent-500 ring-2 ring-accent-500/30'
                         : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
-                    }`}
+                      }`}
                   >
                     <img
                       src={imageUrl}
@@ -309,7 +308,7 @@ const ProductDetails = () => {
           </motion.div>
 
           {/* Product Info */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -365,11 +364,10 @@ const ProductDetails = () => {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setSelectedColor(color)}
-                      className={`relative w-10 h-10 rounded-full transition-all ${
-                        selectedColor === color 
-                          ? 'ring-2 ring-offset-2 ring-accent-500 dark:ring-offset-gray-900' 
+                      className={`relative w-10 h-10 rounded-full transition-all ${selectedColor === color
+                          ? 'ring-2 ring-offset-2 ring-accent-500 dark:ring-offset-gray-900'
                           : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-300 dark:hover:ring-gray-600 dark:hover:ring-offset-gray-900'
-                      }`}
+                        }`}
                       style={{ backgroundColor: color.toLowerCase() }}
                       title={color}
                     >
@@ -409,11 +407,10 @@ const ProductDetails = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setSelectedSize(size)}
-                      className={`min-w-[48px] h-12 px-4 rounded-xl font-medium text-sm transition-all ${
-                        selectedSize === size
+                      className={`min-w-[48px] h-12 px-4 rounded-xl font-medium text-sm transition-all ${selectedSize === size
                           ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-lg'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                      }`}
+                        }`}
                     >
                       {size}
                     </motion.button>
@@ -454,9 +451,8 @@ const ProductDetails = () => {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleAddToCart}
                 disabled={isButtonDisabled}
-                className={`flex-1 h-14 bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-700 hover:to-accent-600 text-white rounded-xl font-semibold text-sm uppercase tracking-wider shadow-lg shadow-accent-500/25 flex items-center justify-center gap-2 transition-all ${
-                  isButtonDisabled ? 'opacity-60 cursor-not-allowed' : ''
-                }`}
+                className={`flex-1 h-14 bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-700 hover:to-accent-600 text-white rounded-xl font-semibold text-sm uppercase tracking-wider shadow-lg shadow-accent-500/25 flex items-center justify-center gap-2 transition-all ${isButtonDisabled ? 'opacity-60 cursor-not-allowed' : ''
+                  }`}
               >
                 {isButtonDisabled ? (
                   <>
@@ -477,11 +473,10 @@ const ProductDetails = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleWishlistClick}
-                className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all ${
-                  isInWishlist 
-                    ? 'bg-red-50 dark:bg-red-900/20 text-red-500 border-2 border-red-200 dark:border-red-800' 
+                className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all ${isInWishlist
+                    ? 'bg-red-50 dark:bg-red-900/20 text-red-500 border-2 border-red-200 dark:border-red-800'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
-                }`}
+                  }`}
               >
                 {isInWishlist ? (
                   <HiHeart className='w-6 h-6' />
@@ -504,7 +499,7 @@ const ProductDetails = () => {
 
             {/* Product Details Accordion */}
             <div className='border-t border-gray-200 dark:border-gray-800'>
-              <button 
+              <button
                 onClick={() => setActiveTab(activeTab === 'details' ? '' : 'details')}
                 className='w-full flex items-center justify-between py-4 text-left'
               >
@@ -553,7 +548,7 @@ const ProductDetails = () => {
         </div>
 
         {/* Reviews Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -562,12 +557,12 @@ const ProductDetails = () => {
           <Reviews productId={id} reviews={product.reviews} />
         </motion.div>
 
-        
+
         {/* Recently Viewed */}
         <RecentlyViewed excludeId={product?._id} />
         {/* Similar Products */}
         {similarProducts.length > 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -579,7 +574,7 @@ const ProductDetails = () => {
                 Similar Products
               </h2>
             </div>
-            <ProductGrid products={similarProducts}/>
+            <ProductGrid products={similarProducts} />
           </motion.div>
         )}
       </div>
