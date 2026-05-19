@@ -93,7 +93,11 @@ const getProducts = async (req, res, next) => {
 
     // Filter logic
     if (collection && collection.toLowerCase() !== 'all') query.collections = collection;
-    if (category && category.toLowerCase() !== 'all') query.category = category;
+    if (category && category.toLowerCase() !== 'all') {
+      const escapedCategory = category.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const whitespaceTolerant = escapedCategory.replace(/\s+/g, '\\s*');
+      query.category = { $regex: `^${whitespaceTolerant}$`, $options: 'i' };
+    }
     if (material) query.material = { $in: material.split(',') };
     if (brand) query.brand = { $in: brand.split(',') };
     if (size) query.sizes = { $in: size.split(',') };
