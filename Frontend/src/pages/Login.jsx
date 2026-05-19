@@ -71,10 +71,6 @@ const handleSubmit = async (e) => {
                 transition={{ duration: 0.5 }}
                 className='w-full max-w-md'
             >
-                {/* Logo */}
-                <Link to="/" className='inline-block mb-8'>
-                    <span className='text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-heading'>Wearero</span>
-                </Link>
 
                 {/* Form Card */}
                 <div className='bg-white dark:bg-gray-900 p-8 md:p-10 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800'>

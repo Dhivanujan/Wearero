@@ -74,20 +74,6 @@ const handleSubmit = async (e) => {
           className='w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-8 lg:p-12'
         >
             <div className='w-full max-w-md'>
-                {/* Logo */}
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className='text-center mb-8'
-                >
-                    <Link to='/' className='inline-flex items-center gap-2'>
-                        <div className='w-10 h-10 bg-gradient-to-br from-accent-600 to-accent-500 rounded-xl flex items-center justify-center'>
-                            <HiOutlineSparkles className='w-6 h-6 text-white' />
-                        </div>
-                        <span className='text-2xl font-bold text-gray-900 dark:text-white'>Wearero</span>
-                    </Link>
-                </motion.div>
 
                 {/* Form Card */}
                 <motion.div 
